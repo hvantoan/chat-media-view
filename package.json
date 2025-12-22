@@ -1,6 +1,6 @@
 {
   "name": "chat-media-view",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Telegram-style image grid for React chat applications",
   "type": "module",
   "exports": {
@@ -25,9 +25,11 @@
     "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepublishOnly": "npm run build && npm run test"
   },
   "keywords": [
     "react",
@@ -35,15 +37,22 @@
     "chat",
     "telegram",
     "media",
-    "chat-image",
     "gallery",
-    "chat-media"
+    "virtual-list",
+    "blurhash",
+    "thumbhash",
+    "lightbox",
+    "accessibility",
+    "rtl"
   ],
   "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": ""
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

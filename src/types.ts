@@ -38,6 +38,8 @@ export interface ChatImageGridProps {
   lazyLoad?: boolean
   /** Custom class name for the grid container */
   className?: string
+  /** Enable RTL layout */
+  rtl?: boolean
 }
 
 /**
@@ -120,4 +122,6 @@ export interface LayoutConfig {
   gap: number
   /** Outer corner border radius */
   borderRadius: number
+  /** Enable RTL layout */
+  rtl?: boolean
 }

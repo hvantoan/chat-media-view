@@ -4,7 +4,63 @@ import { ChatImageGrid } from './ChatImageGrid'
 const meta = {
   component: ChatImageGrid,
   title: 'Components/ChatImageGrid',
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: `
+Telegram-style image grid for React chat applications.
+
+## Features
+- Layouts for 1-5 images (exact Telegram clone)
+- Virtual list compatible via \`calculateGridHeight()\`
+- BlurHash/ThumbHash placeholder support
+- Keyboard accessible (Tab, Enter, Arrow keys)
+- RTL layout support
+- < 5KB gzipped
+        `
+      }
+    }
+  },
+  argTypes: {
+    images: {
+      description: 'Array of images to display (1-5 images)',
+      control: { type: 'object' }
+    },
+    maxWidth: {
+      description: 'Maximum width of the grid in pixels',
+      control: { type: 'range', min: 200, max: 600, step: 50 },
+      table: { defaultValue: { summary: '400' } }
+    },
+    gap: {
+      description: 'Gap between images in pixels',
+      control: { type: 'range', min: 0, max: 10, step: 1 },
+      table: { defaultValue: { summary: '2' } }
+    },
+    borderRadius: {
+      description: 'Border radius for outer corners',
+      control: { type: 'range', min: 0, max: 24, step: 2 },
+      table: { defaultValue: { summary: '12' } }
+    },
+    lazyLoad: {
+      description: 'Enable lazy loading with Intersection Observer',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
+    },
+    rtl: {
+      description: 'Enable RTL (right-to-left) layout',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'false' } }
+    },
+    onImageClick: {
+      description: 'Callback when an image is clicked',
+      action: 'imageClicked'
+    },
+    className: {
+      description: 'Custom class name for the grid container',
+      control: 'text'
+    }
+  },
   tags: ['autodocs']
 } satisfies Meta<typeof ChatImageGrid>
 
@@ -102,5 +158,39 @@ export const MixedWithAndWithoutPlaceholder: Story = {
       sampleImages[1],
       { ...sampleImages[2], thumbhash: thumbhashSample }
     ]
+  }
+}
+
+// RTL Layout Demo
+export const RTLLayout: Story = {
+  name: 'RTL Layout (Right-to-Left)',
+  args: {
+    images: sampleImages.slice(0, 3),
+    rtl: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates RTL support for languages like Arabic, Hebrew. Layout is mirrored horizontally.'
+      }
+    }
+  }
+}
+
+// Accessibility Demo - Focus Visible
+export const AccessibilityDemo: Story = {
+  name: 'Accessibility (Tab to Navigate)',
+  args: {
+    images: sampleImages.slice(0, 4).map((img, i) => ({
+      ...img,
+      alt: `Scenic landscape photo ${i + 1}`
+    }))
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Tab through images to see focus rings. Press Enter or Space to trigger click. Images have descriptive alt text for screen readers.'
+      }
+    }
   }
 }

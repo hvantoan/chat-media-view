@@ -32,20 +32,42 @@ export function calculateLayout(
   const cfg = { ...DEFAULT_CONFIG, ...config }
   const count = Math.min(images.length, 5)
 
+  let result: GridLayoutResult
   switch (count) {
     case 1:
-      return layoutSingle(images, cfg)
+      result = layoutSingle(images, cfg)
+      break
     case 2:
-      return layoutTwo(images, cfg)
+      result = layoutTwo(images, cfg)
+      break
     case 3:
-      return layoutThree(images, cfg)
+      result = layoutThree(images, cfg)
+      break
     case 4:
-      return layoutFour(images, cfg)
+      result = layoutFour(images, cfg)
+      break
     case 5:
-      return layoutFive(images, cfg)
+      result = layoutFive(images, cfg)
+      break
     default:
-      return { cells: [], totalWidth: 0, totalHeight: 0 }
+      result = { cells: [], totalWidth: 0, totalHeight: 0 }
   }
+
+  // Apply RTL transformation if enabled
+  if (cfg.rtl) {
+    result.cells = result.cells.map(cell => ({
+      ...cell,
+      x: cfg.maxWidth - cell.x - cell.width,
+      borderRadius: {
+        topLeft: cell.borderRadius.topRight,
+        topRight: cell.borderRadius.topLeft,
+        bottomLeft: cell.borderRadius.bottomRight,
+        bottomRight: cell.borderRadius.bottomLeft
+      }
+    }))
+  }
+
+  return result
 }
 
 /** Create BorderRadius with all corners set to same value */
@@ -70,6 +92,9 @@ function getCornerRadius(index: number, total: number, radius: number): BorderRa
  */
 function layoutSingle(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
   const img = images[0]
+  if (!img) {
+    return { cells: [], totalWidth: 0, totalHeight: 0 }
+  }
   const aspectRatio = getAspectRatio(img.width, img.height)
   const width = cfg.maxWidth
   // Limit height to 1.2x max width for very tall images
@@ -95,10 +120,15 @@ function layoutSingle(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult 
  * Layout for 2 images - side by side, 50/50 split
  */
 function layoutTwo(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
+  const img0 = images[0]
+  const img1 = images[1]
+  if (!img0 || !img1) {
+    return { cells: [], totalWidth: 0, totalHeight: 0 }
+  }
   const cellWidth = (cfg.maxWidth - cfg.gap) / 2
   const minAspect = Math.min(
-    getAspectRatio(images[0].width, images[0].height),
-    getAspectRatio(images[1].width, images[1].height)
+    getAspectRatio(img0.width, img0.height),
+    getAspectRatio(img1.width, img1.height)
   )
   // Limit height to 0.6x max width
   const height = Math.min(cellWidth / minAspect, cfg.maxWidth * 0.6)
@@ -141,9 +171,13 @@ function layoutTwo(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
  * Layout for 3 images - 66% left + 33% right (2 stacked)
  */
 function layoutThree(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
+  const img0 = images[0]
+  if (!img0) {
+    return { cells: [], totalWidth: 0, totalHeight: 0 }
+  }
   const leftWidth = (cfg.maxWidth - cfg.gap) * 0.66
   const rightWidth = cfg.maxWidth - leftWidth - cfg.gap
-  const leftAspect = getAspectRatio(images[0].width, images[0].height)
+  const leftAspect = getAspectRatio(img0.width, img0.height)
   // Limit height to 0.8x max width
   const leftHeight = Math.min(leftWidth / leftAspect, cfg.maxWidth * 0.8)
   const rightCellHeight = (leftHeight - cfg.gap) / 2

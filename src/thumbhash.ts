@@ -14,8 +14,13 @@ export function thumbHashToRGBA(hash: Uint8Array): {
   const { PI, min, max, cos, round } = Math
 
   // Read header
-  const header24 = hash[0] | (hash[1] << 8) | (hash[2] << 16)
-  const header16 = hash[3] | (hash[4] << 8)
+  const h0 = hash[0] ?? 0
+  const h1 = hash[1] ?? 0
+  const h2 = hash[2] ?? 0
+  const h3 = hash[3] ?? 0
+  const h4 = hash[4] ?? 0
+  const header24 = h0 | (h1 << 8) | (h2 << 16)
+  const header16 = h3 | (h4 << 8)
   const lDc = (header24 & 63) / 63
   const pDc = ((header24 >> 6) & 63) / 31.5 - 1
   const qDc = ((header24 >> 12) & 63) / 31.5 - 1
@@ -26,8 +31,9 @@ export function thumbHashToRGBA(hash: Uint8Array): {
   const isLandscape = (header16 >> 12) !== 0
   const lx = max(3, isLandscape ? (hasAlpha ? 5 : 7) : ((header16 >> 13) & 7) + 1)
   const ly = max(3, isLandscape ? ((header16 >> 13) & 7) + 1 : (hasAlpha ? 5 : 7))
-  const aScale = hasAlpha ? ((hash[5] & 15) / 15) : 1
-  const aDc = hasAlpha ? ((hash[5] >> 4) / 15) : 1
+  const h5 = hash[5] ?? 0
+  const aScale = hasAlpha ? ((h5 & 15) / 15) : 1
+  const aDc = hasAlpha ? ((h5 >> 4) / 15) : 1
 
   // Decode AC coefficients
   const ac: number[] = []
@@ -36,7 +42,8 @@ export function thumbHashToRGBA(hash: Uint8Array): {
   const readBits = (bits: number): number => {
     let value = 0
     for (let i = 0; i < bits; i++) {
-      if (hash[dataIndex] & (1 << bitIndex)) {
+      const byte = hash[dataIndex] ?? 0
+      if (byte & (1 << bitIndex)) {
         value |= 1 << i
       }
       bitIndex++
@@ -86,23 +93,23 @@ export function thumbHashToRGBA(hash: Uint8Array): {
 
   for (let cy = 0; cy < ly; cy++) {
     for (let cx = cy ? 0 : 1; cx * ly < lx * (ly - cy); cx++) {
-      lAc.push(ac[acIndex++])
+      lAc.push(ac[acIndex++] ?? 0)
     }
   }
   for (let cy = 0; cy < 3; cy++) {
     for (let cx = cy ? 0 : 1; cx < 3 - cy; cx++) {
-      pAc.push(ac[acIndex++])
+      pAc.push(ac[acIndex++] ?? 0)
     }
   }
   for (let cy = 0; cy < 3; cy++) {
     for (let cx = cy ? 0 : 1; cx < 3 - cy; cx++) {
-      qAc.push(ac[acIndex++])
+      qAc.push(ac[acIndex++] ?? 0)
     }
   }
   if (hasAlpha) {
     for (let cy = 0; cy < 5; cy++) {
       for (let cx = cy ? 0 : 1; cx < 5 - cy; cx++) {
-        aAc.push(ac[acIndex++])
+        aAc.push(ac[acIndex++] ?? 0)
       }
     }
   }
@@ -120,7 +127,7 @@ export function thumbHashToRGBA(hash: Uint8Array): {
       for (let cy = 0; cy < ly; cy++) {
         const fy = cos((PI * cy * (y + 0.5)) / h)
         for (let cx = cy ? 0 : 1; cx * ly < lx * (ly - cy); cx++) {
-          l += lAc[acIdx++] * cos((PI * cx * (x + 0.5)) / w) * fy
+          l += (lAc[acIdx++] ?? 0) * cos((PI * cx * (x + 0.5)) / w) * fy
         }
       }
 
@@ -129,7 +136,7 @@ export function thumbHashToRGBA(hash: Uint8Array): {
       for (let cy = 0; cy < 3; cy++) {
         const fy = cos((PI * cy * (y + 0.5)) / h)
         for (let cx = cy ? 0 : 1; cx < 3 - cy; cx++) {
-          p += pAc[acIdx++] * cos((PI * cx * (x + 0.5)) / w) * fy
+          p += (pAc[acIdx++] ?? 0) * cos((PI * cx * (x + 0.5)) / w) * fy
         }
       }
 
@@ -138,7 +145,7 @@ export function thumbHashToRGBA(hash: Uint8Array): {
       for (let cy = 0; cy < 3; cy++) {
         const fy = cos((PI * cy * (y + 0.5)) / h)
         for (let cx = cy ? 0 : 1; cx < 3 - cy; cx++) {
-          q += qAc[acIdx++] * cos((PI * cx * (x + 0.5)) / w) * fy
+          q += (qAc[acIdx++] ?? 0) * cos((PI * cx * (x + 0.5)) / w) * fy
         }
       }
 
@@ -148,7 +155,7 @@ export function thumbHashToRGBA(hash: Uint8Array): {
         for (let cy = 0; cy < 5; cy++) {
           const fy = cos((PI * cy * (y + 0.5)) / h)
           for (let cx = cy ? 0 : 1; cx < 5 - cy; cx++) {
-            a += aAc[acIdx++] * cos((PI * cx * (x + 0.5)) / w) * fy
+            a += (aAc[acIdx++] ?? 0) * cos((PI * cx * (x + 0.5)) / w) * fy
           }
         }
       }

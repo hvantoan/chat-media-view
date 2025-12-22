@@ -11,11 +11,12 @@ export function ChatImageGrid({
   borderRadius = 12,
   onImageClick,
   lazyLoad = true,
-  className
+  className,
+  rtl = false
 }: ChatImageGridProps) {
   const layout = useMemo(
-    () => calculateLayout(images, { maxWidth, gap, borderRadius }),
-    [images, maxWidth, gap, borderRadius]
+    () => calculateLayout(images, { maxWidth, gap, borderRadius, rtl }),
+    [images, maxWidth, gap, borderRadius, rtl]
   )
 
   if (images.length === 0) return null
@@ -28,16 +29,23 @@ export function ChatImageGrid({
         height: layout.totalHeight,
         position: 'relative'
       }}
+      dir={rtl ? 'rtl' : undefined}
+      role="group"
+      aria-label={`Image gallery with ${images.length} image${images.length > 1 ? 's' : ''}`}
     >
-      {layout.cells.map((cell) => (
-        <ImageCell
-          key={cell.index}
-          image={images[cell.index]}
-          layout={cell}
-          lazyLoad={lazyLoad}
-          onClick={() => onImageClick?.(cell.index, images[cell.index])}
-        />
-      ))}
+      {layout.cells.map((cell) => {
+        const image = images[cell.index]
+        if (!image) return null
+        return (
+          <ImageCell
+            key={cell.index}
+            image={image}
+            layout={cell}
+            lazyLoad={lazyLoad}
+            onClick={() => onImageClick?.(cell.index, image)}
+          />
+        )
+      })}
     </div>
   )
 }

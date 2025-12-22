@@ -2,6 +2,7 @@
 export { ChatImageGrid } from './ChatImageGrid'
 export { ImageCell } from './ImageCell'
 export { PlaceholderCanvas } from './PlaceholderCanvas'
+export { Lightbox, type LightboxProps } from './Lightbox'
 
 // Hooks
 export { useIntersectionObserver } from './hooks/useIntersectionObserver'
@@ -26,6 +27,9 @@ export {
   thumbHashToDataURL,
   base64ToBytes
 } from './thumbhash'
+
+// Accessibility utilities
+export { getAriaLabel, handleKeyboardNav } from './accessibility'
 
 // Types
 export type {
