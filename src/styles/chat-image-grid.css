@@ -1,0 +1,46 @@
+/* Chat Image Grid - Core Styles */
+.chat-image-grid {
+  --cmv-bg-placeholder: #e0e0e0;
+  --cmv-transition-duration: 0.3s;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-image-cell {
+  cursor: pointer;
+  background-color: var(--cmv-bg-placeholder);
+  transition: transform var(--cmv-transition-duration) ease;
+}
+
+.chat-image-cell:hover {
+  transform: scale(1.02);
+}
+
+.chat-image-cell:focus-visible {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.chat-image-cell__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--cmv-transition-duration) ease;
+}
+
+.chat-image-cell__img.loaded {
+  opacity: 1;
+}
+
+.chat-image-cell__error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #666;
+  font-size: 12px;
+  background-color: #f0f0f0;
+}

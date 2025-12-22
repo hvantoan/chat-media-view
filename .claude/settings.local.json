@@ -15,7 +15,12 @@
       "Bash(repomix:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(phase-1\\): initialize chat-media-view npm library\n\n- Set up Vite library mode with ESM/CJS dual output\n- Configure TypeScript strict mode\n- Initialize Vitest with jsdom environment  \n- Set up Storybook 10.x with React-Vite\n- Create CSS foundation with custom properties\n- Add types for ImageItem, ChatImageGridProps\n- Add placeholder exports for build verification\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(phase-1\\): initialize chat-media-view npm library\n\n- Set up Vite library mode with ESM/CJS dual output\n- Configure TypeScript strict mode\n- Initialize Vitest with jsdom environment  \n- Set up Storybook 10.x with React-Vite\n- Create CSS foundation with custom properties\n- Add types for ImageItem, ChatImageGridProps\n- Add placeholder exports for build verification\nEOF\n\\)\")",
+      "Bash(npm run typecheck)",
+      "Bash(npm test:*)",
+      "Bash(npx tsc:*)",
+      "Skill(repomix)",
+      "Bash(git commit:*)"
     ]
   }
 }

@@ -1,5 +1,9 @@
-// Components (placeholder - will be implemented in Phase 3)
-export const ChatImageGrid = (): null => null
+// Components
+export { ChatImageGrid } from './ChatImageGrid'
+export { ImageCell } from './ImageCell'
+
+// Hooks
+export { useIntersectionObserver } from './hooks/useIntersectionObserver'
 
 // Layout Engine
 export { calculateLayout } from './GridLayoutEngine'

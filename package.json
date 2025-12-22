@@ -35,7 +35,9 @@
     "chat",
     "telegram",
     "media",
-    "gallery"
+    "chat-image",
+    "gallery",
+    "chat-media"
   ],
   "author": "",
   "license": "MIT",
