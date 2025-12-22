@@ -27,3 +27,33 @@ class MockIntersectionObserver {
 }
 
 (globalThis as unknown as Record<string, unknown>).IntersectionObserver = MockIntersectionObserver
+
+// Mock URL.createObjectURL and URL.revokeObjectURL for jsdom
+if (typeof URL.createObjectURL === 'undefined') {
+  URL.createObjectURL = () => 'blob:mock-url'
+}
+if (typeof URL.revokeObjectURL === 'undefined') {
+  URL.revokeObjectURL = () => {}
+}
+
+// Mock ImageData for jsdom
+if (typeof globalThis.ImageData === 'undefined') {
+  (globalThis as unknown as Record<string, unknown>).ImageData = class ImageData {
+    readonly data: Uint8ClampedArray
+    readonly width: number
+    readonly height: number
+    readonly colorSpace: PredefinedColorSpace = 'srgb'
+
+    constructor(dataOrWidth: Uint8ClampedArray | number, widthOrHeight: number, height?: number) {
+      if (typeof dataOrWidth === 'number') {
+        this.width = dataOrWidth
+        this.height = widthOrHeight
+        this.data = new Uint8ClampedArray(this.width * this.height * 4)
+      } else {
+        this.data = dataOrWidth
+        this.width = widthOrHeight
+        this.height = height ?? (dataOrWidth.length / (widthOrHeight * 4))
+      }
+    }
+  }
+}

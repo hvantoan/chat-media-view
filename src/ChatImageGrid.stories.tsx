@@ -64,3 +64,43 @@ export const NoLazyLoad: Story = {
     lazyLoad: false
   }
 }
+
+// Sample thumbhash for demo (a pinkish color)
+const thumbhashSample = 'YTkGJwaRhWUIt4lbgnhZl3ath2BUBGYA'
+
+const imagesWithPlaceholder = sampleImages.slice(0, 3).map((img, i) => ({
+  ...img,
+  thumbhash: thumbhashSample,
+  alt: `Image ${i + 1} with placeholder`
+}))
+
+export const WithThumbHashPlaceholder: Story = {
+  name: 'With ThumbHash Placeholder',
+  args: {
+    images: imagesWithPlaceholder
+  }
+}
+
+// Simulating error state with invalid URLs
+const errorImages = [
+  { src: 'https://invalid-url-for-testing.local/image1.jpg', width: 800, height: 600 },
+  { src: 'https://invalid-url-for-testing.local/image2.jpg', width: 600, height: 800 }
+]
+
+export const ErrorStateWithRetry: Story = {
+  name: 'Error State (Retry Button)',
+  args: {
+    images: errorImages
+  }
+}
+
+export const MixedWithAndWithoutPlaceholder: Story = {
+  name: 'Mixed (Some With Placeholder)',
+  args: {
+    images: [
+      { ...sampleImages[0], thumbhash: thumbhashSample },
+      sampleImages[1],
+      { ...sampleImages[2], thumbhash: thumbhashSample }
+    ]
+  }
+}

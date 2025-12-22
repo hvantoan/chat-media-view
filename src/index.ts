@@ -1,13 +1,31 @@
 // Components
 export { ChatImageGrid } from './ChatImageGrid'
 export { ImageCell } from './ImageCell'
+export { PlaceholderCanvas } from './PlaceholderCanvas'
 
 // Hooks
 export { useIntersectionObserver } from './hooks/useIntersectionObserver'
+export { useDownload } from './hooks/useDownload'
 
 // Layout Engine
 export { calculateLayout } from './GridLayoutEngine'
 export { calculateGridHeight } from './calculate-grid-height'
+
+// Download Manager
+export {
+  downloadWithProgress,
+  createImageUrl,
+  revokeImageUrl,
+  type DownloadProgress,
+  type ProgressCallback
+} from './DownloadManager'
+
+// ThumbHash utilities
+export {
+  thumbHashToRGBA,
+  thumbHashToDataURL,
+  base64ToBytes
+} from './thumbhash'
 
 // Types
 export type {

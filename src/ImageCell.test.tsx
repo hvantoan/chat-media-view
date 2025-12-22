@@ -1,13 +1,27 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ImageCell } from './ImageCell'
 import type { ImageItem, CellLayout } from './types'
+
+// Mock canvas for PlaceholderCanvas
+beforeEach(() => {
+  HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
+    putImageData: vi.fn(),
+    fillRect: vi.fn(),
+    fillStyle: ''
+  })
+})
 
 const mockImage: ImageItem = {
   src: 'test.jpg',
   width: 800,
   height: 600,
   alt: 'Test image'
+}
+
+const mockImageWithHash: ImageItem = {
+  ...mockImage,
+  thumbhash: 'YTkGJwaRhWUIt4lbgnhZl3ath2BUBGYA'
 }
 
 const mockLayout: CellLayout = {
@@ -110,5 +124,70 @@ describe('ImageCell', () => {
     render(<ImageCell image={imageNoAlt} layout={mockLayout} lazyLoad={false} />)
     const img = document.querySelector('img')
     expect(img).toHaveAttribute('alt', '')
+  })
+
+  it('renders placeholder when thumbhash provided', () => {
+    render(<ImageCell image={mockImageWithHash} layout={mockLayout} lazyLoad={false} />)
+    const canvas = document.querySelector('canvas')
+    expect(canvas).toBeInTheDocument()
+  })
+
+  it('hides placeholder when image loads', async () => {
+    render(<ImageCell image={mockImageWithHash} layout={mockLayout} lazyLoad={false} />)
+    const img = document.querySelector('img') as HTMLImageElement
+    fireEvent.load(img)
+    await waitFor(() => {
+      const canvas = document.querySelector('canvas')
+      expect(canvas).not.toBeInTheDocument()
+    })
+  })
+
+  it('shows retry button on error', async () => {
+    render(<ImageCell image={mockImage} layout={mockLayout} lazyLoad={false} />)
+    const img = document.querySelector('img') as HTMLImageElement
+    fireEvent.error(img)
+    await waitFor(() => {
+      const retryButton = document.querySelector('.chat-image-cell__retry')
+      expect(retryButton).toBeInTheDocument()
+    })
+  })
+
+  it('retry button resets error state', async () => {
+    render(<ImageCell image={mockImage} layout={mockLayout} lazyLoad={false} />)
+    const img = document.querySelector('img') as HTMLImageElement
+    fireEvent.error(img)
+
+    await waitFor(() => {
+      expect(document.querySelector('.chat-image-cell__error')).toBeInTheDocument()
+    })
+
+    const retryButton = document.querySelector('.chat-image-cell__retry') as HTMLButtonElement
+    fireEvent.click(retryButton)
+
+    await waitFor(() => {
+      expect(document.querySelector('.chat-image-cell__error')).not.toBeInTheDocument()
+      expect(document.querySelector('img')).toBeInTheDocument()
+    })
+  })
+
+  it('retry button stops event propagation', async () => {
+    const onClick = vi.fn()
+    render(<ImageCell image={mockImage} layout={mockLayout} lazyLoad={false} onClick={onClick} />)
+    const img = document.querySelector('img') as HTMLImageElement
+    fireEvent.error(img)
+
+    await waitFor(() => {
+      const retryButton = document.querySelector('.chat-image-cell__retry') as HTMLButtonElement
+      fireEvent.click(retryButton)
+      expect(onClick).not.toHaveBeenCalled()
+    })
+  })
+
+  it('handles Space key for accessibility', () => {
+    const onClick = vi.fn()
+    render(<ImageCell image={mockImage} layout={mockLayout} lazyLoad={false} onClick={onClick} />)
+    const cell = document.querySelector('.chat-image-cell') as HTMLElement
+    fireEvent.keyDown(cell, { key: ' ' })
+    expect(onClick).toHaveBeenCalled()
   })
 })

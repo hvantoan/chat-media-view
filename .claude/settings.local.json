@@ -20,7 +20,9 @@
       "Bash(npm test:*)",
       "Bash(npx tsc:*)",
       "Skill(repomix)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(Get-Date:*)",
+      "Bash(bash -c 'date +%y%m%d')"
     ]
   }
 }
