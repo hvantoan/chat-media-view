@@ -69,3 +69,55 @@ export interface CellDimensions {
   /** Grid row start position */
   gridRow: string
 }
+
+/**
+ * Border radius for each corner of a cell
+ */
+export interface BorderRadius {
+  topLeft: number
+  topRight: number
+  bottomLeft: number
+  bottomRight: number
+}
+
+/**
+ * Layout calculation result for a single cell
+ */
+export interface CellLayout {
+  /** Index of the image in the source array */
+  index: number
+  /** X position in pixels */
+  x: number
+  /** Y position in pixels */
+  y: number
+  /** Cell width in pixels */
+  width: number
+  /** Cell height in pixels */
+  height: number
+  /** Border radius for each corner */
+  borderRadius: BorderRadius
+}
+
+/**
+ * Complete grid layout calculation result
+ */
+export interface GridLayoutResult {
+  /** Layout for each cell */
+  cells: CellLayout[]
+  /** Total grid width in pixels */
+  totalWidth: number
+  /** Total grid height in pixels */
+  totalHeight: number
+}
+
+/**
+ * Configuration for layout calculations
+ */
+export interface LayoutConfig {
+  /** Maximum grid width in pixels */
+  maxWidth: number
+  /** Gap between cells in pixels */
+  gap: number
+  /** Outer corner border radius */
+  borderRadius: number
+}

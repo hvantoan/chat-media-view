@@ -1,21 +1,18 @@
-// Components (placeholder exports - will be implemented in Phase 3)
-// export { ChatImageGrid } from './ChatImageGrid'
-// export { ImageCell } from './ImageCell'
+// Components (placeholder - will be implemented in Phase 3)
+export const ChatImageGrid = (): null => null
 
-// Utilities (placeholder exports - will be implemented in Phase 2)
-// export { calculateGridHeight } from './calculate-grid-height'
+// Layout Engine
+export { calculateLayout } from './GridLayoutEngine'
+export { calculateGridHeight } from './calculate-grid-height'
 
 // Types
 export type {
-	ChatImageGridProps,
-	ImageItem,
-	GridLayout,
-	CellDimensions,
-} from "./types";
-
-// Placeholder component for build verification
-export const ChatImageGrid = (): null => null;
-export const calculateGridHeight = (
-	_images: unknown[],
-	_maxWidth: number,
-): number => 0;
+  ChatImageGridProps,
+  ImageItem,
+  GridLayout,
+  CellDimensions,
+  BorderRadius,
+  CellLayout,
+  GridLayoutResult,
+  LayoutConfig,
+} from './types'
