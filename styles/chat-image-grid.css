@@ -1,0 +1,98 @@
+.chat-image-grid {
+  /* Spacing */
+  --cmv-gap: 2px;
+
+  /* Border radius */
+  --cmv-radius-outer: 12px;
+  --cmv-radius-inner: 4px;
+
+  /* Sizing */
+  --cmv-max-width: 400px;
+
+  /* Colors */
+  --cmv-bg-placeholder: #e0e0e0;
+  --cmv-bg-loading: #f0f0f0;
+  --cmv-overlay-hover: rgba(0, 0, 0, 0.05);
+
+  /* Animation */
+  --cmv-transition-duration: 200ms;
+  --cmv-transition-timing: ease-out;
+
+  display: grid;
+  gap: var(--cmv-gap);
+  max-width: var(--cmv-max-width);
+  border-radius: var(--cmv-radius-outer);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Image cell base */
+.chat-image-grid__cell {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--cmv-bg-placeholder);
+}
+
+/* First cell gets outer radius on top-left */
+.chat-image-grid__cell:first-child {
+  border-top-left-radius: var(--cmv-radius-outer);
+}
+
+/* Last cell gets outer radius on bottom-right for single image */
+.chat-image-grid[data-count="1"] .chat-image-grid__cell:last-child {
+  border-bottom-right-radius: var(--cmv-radius-outer);
+}
+
+/* Image within cell */
+.chat-image-grid__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--cmv-transition-duration) var(--cmv-transition-timing);
+}
+
+/* Hover effect */
+.chat-image-grid__cell:hover .chat-image-grid__image {
+  transform: scale(1.02);
+}
+
+/* Placeholder canvas for blur/thumbhash */
+.chat-image-grid__placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity var(--cmv-transition-duration) var(--cmv-transition-timing);
+}
+
+/* Hide placeholder when image loaded */
+.chat-image-grid__cell[data-loaded="true"] .chat-image-grid__placeholder {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Loading indicator */
+.chat-image-grid__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--cmv-bg-loading);
+}
+
+/* Download progress overlay */
+.chat-image-grid__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.chat-image-grid__progress-bar {
+  height: 100%;
+  background-color: #fff;
+  transition: width 100ms linear;
+}
