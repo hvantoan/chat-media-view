@@ -1,169 +1,158 @@
 # chat-media-view
 
-Telegram-style image grid for React chat applications.
+`chat-media-view` is an npm library designed to provide a flexible and efficient solution for displaying media in chat applications. It offers a responsive grid layout for images and videos, with features like dynamic resizing, lazy loading, and a customizable lightbox component for an enhanced viewing experience.
 
 ## Features
 
-- Layouts for 1-5 images (exact Telegram clone)
-- Virtual list compatible via `calculateGridHeight()`
-- BlurHash/ThumbHash placeholder support
-- Download progress tracking
-- Keyboard accessible (Tab, Enter, Arrow keys)
-- RTL layout support
-- Optional lightbox component
-- < 5KB gzipped
+- **Responsive Grid Layout**: Automatically adjusts media display based on container size.
+- **Dynamic Media Handling**: Supports both images and videos, with intelligent loading strategies.
+- **Customizable Lightbox**: Full-screen media viewer with navigation and zoom capabilities.
+- **Performance Optimized**: Lazy loading and efficient rendering for smooth user experience.
+- **Accessibility**: Built with accessibility in mind, supporting keyboard navigation and ARIA attributes.
+- **TypeScript Support**: Fully typed for better developer experience.
 
 ## Installation
 
 ```bash
 npm install chat-media-view
+# or
+yarn add chat-media-view
 ```
 
-## Quick Start
+## Usage
 
-```tsx
-import { ChatImageGrid, calculateGridHeight } from 'chat-media-view'
-import 'chat-media-view/styles.css'
+### ChatMediaView Component
 
-const images = [
-  { src: '/photo1.jpg', width: 800, height: 600 },
-  { src: '/photo2.jpg', width: 600, height: 800, blurhash: 'LEHV6nWB...' }
-]
+The `ChatMediaView` component is the main entry point for displaying a collection of media items.
 
-// For virtual lists - calculate height before rendering
-const height = calculateGridHeight(images, 400)
+```typescript jsx
+import React from 'react';
+import { ChatMediaView, MediaItem } from 'chat-media-view';
 
-function App() {
+const media: MediaItem[] = [
+  {
+    id: '1',
+    type: 'image',
+    url: 'https://example.com/image1.jpg',
+    alt: 'Description of image 1',
+    dimensions: { width: 1200, height: 800 }, // Optional: for aspect ratio calculation
+    thumbnailUrl: 'https://example.com/image1-thumb.jpg', // Optional: for faster loading
+  },
+  {
+    id: '2',
+    type: 'video',
+    url: 'https://example.com/video1.mp4',
+    alt: 'Description of video 1',
+    dimensions: { width: 1920, height: 1080 },
+    thumbnailUrl: 'https://example.com/video1-thumb.jpg',
+  },
+  {
+    id: '3',
+    type: 'image',
+    url: 'https://example.com/image2.jpg',
+    alt: 'Description of image 2',
+    dimensions: { width: 900, height: 1600 },
+  },
+];
+
+const MyChatComponent = () => {
   return (
-    <ChatImageGrid
-      images={images}
-      maxWidth={400}
-      onImageClick={(index, image) => console.log('Clicked:', index)}
-    />
-  )
-}
+    <div style={{ width: '100%', maxWidth: '800px', margin: 'auto' }}>
+      <ChatMediaView media={media} />
+    </div>
+  );
+};
+
+export default MyChatComponent;
 ```
 
-## API Reference
+#### Props
 
-### ChatImageGrid
+| Prop Name         | Type                 | Description                                                        | Default   |
+| :---------------- | :------------------- | :----------------------------------------------------------------- | :-------- |
+| `media`           | `MediaItem[]`        | An array of media objects to display.                              | `[]`      |
+| `onMediaClick`    | `(item: MediaItem) => void` | Callback when a media item is clicked. Receives the clicked item. | `undefined` |
+| `aspectRatio`     | `number`             | Desired aspect ratio for grid items (width / height).              | `1`       |
+| `gap`             | `number`             | Gap between grid items in pixels.                                  | `4`       |
+| `initialIndex`    | `number`             | Initial index of the media item to display in the lightbox.        | `0`       |
+| `placeholder`     | `React.ReactNode`    | Custom placeholder to display while media is loading.              | `undefined` |
+| `maxRows`         | `number`             | Maximum number of rows to display in the grid.                     | `undefined` |
+| `showControls`    | `boolean`            | Show/hide lightbox navigation controls.                            | `true`    |
+| `zoomLevel`       | `number`             | Initial zoom level for images in the lightbox.                     | `1`       |
+| `allowZoom`       | `boolean`            | Allow/disallow zooming in the lightbox.                            | `true`    |
+| `downloadable`    | `boolean`            | Allow/disallow downloading media from the lightbox.                | `true`    |
+| `downloadFileName`| `(item: MediaItem, index: number) => string` | Function to generate download file name.       | `undefined` |
+| `overlayColor`    | `string`             | Color of the lightbox overlay.                                     | `'rgba(0, 0, 0, 0.9)'` |
 
-Main component for displaying the image grid.
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `images` | `ImageItem[]` | required | Array of images (1-5) |
-| `maxWidth` | `number` | `400` | Maximum grid width in pixels |
-| `gap` | `number` | `2` | Gap between images in pixels |
-| `borderRadius` | `number` | `12` | Border radius for outer corners |
-| `onImageClick` | `(index, image) => void` | - | Click handler |
-| `lazyLoad` | `boolean` | `true` | Enable lazy loading |
-| `rtl` | `boolean` | `false` | Enable RTL layout |
-| `className` | `string` | - | Custom class name |
-
-### ImageItem
+### MediaItem Type
 
 ```typescript
-interface ImageItem {
-  src: string          // Image URL (required)
-  width: number        // Original width in pixels (required)
-  height: number       // Original height in pixels (required)
-  thumbnail?: string   // Low-res preview URL
-  blurhash?: string    // BlurHash placeholder string
-  thumbhash?: string   // ThumbHash placeholder string (preferred)
-  alt?: string         // Alt text for accessibility
+interface MediaItem {
+  id: string;
+  type: 'image' | 'video';
+  url: string;
+  alt: string;
+  dimensions?: { width: number; height: number };
+  thumbnailUrl?: string; // Optional: URL for a thumbnail image
 }
 ```
 
-### calculateGridHeight
+### Lightbox Component (Internal Use)
 
-Utility for virtual list integration. Returns the calculated height for a given set of images.
+The `Lightbox` component is used internally by `ChatMediaView` to display media in a full-screen overlay. While it's primarily for internal use, its props are documented here for comprehensive understanding.
 
-```typescript
-function calculateGridHeight(
-  images: ImageItem[],
-  maxWidth?: number,  // default: 400
-  gap?: number        // default: 2
-): number
-```
+#### Props
 
-### Lightbox (Optional)
-
-Full-screen image viewer. Tree-shakeable - only included if imported.
-
-```tsx
-import { Lightbox } from 'chat-media-view'
-
-<Lightbox
-  images={images}
-  isOpen={isOpen}
-  initialIndex={0}
-  onClose={() => setIsOpen(false)}
-  onIndexChange={(index) => console.log('Current:', index)}
-/>
-```
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `images` | `ImageItem[]` | required | Array of images |
-| `isOpen` | `boolean` | required | Lightbox visibility |
-| `onClose` | `() => void` | required | Close handler |
-| `initialIndex` | `number` | `0` | Starting image index |
-| `onIndexChange` | `(index) => void` | - | Index change handler |
-
-## Virtual List Integration
-
-Works with react-window, react-virtualized, @tanstack/virtual:
-
-```tsx
-import { calculateGridHeight } from 'chat-media-view'
-
-// Calculate row height for virtual list
-const getItemSize = (index: number) => {
-  const message = messages[index]
-  if (message.images) {
-    return calculateGridHeight(message.images, 400) + 16 // + padding
-  }
-  return 60 // text message height
-}
-```
-
-## Accessibility
-
-- Full keyboard navigation (Tab, Enter/Space, Arrow keys)
-- ARIA labels for screen readers
-- Focus-visible outlines
-- Escape key closes lightbox
-
-## RTL Support
-
-```tsx
-<ChatImageGrid images={images} rtl />
-```
-
-Layout automatically mirrors for right-to-left languages (Arabic, Hebrew, etc.)
-
-## CSS Customization
-
-Override CSS custom properties:
-
-```css
-.chat-image-grid {
-  --cmv-bg-placeholder: #e0e0e0;
-  --cmv-transition-duration: 0.3s;
-  --cmv-accent-color: #007bff;
-}
-```
+| Prop Name           | Type                   | Description                                                 | Default |
+| :------------------ | :--------------------- | :---------------------------------------------------------- | :------ |
+| `media`             | `MediaItem[]`          | An array of media objects to display.                       | `[]`    |
+| `currentIndex`      | `number`               | The index of the currently displayed media item.            | `0`     |
+| `isOpen`            | `boolean`              | Controls the visibility of the lightbox.                    | `false` |
+| `onClose`           | `() => void`           | Callback function when the lightbox is closed.              |         |
+| `onNext`            | `() => void`           | Callback function for navigating to the next media item.    |         |
+| `onPrev`            | `() => void`           | Callback function for navigating to the previous media item.|         |
+| `showControls`      | `boolean`              | Show/hide navigation controls (arrows, close button).       | `true`  |
+| `zoomLevel`         | `number`               | Initial zoom level for images.                              | `1`     |
+| `allowZoom`         | `boolean`              | Allow/disallow zooming.                                     | `true`  |
+| `downloadable`      | `boolean`              | Allow/disallow downloading media.                           | `true`  |
+| `downloadFileName`  | `(item: MediaItem, index: number) => string` | Function to generate download file name. |         |
+| `overlayColor`      | `string`               | Color of the lightbox overlay.                              | `'rgba(0, 0, 0, 0.9)'` |
 
 ## Development
 
+To set up the project for development:
+
 ```bash
-npm run dev          # Start dev server
-npm run build        # Build library
-npm run test         # Run tests
-npm run storybook    # Start Storybook
+git clone https://github.com/your-username/chat-media-view.git
+cd chat-media-view
+npm install
+npm run dev
 ```
+
+## Running Storybook
+
+Storybook is used for component development and testing.
+
+```bash
+npm run storybook
+```
+
+This will start Storybook in development mode, usually at `http://localhost:6006`.
+
+## Building the Library
+
+To build the library for publishing:
+
+```bash
+npm run build
+```
+
+The build output will be in the `dist` directory.
+
+## Contributing
+
+We welcome contributions! Please see our `CONTRIBUTING.md` for more details.
 
 ## License
 
-MIT
+This project is licensed under the MIT License.

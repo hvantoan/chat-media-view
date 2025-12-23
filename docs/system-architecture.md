@@ -1,85 +1,133 @@
 # System Architecture - chat-media-view
 
-## Overview
+## 1. Overview
 
-The `chat-media-view` library is designed as a standalone, modular React component for displaying media grids within chat applications. Its architecture emphasizes reusability, performance, and ease of integration into existing React projects.
+The `chat-media-view` library is a React component library designed for efficient and flexible display of media (images and videos) in chat applications. Its architecture is built around modularity, performance, and a rich user experience, providing a responsive grid view and an interactive lightbox viewer.
 
-## High-Level Architecture
+## 2. High-Level Architecture
+
+The library exposes two main components: `ChatMediaView` for grid display and `Lightbox` for full-screen viewing. These components interact with utility functions and hooks to manage layout, performance, and user interactions.
 
 ```
-+--------------------------+
-|  Your React Application  |
-|                          |
-|  +--------------------+  |
-|  |  ChatMediaView     |<------- Props (image URLs, config)
-|  |  (React Component) |  |
-|  +--------------------+  |
-|                          |
-+------------|-------------+
-             |
-             |  Import & CSS Link
-             v
-+--------------------------+
-|    chat-media-view NPM   |
-|         Library          |
-|                          |
-| +----------------------+ |
-| | src/                 | |
-| |   ├── components/    | |
-| |   │   └── ChatMediaView.tsx |<----- Core Logic & Layout
-| |   ├── types.ts       | |
-| |   └── index.ts       | |
-| +----------------------+ |
-| +----------------------+ |
-| | styles/              | |
-| |   └── chat-image-grid.css |<----- Styling
-| +----------------------+ |
-|                          |
-+--------------------------+
++-------------------------------------------------------------+
+|                     Your React Application                  |
+|                                                             |
+|  +---------------------+        +---------------------+   |
+|  |     ChatMediaView   |<-------|       Lightbox      |   |
+|  |  (Grid Component)   |        |  (Viewer Component) |   |
+|  +----------^----------+        +----------^----------+   |
+|             | media[]                   | media[], index    |
+|             | onMediaClick              | onClose, onNext, onPrev |
+|             |                           |                     |
+|  +----------|---------------------------|----------+          |
+|  |          v                           v          |          |
+|  |     chat-media-view NPM Library                 |          |
+|  |                                                 |          |
+|  |  +--------------------------------------------+ |          |
+|  |  |                 src/                       | |          |
+|  |  |   ├── ChatImageGrid.tsx (ChatMediaView)    | |          |
+|  |  |   ├── Lightbox.tsx                       | |          |
+|  |  |   ├── GridLayoutEngine.ts                | |-----------> Calculates grid item dimensions
+|  |  |   ├── types.ts (MediaItem interface)     | |-----------> Defines media data structure
+|  |  |   ├── hooks/useIntersectionObserver.ts   | |-----------> Handles lazy loading
+|  |  |   ├── styles/image-grid.css              | |-----------> Grid styling
+|  |  |   └── styles/lightbox.css                | |-----------> Lightbox styling
+|  |  +--------------------------------------------+ |          |
+|  |                                                 |          |
+|  +-------------------------------------------------------------+
 ```
 
-## Component Breakdown
+## 3. Component Breakdown
 
-### 1. `ChatMediaView` (src/components/ChatMediaView.tsx)
--   **Purpose**: The primary and likely sole public-facing React component of the library. It orchestrates the display of multiple images in a grid format.
--   **Inputs (Props)**:
-    -   `images`: An array of strings (image URLs) that will be displayed.
-    -   (Future) `config`: Optional configuration object for layout, aspect ratios, click handlers, etc.
--   **Outputs**: Renders a structured HTML element containing `img` tags, styled to form a grid.
--   **Dependencies**: Relies on internal utility functions for layout calculation and the associated CSS for visual presentation.
+### 3.1 `ChatMediaView` (src/ChatImageGrid.tsx)
 
-### 2. Types (src/types.ts)
--   **Purpose**: Defines TypeScript interfaces and types used throughout the library, ensuring type safety and code clarity.
--   **Key Types**:
-    -   `ImageSource`: Type definition for image URLs (e.g., `string`).
-    -   (Future) `ChatMediaViewProps`: Interface for the props of the `ChatMediaView` component.
+*   **Purpose**: The primary component for rendering a collection of media items in a responsive grid. It handles the overall layout, initial loading, and integration with the lightbox.
+*   **Responsibilities**:
+    *   Accepts an array of `MediaItem` objects and configuration props.
+    *   Calculates the optimal grid layout using `GridLayoutEngine` based on container width, aspect ratio, and gaps.
+    *   Renders individual media items (images/videos) within the grid.
+    *   Implements lazy loading for media using `useIntersectionObserver`.
+    *   Manages the state and opening of the `Lightbox` component.
+    *   Provides `onMediaClick` callback for custom actions when a media item is selected.
+*   **Key Interactions**:
+    *   Uses `GridLayoutEngine` for layout calculations.
+    *   Leverages `useIntersectionObserver` for performance optimization.
+    *   Renders `Lightbox` when a media item is clicked.
 
-### 3. Styling (styles/chat-image-grid.css)
--   **Purpose**: Provides the visual styling for the `ChatMediaView` component, defining the grid layout, image sizing, aspect ratios, and responsiveness.
--   **Technology**: Standard CSS, potentially using CSS Modules for scoping.
--   **Considerations**: Designed to be easily overridden or extended by the consuming application's styles.
+### 3.2 `Lightbox` (src/Lightbox.tsx)
 
-## Data Flow
+*   **Purpose**: A full-screen overlay component for detailed viewing and interaction with individual media items.
+*   **Responsibilities**:
+    *   Displays the currently selected `MediaItem` (image or video).
+    *   Provides navigation controls (previous, next) for cycling through media.
+    *   Offers image zoom functionality (panning included) and a reset option.
+    *   Includes a download option for the current media.
+    *   Supports keyboard navigation (Escape to close, arrow keys for navigation).
+    *   Handles responsiveness and overlay styling.
+*   **Key Interactions**:
+    *   Receives `media`, `currentIndex`, `isOpen`, `onClose`, `onNext`, `onPrev` and other customization props from `ChatMediaView`.
+    *   Manages its own internal state for zoom level and position.
 
-1.  **Application Integration**: A consuming React application imports `ChatMediaView` and its associated CSS.
-2.  **Prop Passing**: The application passes an array of image URLs (and potentially configuration) as props to the `ChatMediaView` component.
-3.  **Component Rendering**: `ChatMediaView` receives the props and, based on the number of images and internal logic, determines the optimal grid layout.
-4.  **Image Display**: For each image URL, `ChatMediaView` renders an `<img>` element within the structured grid layout.
-5.  **Styling Application**: The `chat-image-grid.css` styles are applied to the rendered HTML, transforming the `<img>` elements into the desired Telegram-style grid.
+### 3.3 `GridLayoutEngine` (src/GridLayoutEngine.ts)
 
-## Key Architectural Decisions
+*   **Purpose**: A utility class responsible for calculating the dimensions and positions of media items within the responsive grid.
+*   **Responsibilities**:
+    *   Takes `MediaItem[]`, container width, target aspect ratio, and gap as input.
+    *   Applies a heuristic algorithm to arrange media items into rows.
+    *   Calculates the `width` and `height` for each media item to fill the grid row efficiently while respecting aspect ratios.
+    *   Supports a `maxRows` constraint to limit the visible grid height.
+*   **Key Interactions**:
+    *   Instantiated and used by `ChatMediaView` during layout calculations.
 
--   **Component-Based**: The library is built around a single, highly reusable React component, promoting encapsulation and easy integration.
--   **Framework Agnostic (within React)**: Designed to work with any React project, minimizing dependencies on specific UI frameworks or complex state management libraries.
--   **Separation of Concerns**: Logic, types, and styling are separated into distinct files and directories for better organization.
--   **Declarative UI**: Leverages React's declarative nature for rendering the media grid.
--   **Minimal Dependencies**: Aims to keep external dependencies to a minimum to reduce bundle size and potential conflicts.
+### 3.4 `useIntersectionObserver` (src/hooks/useIntersectionObserver.ts)
 
-## Future Considerations
+*   **Purpose**: A custom React hook for observing changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. Used for lazy loading.
+*   **Responsibilities**:
+    *   Provides a simple API to integrate the Intersection Observer API into React components.
+    *   Returns whether the observed element is currently intersecting.
+*   **Key Interactions**:
+    *   Used by `ChatMediaView` to determine when media items enter the viewport, triggering their loading.
 
--   **Responsive Layout Engine**: Dynamic adjustment of grid layout based on container size and number of images.
--   **Image Optimization**: Lazy loading, responsive images (`srcset`), and placeholder support.
--   **Accessibility (a11y)**: Enhancements for screen readers and keyboard navigation.
--   **Customization**: More extensive props for layout variations, aspect ratios, borders, hover effects, etc.
--   **Event Handling**: Click events on images (e.g., to open a lightbox).
--   **Performance Optimizations**: Virtualization for very large numbers of images.
+### 3.5 `MediaItem` Type (src/types.ts)
+
+*   **Purpose**: Defines the structure for a single media object throughout the library.
+*   **Structure**: Includes properties like `id`, `type` (`image` | `video`), `url`, `alt`, optional `dimensions` (`width`, `height`), and `thumbnailUrl`.
+*   **Key Interactions**:
+    *   Used by `ChatMediaView` and `Lightbox` to represent and process media data consistently.
+
+### 3.6 Styling (src/styles/image-grid.css, src/styles/lightbox.css)
+
+*   **Purpose**: Provides the visual presentation for the grid and lightbox components.
+*   **Technologies**: Standard CSS.
+*   **Details**:
+    *   `image-grid.css`: Defines grid item styling, responsive behaviors, and placeholder appearance.
+    *   `lightbox.css`: Manages overlay, media element, and control button styling for the full-screen viewer.
+
+## 4. Data Flow
+
+1.  **Application Integration**: The consuming React application imports `ChatMediaView` and its associated CSS.
+2.  **Media Provision**: The application provides an array of `MediaItem` objects to the `ChatMediaView` component via props.
+3.  **Grid Layout Calculation**: `ChatMediaView` instantiates `GridLayoutEngine` with the media data and container dimensions to calculate the layout for each grid item.
+4.  **Lazy Loading**: `useIntersectionObserver` monitors the visibility of `ChatMediaView` and individual media placeholders.
+5.  **Media Rendering**: As media items become visible, `ChatMediaView` renders `<img>` or `<video>` tags, applying styles from `image-grid.css`.
+6.  **Lightbox Interaction**: When a user clicks a media item in the grid:
+    *   `ChatMediaView` updates its internal state, setting `lightboxOpen` to `true` and `currentMediaIndex` to the clicked item's index.
+    *   The `Lightbox` component is rendered, displaying the selected media.
+    *   User interactions (navigation, zoom, download) within the `Lightbox` are handled by its internal logic and passed-in callbacks (`onNext`, `onPrev`, `onClose`).
+7.  **Closure**: When the `Lightbox` is closed, `ChatMediaView`'s state is updated, unmounting the `Lightbox` component.
+
+## 5. Key Architectural Decisions
+
+*   **Component-Based Design**: Emphasizes reusability and clear separation of concerns, making the library easy to integrate and extend.
+*   **Declarative UI with React**: Leverages React's declarative nature for efficient rendering and state management.
+*   **TypeScript-First**: Ensures type safety across the codebase, reducing bugs and improving developer experience.
+*   **Performance Focus**: Integration of `useIntersectionObserver` for lazy loading and optimized `GridLayoutEngine` to ensure smooth performance with varying media counts.
+*   **Minimal External Dependencies**: Keeps the bundle size small and reduces potential conflicts with consuming applications.
+*   **Customizable via Props**: Most aspects of appearance and behavior are configurable through component props, allowing high flexibility without modifying the core library.
+
+## 6. Future Considerations
+
+-   **Pre-fetching/Pre-loading**: Implement strategies to pre-fetch adjacent media items in the lightbox for a smoother transition experience.
+-   **Gesture Support**: Add swipe gestures for navigation and pinch-to-zoom for touch devices in the lightbox.
+-   **Download Progress**: Enhance the download functionality in the lightbox to show progress.
+-   **Accessibility Enhancements**: Further refine ARIA attributes and keyboard interactions for broader accessibility.
