@@ -40,9 +40,12 @@ describe('DownloadManager', () => {
         }
       })
 
-      const blob = await downloadWithProgress('https://example.com/image.jpg', progressCallback)
+      const result = await downloadWithProgress('https://example.com/image.jpg', {
+        onProgress: progressCallback
+      })
 
-      expect(blob).toBeInstanceOf(Blob)
+      expect(result.blob).toBeInstanceOf(Blob)
+      expect(result.attempts).toBe(1)
       expect(progressCallback).toHaveBeenCalledTimes(2)
       expect(progressCallback).toHaveBeenCalledWith({ loaded: 3, total: 6, percentage: 50 })
       expect(progressCallback).toHaveBeenCalledWith({ loaded: 6, total: 6, percentage: 100 })
@@ -59,7 +62,8 @@ describe('DownloadManager', () => {
 
       const result = await downloadWithProgress('https://example.com/image.jpg')
 
-      expect(result).toBe(mockBlob)
+      expect(result.blob).toEqual(mockBlob)
+      expect(result.attempts).toBe(1)
     })
 
     it('throws error on non-ok response', async () => {
@@ -83,7 +87,59 @@ describe('DownloadManager', () => {
 
       const result = await downloadWithProgress('https://example.com/image.jpg')
 
-      expect(result).toBe(mockBlob)
+      expect(result.blob).toEqual(mockBlob)
+    })
+
+    it('supports legacy callback signature', async () => {
+      const progressCallback = vi.fn()
+      const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
+
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        headers: new Headers({}),
+        blob: vi.fn().mockResolvedValue(mockBlob)
+      })
+
+      // Legacy signature: (url, onProgress?)
+      const result = await downloadWithProgress('https://example.com/image.jpg', progressCallback)
+
+      expect(result.blob).toEqual(mockBlob)
+    })
+
+    it('throws AbortError when cancelled', async () => {
+      const controller = new AbortController()
+      controller.abort()
+
+      await expect(
+        downloadWithProgress('https://example.com/image.jpg', {
+          signal: controller.signal
+        })
+      ).rejects.toThrow()
+    })
+
+    it('retries on 5xx errors', async () => {
+      let attempts = 0
+      const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
+
+      global.fetch = vi.fn().mockImplementation(async () => {
+        attempts++
+        if (attempts < 2) {
+          return { ok: false, status: 500 }
+        }
+        return {
+          ok: true,
+          headers: new Headers({}),
+          blob: vi.fn().mockResolvedValue(mockBlob)
+        }
+      })
+
+      const result = await downloadWithProgress('https://example.com/test.jpg', {
+        maxRetries: 3,
+        baseDelay: 10 // Fast for testing
+      })
+
+      expect(result.retried).toBe(true)
+      expect(result.attempts).toBe(2)
     })
   })
 
