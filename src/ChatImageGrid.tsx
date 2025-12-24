@@ -1,25 +1,48 @@
 import { useMemo } from 'react'
 import { calculateLayout } from './GridLayoutEngine'
-import { ImageCell } from './ImageCell'
-import type { ChatImageGridProps } from './types'
+import { MediaCell } from './MediaCell'
+import type { ChatImageGridProps, MediaItem, ImageItem } from './types'
 import './styles/chat-image-grid.css'
 
+/**
+ * Normalize legacy ImageItem to MediaItem
+ * Infers type: 'image' when type field is missing
+ */
+function normalizeMediaItem(item: ImageItem | MediaItem): MediaItem {
+  if ('type' in item) return item as MediaItem
+  return { ...item, type: 'image' as const }
+}
+
 export function ChatImageGrid({
+  items,
   images,
   maxWidth = 400,
   gap = 2,
   borderRadius = 12,
+  onMediaClick,
   onImageClick,
   lazyLoad = true,
   className,
   rtl = false
 }: ChatImageGridProps) {
+  // Normalize items for backwards compatibility
+  const mediaItems = useMemo(() => {
+    const source = items ?? images ?? []
+    return source.map(normalizeMediaItem)
+  }, [items, images])
+
   const layout = useMemo(
-    () => calculateLayout(images, { maxWidth, gap, borderRadius, rtl }),
-    [images, maxWidth, gap, borderRadius, rtl]
+    () => calculateLayout(mediaItems, { maxWidth, gap, borderRadius, rtl }),
+    [mediaItems, maxWidth, gap, borderRadius, rtl]
   )
 
-  if (images.length === 0) return null
+  if (mediaItems.length === 0) return null
+
+  const handleClick = (index: number, item: MediaItem) => {
+    onMediaClick?.(index, item)
+    // Backwards compat: also call onImageClick
+    onImageClick?.(index, item)
+  }
 
   return (
     <div
@@ -31,18 +54,19 @@ export function ChatImageGrid({
       }}
       dir={rtl ? 'rtl' : undefined}
       role="group"
-      aria-label={`Image gallery with ${images.length} image${images.length > 1 ? 's' : ''}`}
+      aria-label={`Media gallery with ${mediaItems.length} item${mediaItems.length > 1 ? 's' : ''}`}
     >
       {layout.cells.map((cell) => {
-        const image = images[cell.index]
-        if (!image) return null
+        const item = mediaItems[cell.index]
+        if (!item) return null
+
         return (
-          <ImageCell
+          <MediaCell
             key={cell.index}
-            image={image}
+            item={item}
             layout={cell}
             lazyLoad={lazyLoad}
-            onClick={() => onImageClick?.(cell.index, image)}
+            onClick={() => handleClick(cell.index, item)}
           />
         )
       })}

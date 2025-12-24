@@ -1,11 +1,17 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { ChatImageGrid } from './ChatImageGrid'
-import type { ImageItem } from './types'
+import type { ImageItem, MediaItem } from './types'
 
 const mockImages: ImageItem[] = [
   { src: 'test1.jpg', width: 800, height: 600 },
   { src: 'test2.jpg', width: 600, height: 800 }
+]
+
+// Normalized versions with type: 'image' added
+const normalizedImages: MediaItem[] = [
+  { src: 'test1.jpg', width: 800, height: 600, type: 'image' },
+  { src: 'test2.jpg', width: 600, height: 800, type: 'image' }
 ]
 
 describe('ChatImageGrid', () => {
@@ -20,7 +26,8 @@ describe('ChatImageGrid', () => {
     render(<ChatImageGrid images={mockImages} onImageClick={onClick} />)
     const cells = document.querySelectorAll('.chat-image-cell')
     fireEvent.click(cells[1])
-    expect(onClick).toHaveBeenCalledWith(1, mockImages[1])
+    // Now expects normalized item with type: 'image'
+    expect(onClick).toHaveBeenCalledWith(1, normalizedImages[1])
   })
 
   it('renders nothing for empty images', () => {
@@ -65,7 +72,7 @@ describe('ChatImageGrid', () => {
     render(<ChatImageGrid images={[mockImages[0]]} onImageClick={onClick} />)
     const cell = document.querySelector('.chat-image-cell') as HTMLElement
     fireEvent.keyDown(cell, { key: 'Enter' })
-    expect(onClick).toHaveBeenCalledWith(0, mockImages[0])
+    expect(onClick).toHaveBeenCalledWith(0, normalizedImages[0])
   })
 
   it('ignores non-Enter/Space keyboard events', () => {
@@ -81,6 +88,28 @@ describe('ChatImageGrid', () => {
     render(<ChatImageGrid images={[mockImages[0]]} onImageClick={onClick} />)
     const cell = document.querySelector('.chat-image-cell') as HTMLElement
     fireEvent.keyDown(cell, { key: ' ' })
-    expect(onClick).toHaveBeenCalledWith(0, mockImages[0])
+    expect(onClick).toHaveBeenCalledWith(0, normalizedImages[0])
+  })
+
+  it('supports items prop with MediaItem array', () => {
+    const items: MediaItem[] = [
+      { type: 'image', src: 'img.jpg', width: 100, height: 100 },
+      { type: 'video', src: 'vid.mp4', width: 200, height: 200, duration: 30 }
+    ]
+    render(<ChatImageGrid items={items} />)
+    // Should render both cells (video uses VideoCell)
+    const cells = document.querySelectorAll('[role="button"]')
+    expect(cells).toHaveLength(2)
+  })
+
+  it('calls onMediaClick with index and item', () => {
+    const onMediaClick = vi.fn()
+    const items: MediaItem[] = [
+      { type: 'video', src: 'vid.mp4', width: 200, height: 200, duration: 30 }
+    ]
+    render(<ChatImageGrid items={items} onMediaClick={onMediaClick} />)
+    const cell = document.querySelector('[role="button"]') as HTMLElement
+    fireEvent.click(cell)
+    expect(onMediaClick).toHaveBeenCalledWith(0, items[0])
   })
 })

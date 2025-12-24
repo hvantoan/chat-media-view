@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { ChatImageGrid } from './ChatImageGrid'
+import type { ImageItem, VideoMediaItem, MediaItem } from './types'
 
 const meta = {
   component: ChatImageGrid,
@@ -9,22 +10,27 @@ const meta = {
     docs: {
       description: {
         component: `
-Telegram-style image grid for React chat applications.
+Telegram-style media grid for React chat applications.
 
 ## Features
-- Layouts for 1-5 images (exact Telegram clone)
+- Layouts for 1-5 images/videos (exact Telegram clone)
+- **Video support** with inline playback, duration badge, and auto-pause
 - Virtual list compatible via \`calculateGridHeight()\`
 - BlurHash/ThumbHash placeholder support
 - Keyboard accessible (Tab, Enter, Arrow keys)
 - RTL layout support
-- < 5KB gzipped
+- < 8KB gzipped
         `
       }
     }
   },
   argTypes: {
+    items: {
+      description: 'Array of media items to display (1-5 items, supports images and videos)',
+      control: { type: 'object' }
+    },
     images: {
-      description: 'Array of images to display (1-5 images)',
+      description: 'Array of images to display (1-5 images) - deprecated, use items',
       control: { type: 'object' }
     },
     maxWidth: {
@@ -53,8 +59,12 @@ Telegram-style image grid for React chat applications.
       table: { defaultValue: { summary: 'false' } }
     },
     onImageClick: {
-      description: 'Callback when an image is clicked',
+      description: 'Callback when an image is clicked (deprecated, use onMediaClick)',
       action: 'imageClicked'
+    },
+    onMediaClick: {
+      description: 'Callback when a media item is clicked',
+      action: 'mediaClicked'
     },
     className: {
       description: 'Custom class name for the grid container',
@@ -67,12 +77,60 @@ Telegram-style image grid for React chat applications.
 export default meta
 type Story = StoryObj<typeof meta>
 
-const sampleImages = [
+const sampleImages: ImageItem[] = [
   { src: 'https://picsum.photos/800/600?random=1', width: 800, height: 600 },
   { src: 'https://picsum.photos/600/800?random=2', width: 600, height: 800 },
   { src: 'https://picsum.photos/700/700?random=3', width: 700, height: 700 },
   { src: 'https://picsum.photos/900/500?random=4', width: 900, height: 500 },
   { src: 'https://picsum.photos/500/900?random=5', width: 500, height: 900 }
+]
+
+// Sample video items using public test videos
+const sampleVideos: VideoMediaItem[] = [
+  {
+    type: 'video',
+    src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg',
+    width: 1280,
+    height: 720,
+    duration: 15,
+    alt: 'For Bigger Blazes'
+  },
+  {
+    type: 'video',
+    src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg',
+    width: 1280,
+    height: 720,
+    duration: 15,
+    alt: 'For Bigger Escapes'
+  },
+  {
+    type: 'video',
+    src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg',
+    width: 1280,
+    height: 720,
+    duration: 60,
+    alt: 'For Bigger Fun'
+  },
+  {
+    type: 'video',
+    src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg',
+    width: 1280,
+    height: 720,
+    duration: 15,
+    alt: 'For Bigger Joyrides'
+  }
+]
+
+// Mixed media items (images + videos)
+const mixedMedia: MediaItem[] = [
+  { type: 'image', src: 'https://picsum.photos/800/600?random=1', width: 800, height: 600 },
+  sampleVideos[0],
+  { type: 'image', src: 'https://picsum.photos/600/800?random=2', width: 600, height: 800 },
+  sampleVideos[1]
 ]
 
 export const OneImage: Story = {
@@ -190,6 +248,143 @@ export const AccessibilityDemo: Story = {
     docs: {
       description: {
         story: 'Tab through images to see focus rings. Press Enter or Space to trigger click. Images have descriptive alt text for screen readers.'
+      }
+    }
+  }
+}
+
+// =====================
+// Video Stories
+// =====================
+
+export const SingleVideo: Story = {
+  name: 'Single Video',
+  args: {
+    items: [sampleVideos[0]]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Single video with thumbnail, play icon overlay, and duration badge. Click to play inline.'
+      }
+    }
+  }
+}
+
+export const TwoVideos: Story = {
+  name: 'Two Videos',
+  args: {
+    items: sampleVideos.slice(0, 2)
+  }
+}
+
+export const ThreeVideos: Story = {
+  name: 'Three Videos',
+  args: {
+    items: sampleVideos.slice(0, 3)
+  }
+}
+
+export const FourVideos: Story = {
+  name: 'Four Videos',
+  args: {
+    items: sampleVideos.slice(0, 4)
+  }
+}
+
+export const MixedMediaGrid: Story = {
+  name: 'Mixed Media (Images + Videos)',
+  args: {
+    items: mixedMedia
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Grid with both images and videos. Videos show play icon overlay and duration badge. Images load normally.'
+      }
+    }
+  }
+}
+
+export const VideoWithPlaceholder: Story = {
+  name: 'Video with Thumbnail Placeholder',
+  args: {
+    items: [{
+      ...sampleVideos[0],
+      thumbhash: thumbhashSample
+    }]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Video with ThumbHash placeholder while thumbnail loads.'
+      }
+    }
+  }
+}
+
+export const VideoClickHandler: Story = {
+  name: 'Video Click Handler',
+  args: {
+    items: sampleVideos.slice(0, 2),
+    onMediaClick: (index, item) => {
+      const type = item.type
+      const duration = type === 'video' ? ` (${item.duration}s)` : ''
+      alert(`Clicked ${type} at index ${index}${duration}`)
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Click video to see the onMediaClick callback with item type and duration.'
+      }
+    }
+  }
+}
+
+export const MixedMediaClickHandler: Story = {
+  name: 'Mixed Media Click Handler',
+  args: {
+    items: mixedMedia,
+    onMediaClick: (index, item) => {
+      console.log('Clicked:', item)
+      alert(`Clicked ${item.type} at index ${index}`)
+    }
+  }
+}
+
+export const LongDurationVideo: Story = {
+  name: 'Video with Long Duration',
+  args: {
+    items: [{
+      ...sampleVideos[0],
+      duration: 3661 // 1:01:01
+    }]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Duration badge formats as H:MM:SS for videos over 1 hour.'
+      }
+    }
+  }
+}
+
+export const VideoNoDuration: Story = {
+  name: 'Video without Duration',
+  args: {
+    items: [{
+      type: 'video' as const,
+      src: sampleVideos[0].src,
+      thumbnail: sampleVideos[0].thumbnail,
+      width: 1280,
+      height: 720
+    }]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Videos without duration info hide the duration badge.'
       }
     }
   }
