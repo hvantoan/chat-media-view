@@ -25,10 +25,13 @@ The library focuses on:
     *   **FR1.2.3 Max Rows**: The grid SHALL support a `maxRows` property to limit the number of displayed rows.
 *   **FR1.3 Lightbox Viewer**: The library SHALL include a full-screen lightbox component to view media items individually.
     *   **FR1.3.1 Navigation**: The lightbox SHALL provide navigation controls (next/previous) for cycling through media items.
-    *   **FR1.3.2 Zoom**: The lightbox SHALL allow zooming for image media items.
+    *   **FR1.3.2 Zoom**: The lightbox SHALL allow zooming for media items.
+        *   **FR1.3.2.1 Controls**: SHALL provide interactive zoom in/out/reset buttons.
+        *   **FR1.3.2.2 Configuration**: SHALL support `minZoom`, `maxZoom`, and `zoomStep` props.
+        *   **FR1.3.2.3 Shortcuts**: SHALL support keyboard shortcuts: `+`/`=` (Zoom In), `-`/`_` (Zoom Out), `0` (Reset).
     *   **FR1.3.3 Download**: The lightbox SHALL provide an option to download the currently viewed media item.
     *   **FR1.3.4 Customization**: The lightbox SHALL allow customization of overlay color and control visibility using a centralized design token system (CSS custom properties).
-    *   **FR1.3.5 Keyboard Navigation**: The lightbox SHALL support keyboard navigation (Escape, ArrowLeft, ArrowRight).
+    *   **FR1.3.5 Keyboard Navigation**: The lightbox SHALL support keyboard navigation (Escape, ArrowLeft, ArrowRight, and Zoom shortcuts).
     *   **FR1.3.6 Modern UI (Redesign Phase 2)**: The lightbox SHALL implement a sophisticated modern UI with:
         *   **Layered DOM Structure**: Decoupled background (`blur-bg`), gradient overlays, and interactive `stage`.
         *   **Glassmorphism**: Standardized glass buttons (circular and rectangular) and pill-shaped badges.

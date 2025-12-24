@@ -63,15 +63,17 @@ The library exposes two main components: `ChatMediaView` for grid display and `L
         *   `chat-lightbox__gradient`: Contextual top/bottom overlays for legibility.
         *   `chat-lightbox__stage`: Main interactive area containing media and controls.
     *   Provides navigation controls (previous, next) using standardized circular glass buttons.
-    *   Offers image zoom functionality (panning included) and a reset option.
+    *   Offers image and video zoom functionality using `useZoom` hook.
+    *   Renders `LightboxZoomControls` in the bottom control area.
     *   Includes a top toolbar with rectangular glass buttons for download and close actions.
-    *   Features a bottom control area for media counter and future zoom/thumbnail controls.
-    *   Supports keyboard navigation (Escape to close, arrow keys for navigation).
+    *   Features a bottom control area for media counter, zoom controls, and future thumbnail support.
+    *   Supports keyboard navigation (Escape to close, arrow keys for navigation, and zoom shortcuts).
     *   Handles responsiveness and high-performance overlay styling.
 *   **Key Interactions**:
-    *   Receives `media`, `currentIndex`, `isOpen`, `onClose`, `onNext`, `onPrev` and customization props (`showThumbnails`, `showZoomControls`).
+    *   Receives `media`, `currentIndex`, `isOpen`, `onClose`, `onNext`, `onPrev` and customization props (`showThumbnails`, `showZoomControls`, `minZoom`, `maxZoom`, `zoomStep`).
     *   Renders `LightboxVideo` for video items.
-    *   Manages internal state for zoom level and position.
+    *   Uses `useZoom` hook to manage zoom state and transitions.
+    *   Renders `LightboxZoomControls` for interactive zooming.
 
 ### 3.3 `GridLayoutEngine` (src/GridLayoutEngine.ts)
 

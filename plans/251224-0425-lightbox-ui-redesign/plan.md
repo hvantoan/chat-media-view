@@ -120,16 +120,20 @@ Implement circular nav buttons and top-right toolbar.
 - [x] Mobile responsive adjustments
 - [x] Icons exported from index.ts
 
-### Phase 4: Bottom Control Bar
+### Phase 4: Bottom Control Bar (DONE 2024-12-24)
 **File:** `phase-04-bottom-controls.md`
 
 Add counter pill and zoom controls.
 
 **Deliverables:**
-- Counter pill component
-- Zoom controls with +/- buttons
-- useZoom hook for state management
-- Zoom transform on media element
+- [x] Counter pill component
+- [x] Zoom controls with +/- buttons
+- [x] useZoom hook for state management
+- [x] Zoom transform on media element
+- [x] Keyboard shortcuts for zoom (+, -, 0)
+- [x] Zoom reset on media change
+- [x] Props interface updated
+- [x] Hook exported from index.ts
 
 ### Phase 5: Thumbnail Strip
 **File:** `phase-05-thumbnail-strip.md`

@@ -32,19 +32,19 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 
 ### Phase 6: Video Support & Lightbox Redesign
 - **Status:** Complete (251224)
-- **Description:** Video playback integration in grid and lightbox, glassmorphism UI overhaul (Phase 2), and comprehensive testing.
+- **Description:** Video playback integration in grid and lightbox, glassmorphism UI overhaul (Phase 2, 3 & 4), zoom system, and comprehensive testing.
 - **Progress:** 100%
 
 ## Key Features & Milestones
 
 - **MVP (Phase 3 Completion):** Basic image grid with lazy loading and responsive layout.
 - **Enhanced UX (Phase 4 Completion):** Visually appealing loading experience with placeholders and progress indicators.
-- **Video & Modern UI (Phase 6 Completion):** Full video integration and sophisticated glassmorphism lightbox.
+- **Video & Modern UI (Phase 6 Completion):** Full video integration, sophisticated glassmorphism lightbox, and advanced zoom functionality.
 - **Production Ready:** Fully documented, tested, and optimized library ready for public use.
 
 ## Success Metrics
 
-- Bundle size < 6KB gzipped (core + video + lightbox)
+- Bundle size < 6KB gzipped (core + video + lightbox + zoom)
 - Zero layout shift (CLS = 0)
 - Works with popular virtual list libraries (react-window, react-virtualized, @tanstack/virtual)
 - TypeScript strict mode compliant
@@ -55,10 +55,12 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 
 **[0.2.0] - 251224**
 ### Added
+- Lightbox UI Redesign Phase 4: Bottom Control Bar with zoom controls (`useZoom` hook), counter pill, and keyboard shortcuts (`+`, `-`, `0`).
+- `LightboxZoomControls` component for interactive media scaling.
+- New Lightbox props: `showThumbnails`, `showZoomControls`, `minZoom`, `maxZoom`, `zoomStep`.
 - Lightbox UI Redesign Phase 3: Navigation & Toolbar UI with circular glassmorphism buttons and SVG icons.
 - Lightbox UI Redesign Phase 2: Layered DOM structure with blurred background and gradients.
 - `LightboxIcons.tsx` component with custom SVG icons.
-- New Lightbox props: `showThumbnails`, `showZoomControls`.
 - Comprehensive test suite for Lightbox (`src/Lightbox.test.tsx`).
 - HTMLMediaElement mocks for video testing.
 - Video support in `ChatImageGrid` and `Lightbox`.

@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { MediaItem, ImageItem } from './types'
 import { handleKeyboardNav } from './accessibility'
 import { LightboxVideo } from './LightboxVideo'
 import { useDownload } from './hooks/useDownload'
+import { useZoom } from './hooks/useZoom'
+import { LightboxZoomControls } from './LightboxZoomControls'
 import {
   CloseIcon,
   DownloadIcon,
@@ -38,8 +40,14 @@ export interface LightboxProps {
   showDownload?: boolean
   /** Show thumbnail strip at bottom (default: true) */
   showThumbnails?: boolean
-  /** Show zoom controls (default: true) */
+  /** Show zoom controls for images (default: true) */
   showZoomControls?: boolean
+  /** Minimum zoom level (default: 0.5) */
+  minZoom?: number
+  /** Maximum zoom level (default: 3) */
+  maxZoom?: number
+  /** Zoom step increment (default: 0.25) */
+  zoomStep?: number
 }
 
 /**
@@ -56,10 +64,21 @@ export function Lightbox({
   onDownload,
   showDownload = true,
   showThumbnails = true,
-  showZoomControls = true
+  showZoomControls = true,
+  minZoom = 0.5,
+  maxZoom = 3,
+  zoomStep = 0.25
 }: LightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const { download, progress, status, reset } = useDownload()
+  const prevIndexRef = useRef(initialIndex)
+
+  // Zoom state management
+  const zoom = useZoom({
+    min: minZoom,
+    max: maxZoom,
+    step: zoomStep
+  })
 
   // Normalize items (backwards compat)
   const mediaItems = useMemo(() => {
@@ -80,13 +99,45 @@ export function Lightbox({
     reset()
   }, [currentIndex, reset])
 
+  // Reset zoom when image changes
+  useEffect(() => {
+    if (currentIndex !== prevIndexRef.current) {
+      zoom.resetZoom()
+      prevIndexRef.current = currentIndex
+    }
+    // zoom.resetZoom is stable from useCallback, safe to exclude zoom object
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex])
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose()
       return
     }
+
+    // Zoom keyboard shortcuts (images only)
+    const current = mediaItems[currentIndex]
+    const isCurrentVideo = current?.type === 'video'
+    if (!isCurrentVideo) {
+      if (e.key === '+' || e.key === '=') {
+        e.preventDefault()
+        zoom.zoomIn()
+        return
+      }
+      if (e.key === '-' || e.key === '_') {
+        e.preventDefault()
+        zoom.zoomOut()
+        return
+      }
+      if (e.key === '0') {
+        e.preventDefault()
+        zoom.resetZoom()
+        return
+      }
+    }
+
     handleKeyboardNav(e, currentIndex, mediaItems.length, setCurrentIndex)
-  }, [currentIndex, mediaItems.length, onClose])
+  }, [currentIndex, mediaItems, onClose, zoom])
 
   useEffect(() => {
     if (isOpen) {
@@ -161,7 +212,8 @@ export function Lightbox({
             <img
               src={current.src}
               alt={current.alt ?? ''}
-              className="chat-lightbox__media"
+              className={`chat-lightbox__media${zoom.isZoomed ? ' chat-lightbox__media--zoomed' : ''}`}
+              style={{ transform: `scale(${zoom.zoom})` }}
             />
           )}
         </div>
@@ -225,8 +277,10 @@ export function Lightbox({
               </div>
             )}
 
-            {/* Zoom controls placeholder - Phase 4 */}
-            {showZoomControls && !isVideo && null}
+            {/* Zoom controls (images only) */}
+            {showZoomControls && !isVideo && (
+              <LightboxZoomControls zoom={zoom} />
+            )}
           </div>
 
           {/* Thumbnails placeholder - Phase 5 */}

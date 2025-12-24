@@ -154,6 +154,22 @@
   min-width: 48px;
   text-align: center;
   padding: 0 8px;
+  cursor: pointer;
+}
+
+.chat-lightbox__zoom-value:hover {
+  color: white;
+}
+
+/* Zoom button disabled state */
+.chat-lightbox__pill-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.chat-lightbox__pill-btn:focus-visible {
+  outline: 2px solid white;
+  outline-offset: -2px;
 }
 
 /* ============================================

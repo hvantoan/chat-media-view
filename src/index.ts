@@ -7,6 +7,7 @@ export { PlayIcon } from './PlayIcon'
 export { PlaceholderCanvas } from './PlaceholderCanvas'
 export { Lightbox, type LightboxProps } from './Lightbox'
 export { LightboxVideo } from './LightboxVideo'
+export { LightboxZoomControls } from './LightboxZoomControls'
 export {
   CloseIcon,
   DownloadIcon,
@@ -20,6 +21,7 @@ export {
 export { useIntersectionObserver } from './hooks/useIntersectionObserver'
 export { useVideoVisibility } from './hooks/useVideoVisibility'
 export { useDownload, type DownloadStatus, type UseDownloadResult } from './hooks/useDownload'
+export { useZoom, type UseZoomOptions, type UseZoomResult } from './hooks/useZoom'
 
 // Layout Engine
 export { calculateLayout } from './GridLayoutEngine'
