@@ -1,7 +1,7 @@
 ---
 title: "ChatImageGrid Video Support"
 description: "Add video playback support with inline controls, enhanced downloads, and lightbox integration"
-status: pending
+status: in-review
 priority: P1
 effort: 24h
 branch: master
