@@ -1,4 +1,4 @@
-/* Lightbox - Full-screen image viewer */
+/* Lightbox - Full-screen media viewer */
 .chat-lightbox {
   position: fixed;
   inset: 0;
@@ -19,6 +19,13 @@
   max-width: 100%;
   max-height: 90vh;
   object-fit: contain;
+}
+
+.chat-lightbox__video {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  background: #000;
 }
 
 .chat-lightbox__close,
@@ -74,6 +81,43 @@
   font-size: 14px;
 }
 
+/* Download button */
+.chat-lightbox__download {
+  position: absolute;
+  top: -48px;
+  right: 60px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.chat-lightbox__download:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.chat-lightbox__download:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.chat-lightbox__download:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chat-lightbox__download span {
+  font-size: 11px;
+  font-weight: 600;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .chat-lightbox__prev {
@@ -93,6 +137,11 @@
   .chat-lightbox__close {
     top: 8px;
     right: 8px;
+  }
+
+  .chat-lightbox__download {
+    top: 8px;
+    right: 60px;
   }
 
   .chat-lightbox__counter {
