@@ -29,11 +29,12 @@ The library focuses on:
     *   **FR1.3.3 Download**: The lightbox SHALL provide an option to download the currently viewed media item.
     *   **FR1.3.4 Customization**: The lightbox SHALL allow customization of overlay color and control visibility using a centralized design token system (CSS custom properties).
     *   **FR1.3.5 Keyboard Navigation**: The lightbox SHALL support keyboard navigation (Escape, ArrowLeft, ArrowRight).
-    *   **FR1.3.6 Modern UI (Redesign Phase 1)**: The lightbox SHALL implement a modern glassmorphism UI with:
-        *   Standardized glass buttons (circular and rectangular variants).
-        *   Interactive pill-shaped badges for controls and metadata.
-        *   Layered gradient overlays (top/bottom) for enhanced readability.
-        *   Sophisticated backdrop-filter effects with solid color fallbacks.
+    *   **FR1.3.6 Modern UI (Redesign Phase 2)**: The lightbox SHALL implement a sophisticated modern UI with:
+        *   **Layered DOM Structure**: Decoupled background (`blur-bg`), gradient overlays, and interactive `stage`.
+        *   **Glassmorphism**: Standardized glass buttons (circular and rectangular) and pill-shaped badges.
+        *   **Enhanced Background**: Dynamic blurred background using the current media thumbnail/source.
+        *   **Customization**: Props to toggle UI elements like `showThumbnails`, `showZoomControls`, and `showDownload`.
+        *   **Responsive Layout**: Centralized `stage` for media content with independent toolbar, navigation, and bottom control areas.
 *   **FR1.4 Placeholder Support**: The grid SHALL display a configurable placeholder component while media items are loading or not yet visible.
 *   **FR1.5 Callback Mechanism**: The `ChatMediaView` component SHALL provide an `onMediaClick` callback when a media item is interacted with.
 

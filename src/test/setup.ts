@@ -1,4 +1,21 @@
+import { vi } from 'vitest'
 import '@testing-library/jest-dom'
+
+// Mock HTMLMediaElement play/pause for jsdom
+Object.defineProperty(globalThis.HTMLMediaElement.prototype, 'play', {
+  configurable: true,
+  value: vi.fn().mockImplementation(() => Promise.resolve()),
+})
+
+Object.defineProperty(globalThis.HTMLMediaElement.prototype, 'pause', {
+  configurable: true,
+  value: vi.fn(),
+})
+
+Object.defineProperty(globalThis.HTMLMediaElement.prototype, 'load', {
+  configurable: true,
+  value: vi.fn(),
+})
 
 // Mock IntersectionObserver for jsdom environment
 class MockIntersectionObserver {

@@ -29,12 +29,19 @@ This section summarizes the core components and key features introduced in Phase
     -   Supports glassmorphism UI components (buttons, pills, badges).
     -   Includes advanced gradient overlays and backdrop-filter fallbacks for better visual quality.
 
-### Phase 4: Video Support & UI Redesign
+### Phase 4: Video Support & Lightbox UI Redesign (Phase 2)
 
-This section summarizes the enhancements for video playback and the Lightbox UI redesign (Phase 1).
+This section summarizes the enhancements for video playback and the comprehensive Lightbox UI redesign.
 
 ### Key Files and Components:
 
+-   **src/Lightbox.tsx**:
+    -   Refactored with a modern layered DOM structure.
+    -   New props: `showThumbnails`, `showZoomControls`.
+    -   Internalized SVG icons for better portability.
+-   **src/styles/lightbox.css**:
+    -   New classes for `blur-bg`, `stage`, `media-wrapper`, `toolbar`, `nav`, and `bottom`.
+    -   Enhanced glassmorphism and gradient overlay implementations.
 -   **src/VideoCell.tsx**:
     -   Specialized component for rendering videos in the grid.
     -   Supports autoplay, muted, and looping for preview.
@@ -44,8 +51,9 @@ This section summarizes the enhancements for video playback and the Lightbox UI 
 ### Core Features:
 
 -   **Video Playback**: Full support for video media items in both grid and lightbox views.
--   **Enhanced UI**: Modern glassmorphism-based UI for the lightbox, including:
-    -   Dynamic design tokens for consistent styling.
-    -   Pill-shaped badges for metadata and controls.
-    -   High-quality gradient overlays for better control visibility.
+-   **Modern UI**: Sophisticated glassmorphism-based UI for the lightbox, including:
+    -   **Layered Rendering**: Blurred background decoupled from content for performance and visual depth.
+    -   **Interactive Controls**: Glass buttons for navigation and toolbar actions.
+    -   **Contextual Overlays**: Top and bottom gradients to ensure control legibility over diverse media.
+-   **Testing**: Comprehensive test suite in `src/Lightbox.test.tsx` ensuring UI stability and interaction correctness.
 -   **Robustness**: Fallback mechanisms for older browsers (e.g., `backdrop-filter` support).

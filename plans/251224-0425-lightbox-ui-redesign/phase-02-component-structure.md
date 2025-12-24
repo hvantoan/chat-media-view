@@ -342,22 +342,22 @@ export function Lightbox({
 
 ## Deliverables
 
-- [ ] Updated DOM structure in Lightbox.tsx
-- [ ] Blurred background layer implemented
-- [ ] Gradient overlays added
-- [ ] Stage container with proper positioning
-- [ ] Toolbar repositioned to top-right
-- [ ] Bottom controls container structure
-- [ ] New optional props added to interface
+- [x] Updated DOM structure in Lightbox.tsx
+- [x] Blurred background layer implemented
+- [x] Gradient overlays added
+- [x] Stage container with proper positioning
+- [x] Toolbar repositioned to top-right
+- [x] Bottom controls container structure
+- [x] New optional props added to interface
 
 ## Testing Checklist
 
-- [ ] Component renders without errors
-- [ ] Background blur effect visible
-- [ ] Gradients render at top/bottom
-- [ ] Existing functionality preserved
-- [ ] Click-outside-to-close still works
-- [ ] Keyboard navigation still works
+- [x] Component renders without errors
+- [x] Background blur effect visible
+- [x] Gradients render at top/bottom
+- [x] Existing functionality preserved
+- [x] Click-outside-to-close still works
+- [x] Keyboard navigation still works
 
 ## Notes
 

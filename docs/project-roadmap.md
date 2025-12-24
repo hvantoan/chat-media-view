@@ -30,21 +30,38 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 - **Description:** Final polish, comprehensive documentation, Storybook integration, and bundle size optimization.
 - **Progress:** 100%
 
+### Phase 6: Video Support & Lightbox Redesign
+- **Status:** Complete (251224)
+- **Description:** Video playback integration in grid and lightbox, glassmorphism UI overhaul (Phase 2), and comprehensive testing.
+- **Progress:** 100%
+
 ## Key Features & Milestones
 
 - **MVP (Phase 3 Completion):** Basic image grid with lazy loading and responsive layout.
 - **Enhanced UX (Phase 4 Completion):** Visually appealing loading experience with placeholders and progress indicators.
-- **Production Ready (Phase 5 Completion):** Fully documented, tested, and optimized library ready for public use.
+- **Video & Modern UI (Phase 6 Completion):** Full video integration and sophisticated glassmorphism lightbox.
+- **Production Ready:** Fully documented, tested, and optimized library ready for public use.
 
 ## Success Metrics
 
-- Bundle size < 5KB gzipped (core)
+- Bundle size < 6KB gzipped (core + video + lightbox)
 - Zero layout shift (CLS = 0)
 - Works with popular virtual list libraries (react-window, react-virtualized, @tanstack/virtual)
 - TypeScript strict mode compliant
 - Storybook documentation complete
+- >90% test coverage for core components
 
 ## Changelog
+
+**[0.2.0] - 251224**
+### Added
+- Lightbox UI Redesign Phase 2: Layered DOM structure with blurred background and gradients.
+- New Lightbox props: `showThumbnails`, `showZoomControls`.
+- Comprehensive test suite for Lightbox (`src/Lightbox.test.tsx`).
+- HTMLMediaElement mocks for video testing.
+- Video support in `ChatImageGrid` and `Lightbox`.
+- `VideoCell` component for inline video playback.
+- Enhanced `DownloadManager` with retry and abort support.
 
 **[0.1.0] - 251222**
 ### Added

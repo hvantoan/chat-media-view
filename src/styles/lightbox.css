@@ -193,20 +193,186 @@
 }
 
 /* ============================================
-   Lightbox Base Styles
+   Lightbox Base Container
    ============================================ */
-
-/* Lightbox - Full-screen media viewer */
 .chat-lightbox {
   position: fixed;
   inset: 0;
   z-index: 9999;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.9);
+  background: var(--lightbox-overlay);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: white;
+  overflow: hidden;
 }
 
+/* ============================================
+   Blurred Background Layer
+   ============================================ */
+.chat-lightbox__blur-bg {
+  position: absolute;
+  inset: 0;
+  z-index: var(--lightbox-z-bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(var(--lightbox-blur-bg));
+  opacity: 0.3;
+  pointer-events: none;
+  transform: scale(1.1);
+}
+
+/* ============================================
+   Stage Container
+   ============================================ */
+.chat-lightbox__stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--lightbox-z-media);
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .chat-lightbox__stage {
+    padding: 0 16px;
+  }
+}
+
+/* ============================================
+   Media Wrapper & Media Element
+   ============================================ */
+.chat-lightbox__media-wrapper {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
+}
+
+@media (min-width: 640px) {
+  .chat-lightbox__media-wrapper {
+    padding-bottom: 0;
+  }
+}
+
+.chat-lightbox__media {
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: transform var(--lightbox-transition-slow);
+  touch-action: manipulation;
+}
+
+.chat-lightbox__media--zoomed {
+  cursor: zoom-out;
+}
+
+/* Video element styling */
+.chat-lightbox__video {
+  max-width: 90vw;
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+  background: #000;
+}
+
+/* ============================================
+   Toolbar Container (Top Right)
+   ============================================ */
+.chat-lightbox__toolbar {
+  position: absolute;
+  top: 48px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: var(--lightbox-z-toolbar);
+}
+
+@media (max-width: 639px) {
+  .chat-lightbox__toolbar {
+    top: 16px;
+    right: 16px;
+  }
+}
+
+/* ============================================
+   Navigation Buttons
+   ============================================ */
+.chat-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: var(--lightbox-z-controls);
+}
+
+.chat-lightbox__nav--prev {
+  left: 24px;
+}
+
+.chat-lightbox__nav--next {
+  right: 24px;
+}
+
+@media (max-width: 639px) {
+  .chat-lightbox__nav {
+    top: auto;
+    bottom: 100px;
+    transform: none;
+  }
+
+  .chat-lightbox__nav--prev {
+    left: 16px;
+  }
+
+  .chat-lightbox__nav--next {
+    right: 16px;
+  }
+}
+
+/* ============================================
+   Bottom Controls Container
+   ============================================ */
+.chat-lightbox__bottom {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: var(--lightbox-z-controls);
+  pointer-events: none;
+}
+
+.chat-lightbox__bottom > * {
+  pointer-events: auto;
+}
+
+.chat-lightbox__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 639px) {
+  .chat-lightbox__bottom {
+    bottom: 16px;
+  }
+}
+
+/* ============================================
+   Legacy Styles (for backwards compat)
+   ============================================ */
 .chat-lightbox__content {
   position: relative;
   max-width: 90vw;
@@ -217,132 +383,4 @@
   max-width: 100%;
   max-height: 90vh;
   object-fit: contain;
-}
-
-.chat-lightbox__video {
-  max-width: 90vw;
-  max-height: 85vh;
-  object-fit: contain;
-  background: #000;
-}
-
-.chat-lightbox__close,
-.chat-lightbox__prev,
-.chat-lightbox__next {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  font-size: 24px;
-  padding: 12px 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s ease;
-}
-
-.chat-lightbox__close:hover,
-.chat-lightbox__prev:hover,
-.chat-lightbox__next:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.chat-lightbox__close:focus-visible,
-.chat-lightbox__prev:focus-visible,
-.chat-lightbox__next:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 2px;
-}
-
-.chat-lightbox__close {
-  top: -48px;
-  right: 0;
-}
-
-.chat-lightbox__prev {
-  left: -60px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.chat-lightbox__next {
-  right: -60px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.chat-lightbox__counter {
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 14px;
-}
-
-/* Download button */
-.chat-lightbox__download {
-  position: absolute;
-  top: -48px;
-  right: 60px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.chat-lightbox__download:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.chat-lightbox__download:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 2px;
-}
-
-.chat-lightbox__download:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.chat-lightbox__download span {
-  font-size: 11px;
-  font-weight: 600;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .chat-lightbox__prev {
-    left: 8px;
-    top: auto;
-    bottom: 8px;
-    transform: none;
-  }
-
-  .chat-lightbox__next {
-    right: 8px;
-    top: auto;
-    bottom: 8px;
-    transform: none;
-  }
-
-  .chat-lightbox__close {
-    top: 8px;
-    right: 8px;
-  }
-
-  .chat-lightbox__download {
-    top: 8px;
-    right: 60px;
-  }
-
-  .chat-lightbox__counter {
-    bottom: 60px;
-  }
 }
