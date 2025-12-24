@@ -23,23 +23,29 @@ This section summarizes the core components and key features introduced in Phase
     -   Custom React hook for efficient lazy loading of components.
     -   Utilizes the Intersection Observer API to detect when elements enter or exit the viewport.
 
--   **src/styles/chat-image-grid.css**:
-    -   Dedicated stylesheet for the `ChatImageGrid` and `ImageCell` components.
-    -   Defines styles for layout, positioning, transitions, and responsiveness.
+-   **src/styles/lightbox.css**:
+    -   Manages overlay, media element, and control button styling for the full-screen viewer.
+    -   Implements a comprehensive design system using 28+ CSS custom properties (design tokens).
+    -   Supports glassmorphism UI components (buttons, pills, badges).
+    -   Includes advanced gradient overlays and backdrop-filter fallbacks for better visual quality.
 
--   **src/index.ts**:
-    -   Updated to export the new `ChatImageGrid` component and related modules.
+### Phase 4: Video Support & UI Redesign
 
--   **src/ChatImageGrid.stories.tsx**:
-    -   Storybook stories for `ChatImageGrid`, demonstrating various use cases and states (8 stories in total).
+This section summarizes the enhancements for video playback and the Lightbox UI redesign (Phase 1).
 
--   **src/test/setup.ts**:
-    -   Added IntersectionObserver mock for testing purposes, ensuring consistent test environments for lazy loading logic.
+### Key Files and Components:
+
+-   **src/VideoCell.tsx**:
+    -   Specialized component for rendering videos in the grid.
+    -   Supports autoplay, muted, and looping for preview.
+-   **src/components/video/**:
+    -   New directory for video-specific components and hooks (e.g., `VideoPlayer`, `useVideoControls`).
 
 ### Core Features:
 
--   **Image Grid Layout**: Dynamic rendering of image arrays in a grid.
--   **Lazy Loading**: Efficient image loading using Intersection Observer.
--   **Interactivity**: Click handlers for images, keyboard navigation (Enter/Space).
--   **UI/UX**: Smooth fade-in effects, robust error state handling for images.
--   **Testability**: Storybook stories for component demonstration and mocked IntersectionObserver for reliable testing.
+-   **Video Playback**: Full support for video media items in both grid and lightbox views.
+-   **Enhanced UI**: Modern glassmorphism-based UI for the lightbox, including:
+    -   Dynamic design tokens for consistent styling.
+    -   Pill-shaped badges for metadata and controls.
+    -   High-quality gradient overlays for better control visibility.
+-   **Robustness**: Fallback mechanisms for older browsers (e.g., `backdrop-filter` support).

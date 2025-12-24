@@ -59,6 +59,9 @@ The `chat-media-view` library follows a modular structure designed for clarity, 
 - **CSS Files**: Utilize dedicated CSS files (e.g., `image-grid.css`, `lightbox.css`) for component-specific styling.
 - **Utility-First**: Consider using utility-first CSS frameworks like Tailwind CSS for rapid UI development, configured via `tailwind.config.js`.
 - **Variables**: Use CSS variables for themes, colors, and common spacing.
+- **Design Tokens**: Follow a strict naming convention for CSS custom properties: `--[component]-[category]-[property]` (e.g., `--lightbox-color-overlay`, `--lightbox-blur-bg`).
+- **Glassmorphism**: When implementing glassmorphism, always provide a fallback for browsers that do not support `backdrop-filter` using `@supports not (backdrop-filter: blur(1px))`.
+- **Transitions**: Standardize transitions using CSS variables to ensure consistency across interactive elements (e.g., `--lightbox-transition-normal`).
 
 ### 4. Naming Conventions
 - **Files**: `PascalCase` for React components (`ComponentName.tsx`), `camelCase` for hooks and utilities (`useHookName.ts`, `utilityFunction.ts`). Storybook files are `ComponentName.stories.tsx`.

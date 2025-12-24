@@ -101,7 +101,12 @@ The library exposes two main components: `ChatMediaView` for grid display and `L
 *   **Technologies**: Standard CSS.
 *   **Details**:
     *   `image-grid.css`: Defines grid item styling, responsive behaviors, and placeholder appearance.
-    *   `lightbox.css`: Manages overlay, media element, and control button styling for the full-screen viewer.
+    *   `lightbox.css`: Manages overlay, media element, and control button styling for the full-screen viewer. It utilizes a comprehensive design token system (CSS custom properties) to manage:
+        *   **Colors & Opacity**: Themed overlays, glass backgrounds, and borders.
+        *   **Blur & Effects**: Standardized blur levels for glassmorphism and backdrop-filters.
+        *   **Sizing & Spacing**: Consistent button dimensions, navigation sizes, and gutters.
+        *   **Transitions**: Unified duration and easing functions for all interactive elements.
+        *   **Layering (Z-index)**: Explicitly defined z-index stack for background, media, controls, and toolbar.
 
 ## 4. Data Flow
 

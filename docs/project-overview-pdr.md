@@ -27,8 +27,13 @@ The library focuses on:
     *   **FR1.3.1 Navigation**: The lightbox SHALL provide navigation controls (next/previous) for cycling through media items.
     *   **FR1.3.2 Zoom**: The lightbox SHALL allow zooming for image media items.
     *   **FR1.3.3 Download**: The lightbox SHALL provide an option to download the currently viewed media item.
-    *   **FR1.3.4 Customization**: The lightbox SHALL allow customization of overlay color and control visibility.
+    *   **FR1.3.4 Customization**: The lightbox SHALL allow customization of overlay color and control visibility using a centralized design token system (CSS custom properties).
     *   **FR1.3.5 Keyboard Navigation**: The lightbox SHALL support keyboard navigation (Escape, ArrowLeft, ArrowRight).
+    *   **FR1.3.6 Modern UI (Redesign Phase 1)**: The lightbox SHALL implement a modern glassmorphism UI with:
+        *   Standardized glass buttons (circular and rectangular variants).
+        *   Interactive pill-shaped badges for controls and metadata.
+        *   Layered gradient overlays (top/bottom) for enhanced readability.
+        *   Sophisticated backdrop-filter effects with solid color fallbacks.
 *   **FR1.4 Placeholder Support**: The grid SHALL display a configurable placeholder component while media items are loading or not yet visible.
 *   **FR1.5 Callback Mechanism**: The `ChatMediaView` component SHALL provide an `onMediaClick` callback when a media item is interacted with.
 
