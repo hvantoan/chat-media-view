@@ -322,11 +322,33 @@
   right: 24px;
 }
 
+/* Icon hover animation */
+.chat-lightbox__nav svg {
+  transition: transform var(--lightbox-transition-fast);
+}
+
+.chat-lightbox__nav--prev:hover svg {
+  transform: translateX(-2px);
+}
+
+.chat-lightbox__nav--next:hover svg {
+  transform: translateX(2px);
+}
+
+/* Active state with proper transform */
+.chat-lightbox__nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
 @media (max-width: 639px) {
   .chat-lightbox__nav {
     top: auto;
     bottom: 100px;
     transform: none;
+  }
+
+  .chat-lightbox__nav:active {
+    transform: scale(0.95);
   }
 
   .chat-lightbox__nav--prev {

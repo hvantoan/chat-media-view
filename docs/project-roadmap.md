@@ -55,7 +55,9 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 
 **[0.2.0] - 251224**
 ### Added
+- Lightbox UI Redesign Phase 3: Navigation & Toolbar UI with circular glassmorphism buttons and SVG icons.
 - Lightbox UI Redesign Phase 2: Layered DOM structure with blurred background and gradients.
+- `LightboxIcons.tsx` component with custom SVG icons.
 - New Lightbox props: `showThumbnails`, `showZoomControls`.
 - Comprehensive test suite for Lightbox (`src/Lightbox.test.tsx`).
 - HTMLMediaElement mocks for video testing.

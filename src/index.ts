@@ -7,6 +7,14 @@ export { PlayIcon } from './PlayIcon'
 export { PlaceholderCanvas } from './PlaceholderCanvas'
 export { Lightbox, type LightboxProps } from './Lightbox'
 export { LightboxVideo } from './LightboxVideo'
+export {
+  CloseIcon,
+  DownloadIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ZoomInIcon,
+  ZoomOutIcon
+} from './LightboxIcons'
 
 // Hooks
 export { useIntersectionObserver } from './hooks/useIntersectionObserver'
