@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 /**
  * SVG icon components for Lightbox
  * Inline SVGs for tree-shaking and styling control
@@ -8,7 +10,7 @@ interface IconProps {
   className?: string
 }
 
-export function CloseIcon({ size = 20, className }: IconProps) {
+export function CloseIcon({ size = 20, className }: IconProps): ReactNode {
   return (
     <svg
       width={size}
@@ -27,7 +29,7 @@ export function CloseIcon({ size = 20, className }: IconProps) {
   )
 }
 
-export function DownloadIcon({ size = 20, className }: IconProps) {
+export function DownloadIcon({ size = 20, className }: IconProps): ReactNode {
   return (
     <svg
       width={size}
@@ -47,7 +49,7 @@ export function DownloadIcon({ size = 20, className }: IconProps) {
   )
 }
 
-export function ChevronLeftIcon({ size = 24, className }: IconProps) {
+export function ChevronLeftIcon({ size = 24, className }: IconProps): ReactNode {
   return (
     <svg
       width={size}
@@ -65,7 +67,7 @@ export function ChevronLeftIcon({ size = 24, className }: IconProps) {
   )
 }
 
-export function ChevronRightIcon({ size = 24, className }: IconProps) {
+export function ChevronRightIcon({ size = 24, className }: IconProps): ReactNode {
   return (
     <svg
       width={size}
@@ -83,7 +85,7 @@ export function ChevronRightIcon({ size = 24, className }: IconProps) {
   )
 }
 
-export function ZoomInIcon({ size = 18, className }: IconProps) {
+export function ZoomInIcon({ size = 18, className }: IconProps): ReactNode {
   return (
     <svg
       width={size}
@@ -102,7 +104,7 @@ export function ZoomInIcon({ size = 18, className }: IconProps) {
   )
 }
 
-export function ZoomOutIcon({ size = 18, className }: IconProps) {
+export function ZoomOutIcon({ size = 18, className }: IconProps): ReactNode {
   return (
     <svg
       width={size}

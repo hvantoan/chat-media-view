@@ -139,7 +139,7 @@ export async function downloadWithProgress(
       while (true) {
         // Check abort during streaming
         if (signal?.aborted) {
-          reader.cancel()
+          void reader.cancel()
           throw new DOMException('Aborted', 'AbortError')
         }
 
@@ -165,7 +165,7 @@ export async function downloadWithProgress(
       }
 
       const blob = new Blob([combined], {
-        type: response.headers.get('Content-Type') || 'application/octet-stream'
+        type: response.headers.get('Content-Type') ?? 'application/octet-stream'
       })
 
       return { blob, retried: attempt > 0, attempts }
@@ -189,7 +189,7 @@ export async function downloadWithProgress(
   }
 
   // Should not reach here, but handle just in case
-  throw lastError || new Error('Download failed')
+  throw lastError ?? new Error('Download failed')
 }
 
 /**

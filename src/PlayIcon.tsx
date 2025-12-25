@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 interface PlayIconProps {
   size?: number
   className?: string
@@ -6,7 +8,7 @@ interface PlayIconProps {
 /**
  * SVG play button icon with semi-transparent circle background
  */
-export function PlayIcon({ size = 48, className }: PlayIconProps) {
+export function PlayIcon({ size = 48, className }: PlayIconProps): ReactNode {
   return (
     <svg
       width={size}

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { UseZoomResult } from './hooks/useZoom'
 import { ZoomInIcon, ZoomOutIcon } from './LightboxIcons'
 
@@ -9,7 +10,7 @@ interface LightboxZoomControlsProps {
  * Zoom controls component with +/- buttons and percentage display
  * Clicking percentage resets zoom to 100%
  */
-export function LightboxZoomControls({ zoom }: LightboxZoomControlsProps) {
+export function LightboxZoomControls({ zoom }: LightboxZoomControlsProps): ReactNode {
   return (
     <div className="chat-lightbox__pill chat-lightbox__pill--interactive">
       <button

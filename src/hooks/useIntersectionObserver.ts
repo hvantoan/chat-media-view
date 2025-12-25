@@ -1,4 +1,5 @@
-import { useState, useEffect, RefObject } from 'react'
+import type { RefObject } from 'react';
+import { useState, useEffect } from 'react'
 
 interface IntersectionOptions {
   rootMargin?: string
@@ -38,7 +39,7 @@ export function useIntersectionObserver(
     )
 
     observer.observe(element)
-    return () => observer.disconnect()
+    return () => { observer.disconnect(); }
   }, [ref, rootMargin, threshold, skip])
 
   return isVisible

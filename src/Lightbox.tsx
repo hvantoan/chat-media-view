@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { MediaItem, ImageItem } from './types'
 import { handleKeyboardNav } from './accessibility'
@@ -18,7 +19,7 @@ import './styles/lightbox.css'
  * Normalize legacy ImageItem to MediaItem
  */
 function normalizeMediaItem(item: ImageItem | MediaItem): MediaItem {
-  if ('type' in item) return item as MediaItem
+  if ('type' in item) return item
   return { ...item, type: 'image' as const }
 }
 
@@ -69,7 +70,7 @@ export function Lightbox({
   minZoom = 0.5,
   maxZoom = 3,
   zoomStep = 0.25
-}: LightboxProps) {
+}: LightboxProps): ReactNode {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const { download, progress, status, reset } = useDownload()
   const prevIndexRef = useRef(initialIndex)
@@ -166,7 +167,7 @@ export function Lightbox({
       const link = document.createElement('a')
       link.href = objectUrl
       const ext = current.type === 'video' ? 'mp4' : 'jpg'
-      link.download = current.alt || `media-${currentIndex + 1}.${ext}`
+      link.download = current.alt ?? `media-${currentIndex + 1}.${ext}`
       link.click()
     } catch {
       // Download failed or cancelled
@@ -178,11 +179,11 @@ export function Lightbox({
   const current = mediaItems[currentIndex]
   if (!current) return null
 
-  const goPrev = () => setCurrentIndex(i => (i - 1 + mediaItems.length) % mediaItems.length)
-  const goNext = () => setCurrentIndex(i => (i + 1) % mediaItems.length)
+  const goPrev = (): void => { setCurrentIndex(i => (i - 1 + mediaItems.length) % mediaItems.length); }
+  const goNext = (): void => { setCurrentIndex(i => (i + 1) % mediaItems.length); }
 
   const isVideo = current.type === 'video'
-  const bgImageUrl = current.thumbnail || current.src
+  const bgImageUrl = current.thumbnail ?? current.src
 
   return (
     <div
@@ -204,7 +205,7 @@ export function Lightbox({
       <div className="chat-lightbox__gradient chat-lightbox__gradient--bottom" aria-hidden="true" />
 
       {/* Main stage */}
-      <div className="chat-lightbox__stage" onClick={e => e.stopPropagation()}>
+      <div className="chat-lightbox__stage" onClick={e => { e.stopPropagation(); }}>
         {/* Media content */}
         <div className="chat-lightbox__media-wrapper">
           {isVideo ? (

@@ -1,3 +1,14 @@
+---
+title: ESLint 9 Configuration Plan
+description: Configure ESLint 9 with flat config for library-grade TypeScript rules
+status: completed
+priority: high
+effort: 2
+branch: feature/2-eslint-config
+tags: [eslint, linting, typescript]
+created: 2025-12-25
+---
+
 # ESLint 9 Configuration Plan
 
 ## Overview
@@ -237,12 +248,18 @@ Based on codebase analysis, expect fixes needed for:
 
 ## Validation Checklist
 
-- [ ] `npm run lint` runs without config errors
-- [ ] All exported functions have explicit return types
-- [ ] All type imports use `import type { ... }`
-- [ ] Test/story files have appropriately relaxed rules
-- [ ] `npm run lint:strict` passes with 0 warnings (goal)
-- [ ] Build still succeeds after fixes
+- [x] `npm run lint` runs without config errors
+- [x] All exported functions have explicit return types
+- [x] All type imports use `import type { ... }`
+- [x] Test/story files have appropriately relaxed rules
+- [x] `npm run lint:strict` passes with 0 warnings (goal)
+- [x] Build still succeeds after fixes
+
+## Completed
+
+- **Date:** 2025-12-25
+- **Status:** DONE
+- **Summary:** ESLint 9 flat config with library-grade TypeScript rules. Successfully migrated to ESLint 9 using `typescript-eslint` v8. Fixed all lint violations (148 tests pass, build succeeds). Implementation ensures public API hygiene and type safety.
 
 ## Notes
 

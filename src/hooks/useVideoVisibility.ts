@@ -1,4 +1,5 @@
-import { useEffect, RefObject, useRef } from 'react'
+import type { RefObject} from 'react';
+import { useEffect, useRef } from 'react'
 
 interface UseVideoVisibilityOptions {
   /** Threshold below which video pauses (0-1). Default 0.1 */
@@ -52,6 +53,6 @@ export function useVideoVisibility(
     )
 
     observer.observe(container)
-    return () => observer.disconnect()
+    return () => { observer.disconnect(); }
   }, [containerRef, videoRef, threshold, enabled])
 }
