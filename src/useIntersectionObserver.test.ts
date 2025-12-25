@@ -12,7 +12,8 @@ describe('useIntersectionObserver', () => {
     disconnectMock = vi.fn()
 
     // Store callback for manual triggering
-    global.IntersectionObserver = vi.fn((callback) => {
+    // Using regular function (not arrow) for vitest 4.x compatibility with `new` keyword
+    global.IntersectionObserver = vi.fn(function (callback) {
       mockCallback = callback
       return {
         observe: observeMock,
