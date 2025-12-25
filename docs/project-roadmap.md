@@ -40,11 +40,17 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 - **Description:** Migration to ESLint 9 (flat config) with strict library rules, type-aware linting, and codebase-wide refactoring for type safety.
 - **Progress:** 100%
 
+### Phase 8: CI/CD & Infrastructure
+- **Status:** Complete (251225)
+- **Description:** Implementation of GitHub Actions CI/CD pipeline, npm release workflow, automated Storybook deployment, and repo security/metadata.
+- **Progress:** 100%
+
 ## Key Features & Milestones
 
 - **MVP (Phase 3 Completion):** Basic image grid with lazy loading and responsive layout.
 - **Enhanced UX (Phase 4 Completion):** Visually appealing loading experience with placeholders and progress indicators.
 - **Video & Modern UI (Phase 6 Completion):** Full video integration, sophisticated glassmorphism lightbox, and advanced zoom functionality.
+- **CI/CD & Automation (Phase 8 Completion):** Fully automated testing, building, and publishing pipeline with high security standards.
 - **Production Ready:** Fully documented, tested, and optimized library ready for public use.
 
 ## Success Metrics
@@ -58,6 +64,17 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 - >90% test coverage for core components
 
 ## Changelog
+
+**[0.3.0] - 251225**
+### Added
+- CI/CD pipeline via GitHub Actions (`ci.yml`, `release.yml`).
+- Automated Storybook deployment to GitHub Pages.
+- NPM publish workflow with provenance and automated tagging.
+- Automated dependency updates via Dependabot.
+- Commit validation via Husky and Commitlint (Conventional Commits).
+- MIT License and project metadata (author, repository).
+- Node.js version pinning (.nvmrc).
+- Test coverage reporting to Codecov.
 
 **[0.2.1] - 251225**
 ### Added

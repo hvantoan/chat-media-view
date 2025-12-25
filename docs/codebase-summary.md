@@ -104,3 +104,35 @@ This phase involved migrating the project to ESLint 9 with a flat configuration 
     -   Refactored all components and hooks to comply with the new strict rules.
     -   Added explicit return types to all public APIs.
     -   Updated all type imports to use `import type`.
+    -
+## Phase 8: GitHub Actions CI/CD & Commit Standards
+
+This phase implemented a robust CI/CD pipeline and enforced commit standards for production readiness.
+
+### Infrastructure & Workflow:
+
+-   **.github/workflows/ci.yml**:
+    -   Automated CI pipeline on `pull_request` and `push` to `master`/`develop`.
+    -   Steps: Setup Node (via `.nvmrc`), Install, Lint (strict), Test (with coverage), Build.
+-   **.github/workflows/release.yml**:
+    -   Automated release workflow on `push` to `master`.
+    -   Handles versioning, CHANGELOG generation, and NPM publishing.
+-   **.github/dependabot.yml**:
+    -   Automated dependency updates for `npm` and `github-actions`.
+
+### Commit & Quality Standards:
+
+-   **Husky & commitlint**:
+    -   `.husky/commit-msg`: Enforces Conventional Commits using `commitlint`.
+    -   `.husky/pre-commit`: Runs `npm run lint:strict` and `npm test` before every commit.
+-   **commitlint.config.js**:
+    -   Configured with `@commitlint/config-conventional`.
+-   **CHANGELOG.md**:
+    -   Auto-generated log of changes, following Conventional Commits.
+-   **.nvmrc**:
+    -   Locked Node.js version (v20) for environment consistency.
+-   **LICENSE**:
+    -   Added MIT License file.
+-   **package.json updates**:
+    -   Added metadata (author, repository, bugs).
+    -   Added `test:coverage` and `prepare` (husky install) scripts.
