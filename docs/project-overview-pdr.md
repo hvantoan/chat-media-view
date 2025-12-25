@@ -73,7 +73,7 @@ The library focuses on:
     *   **NFR2.5.3 Internal Docs**: Internal documentation for project overview, code standards, and system architecture SHALL be maintained in the `docs` directory.
 *   **NFR2.6 Code Quality**:
     *   **NFR2.6.1 Strict TypeScript**: The project SHALL enforce strict TypeScript settings (`strict: true`, `noUncheckedIndexedAccess: true`, etc.) to minimize runtime errors and improve code robustness.
-    *   **NFR2.6.2 ESLint**: ESLint SHALL be configured and enforced to maintain code style and catch potential issues.
+    *   **NFR2.6.2 ESLint**: ESLint 9 SHALL be configured with a flat configuration (`eslint.config.js`) and enforced to maintain code style and catch potential issues. It SHALL include strict library-grade rules such as explicit return types for public APIs and type-only imports.
 
 ## 3. Future Considerations
 

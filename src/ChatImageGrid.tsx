@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { calculateLayout } from './GridLayoutEngine'
 import { MediaCell } from './MediaCell'
@@ -9,7 +10,7 @@ import './styles/chat-image-grid.css'
  * Infers type: 'image' when type field is missing
  */
 function normalizeMediaItem(item: ImageItem | MediaItem): MediaItem {
-  if ('type' in item) return item as MediaItem
+  if ('type' in item) return item
   return { ...item, type: 'image' as const }
 }
 
@@ -24,7 +25,7 @@ export function ChatImageGrid({
   lazyLoad = true,
   className,
   rtl = false
-}: ChatImageGridProps) {
+}: ChatImageGridProps): ReactNode {
   // Normalize items for backwards compatibility
   const mediaItems = useMemo(() => {
     const source = items ?? images ?? []
@@ -38,7 +39,7 @@ export function ChatImageGrid({
 
   if (mediaItems.length === 0) return null
 
-  const handleClick = (index: number, item: MediaItem) => {
+  const handleClick = (index: number, item: MediaItem): void => {
     onMediaClick?.(index, item)
     // Backwards compat: also call onImageClick
     onImageClick?.(index, item)
@@ -66,7 +67,7 @@ export function ChatImageGrid({
             item={item}
             layout={cell}
             lazyLoad={lazyLoad}
-            onClick={() => handleClick(cell.index, item)}
+            onClick={() => { handleClick(cell.index, item); }}
           />
         )
       })}

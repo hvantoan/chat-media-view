@@ -28,7 +28,7 @@ The `chat-media-view` library follows a modular structure designed for clarity, 
 ├── tsconfig.json         # TypeScript configuration
 ├── tsconfig.build.json   # TypeScript build configuration
 ├── vite.config.ts        # Vite build configuration
-├── .eslintrc.cjs         # ESLint configuration
+├── eslint.config.js     # ESLint 9 configuration
 ├── postcss.config.js     # PostCSS configuration
 ├── tailwind.config.js    # Tailwind CSS configuration
 └── README.md             # Project README
@@ -88,6 +88,22 @@ The `chat-media-view` library follows a modular structure designed for clarity, 
 - **Memoization**: Use `React.memo`, `useMemo`, and `useCallback` to optimize performance for expensive computations or re-renders.
 - **Lazy Loading**: Implement lazy loading for components or media (e.g., `useIntersectionObserver` for media items).
 
-### 9. Version Control
+### 9. Linting
+
+This project uses ESLint 9 with TypeScript-ESLint for code quality:
+
+```bash
+npm run lint        # Check for issues
+npm run lint:fix    # Auto-fix issues
+npm run lint:strict # Zero warnings allowed
+```
+
+Key rules enforced:
+- Explicit return types on exported functions
+- Type-only imports for types
+- No unsafe any operations
+- React hooks rules
+
+### 10. Version Control
 - **Git Flow**: Follow a standard Git branching strategy (e.g., feature branches, develop, main).
 - **Commit Messages**: Write clear, concise, and descriptive commit messages (e.g., Conventional Commits).

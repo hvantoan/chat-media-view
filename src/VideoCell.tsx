@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useRef, useState, useCallback } from 'react'
 import { useIntersectionObserver } from './hooks/useIntersectionObserver'
 import { useVideoVisibility } from './hooks/useVideoVisibility'
@@ -19,7 +20,7 @@ interface VideoCellProps {
  * Format duration in seconds to M:SS format
  */
 function formatDuration(seconds?: number): string | null {
-  if (!seconds) return null
+  if (seconds == null || seconds === 0) return null
   const m = Math.floor(seconds / 60)
   const s = Math.floor(seconds % 60)
   return `${m}:${s.toString().padStart(2, '0')}`
@@ -30,7 +31,7 @@ export function VideoCell({
   layout,
   lazyLoad,
   onClick
-}: VideoCellProps) {
+}: VideoCellProps): ReactNode {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [state, setState] = useState<VideoState>('thumbnail')
@@ -49,11 +50,11 @@ export function VideoCell({
   })
 
   const shouldLoadThumbnail = !lazyLoad || isVisible
-  const hasPlaceholder = video.blurhash || video.thumbhash
+  const hasPlaceholder = video.blurhash ?? video.thumbhash
   const showThumbnail = state === 'thumbnail' || state === 'loading'
   const showVideo = state === 'playing' || state === 'paused' || state === 'loading'
 
-  const handleThumbnailLoad = useCallback(() => setThumbnailLoaded(true), [])
+  const handleThumbnailLoad = useCallback(() => { setThumbnailLoaded(true); }, [])
 
   const handleThumbnailError = useCallback(() => {
     if (state === 'thumbnail') setState('error')
@@ -67,8 +68,8 @@ export function VideoCell({
   const handleVideoCanPlay = useCallback(() => {
     if (videoRef.current) {
       videoRef.current.play()
-        .then(() => setState('playing'))
-        .catch(() => setState('error'))
+        .then(() => { setState('playing'); })
+        .catch(() => { setState('error'); })
     }
   }, [])
 
@@ -120,13 +121,13 @@ export function VideoCell({
       onClick={onClick}
       role="button"
       tabIndex={0}
-      aria-label={video.alt || 'Video'}
+      aria-label={video.alt ?? 'Video'}
       onKeyDown={handleKeyDown}
     >
       {/* Placeholder layer */}
       {hasPlaceholder && !thumbnailLoaded && state !== 'error' && (
         <PlaceholderCanvas
-          hash={(video.thumbhash || video.blurhash)!}
+          hash={(video.thumbhash ?? video.blurhash)!}
           hashType={video.thumbhash ? 'thumbhash' : 'blurhash'}
           width={layout.width}
           height={layout.height}
@@ -137,7 +138,7 @@ export function VideoCell({
       {/* Thumbnail layer */}
       {shouldLoadThumbnail && showThumbnail && (
         <img
-          src={video.thumbnail || video.src}
+          src={video.thumbnail ?? video.src}
           alt=""
           className={`chat-video-cell__thumbnail ${thumbnailLoaded ? 'loaded' : ''}`}
           onLoad={handleThumbnailLoad}
@@ -159,7 +160,7 @@ export function VideoCell({
           onError={handleVideoError}
           onPause={handleVideoPause}
           onPlay={handleVideoPlay}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); }}
         />
       )}
 

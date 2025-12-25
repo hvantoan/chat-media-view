@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { ImageCell } from './ImageCell'
 import { VideoCell } from './VideoCell'
 import type { MediaItem, CellLayout } from './types'
@@ -12,7 +13,7 @@ interface MediaCellProps {
 /**
  * Wrapper component that renders appropriate cell based on media type
  */
-export function MediaCell({ item, layout, lazyLoad, onClick }: MediaCellProps) {
+export function MediaCell({ item, layout, lazyLoad, onClick }: MediaCellProps): ReactNode {
   if (item.type === 'video') {
     return (
       <VideoCell

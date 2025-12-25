@@ -35,6 +35,11 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 - **Description:** Video playback integration in grid and lightbox, glassmorphism UI overhaul, thumbnail strip, zoom system, and comprehensive testing.
 - **Progress:** 100%
 
+### Phase 7: Quality Assurance & Linting
+- **Status:** Complete (251225)
+- **Description:** Migration to ESLint 9 (flat config) with strict library rules, type-aware linting, and codebase-wide refactoring for type safety.
+- **Progress:** 100%
+
 ## Key Features & Milestones
 
 - **MVP (Phase 3 Completion):** Basic image grid with lazy loading and responsive layout.
@@ -48,10 +53,20 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 - Zero layout shift (CLS = 0)
 - Works with popular virtual list libraries (react-window, react-virtualized, @tanstack/virtual)
 - TypeScript strict mode compliant
+- ESLint 9 (flat config) compliant with strict library rules
 - Storybook documentation complete
 - >90% test coverage for core components
 
 ## Changelog
+
+**[0.2.1] - 251225**
+### Added
+- ESLint 9 flat configuration with `typescript-eslint` v8.
+- Library-grade linting rules (explicit return types, type-only imports, strict boolean expressions).
+- New lint scripts: `lint`, `lint:fix`, `lint:strict`.
+
+### Fixed
+- All lint violations across the codebase.
 
 **[0.2.0] - 251225**
 ### Added

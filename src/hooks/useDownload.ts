@@ -1,10 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import type {
+  DownloadProgress,
+  DownloadOptions
+} from '../DownloadManager';
 import {
   downloadWithProgress,
   createImageUrl,
-  revokeImageUrl,
-  DownloadProgress,
-  DownloadOptions
+  revokeImageUrl
 } from '../DownloadManager'
 
 export type DownloadStatus = 'idle' | 'downloading' | 'completed' | 'cancelled' | 'error'

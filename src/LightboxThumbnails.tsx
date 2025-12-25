@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useRef, useEffect, useCallback } from 'react'
 import type { MediaItem } from './types'
 
@@ -10,7 +11,7 @@ export interface LightboxThumbnailsProps {
 /**
  * Small play icon for video thumbnails
  */
-function VideoIndicator() {
+function VideoIndicator(): ReactNode {
   return (
     <div className="chat-lightbox__thumb-video-badge" aria-hidden="true">
       <svg viewBox="0 0 24 24">
@@ -27,7 +28,7 @@ export function LightboxThumbnails({
   items,
   currentIndex,
   onSelect
-}: LightboxThumbnailsProps) {
+}: LightboxThumbnailsProps): ReactNode {
   const scrollRef = useRef<HTMLDivElement>(null)
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([])
 
@@ -61,7 +62,7 @@ export function LightboxThumbnails({
 
   const getThumbnailUrl = (item: MediaItem): string => {
     // Prefer thumbnail, fallback to src
-    return item.thumbnail || item.src
+    return item.thumbnail ?? item.src
   }
 
   return (
@@ -82,11 +83,11 @@ export function LightboxThumbnails({
                 key={index}
                 ref={el => { thumbRefs.current[index] = el }}
                 className={`chat-lightbox__thumb ${isActive ? 'chat-lightbox__thumb--active' : ''}`}
-                onClick={() => onSelect(index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
+                onClick={() => { onSelect(index); }}
+                onKeyDown={(e) => { handleKeyDown(e, index); }}
                 role="option"
                 aria-selected={isActive}
-                aria-label={item.alt || `${isVideo ? 'Video' : 'Image'} ${index + 1}`}
+                aria-label={item.alt ?? `${isVideo ? 'Video' : 'Image'} ${index + 1}`}
                 type="button"
               >
                 <img
