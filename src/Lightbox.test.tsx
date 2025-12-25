@@ -194,4 +194,43 @@ describe('Lightbox', () => {
     )
     expect(screen.queryByLabelText('Download')).not.toBeInTheDocument()
   })
+
+  it('shows thumbnails when enabled and multiple items', () => {
+    render(
+      <Lightbox items={mockItems} isOpen={true} onClose={() => {}} showThumbnails={true} />
+    )
+    expect(screen.getByRole('listbox')).toBeInTheDocument()
+    expect(screen.getAllByRole('option')).toHaveLength(3)
+  })
+
+  it('hides thumbnails when disabled', () => {
+    render(
+      <Lightbox items={mockItems} isOpen={true} onClose={() => {}} showThumbnails={false} />
+    )
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+  })
+
+  it('hides thumbnails for single item', () => {
+    render(
+      <Lightbox items={[mockItems[0]]} isOpen={true} onClose={() => {}} showThumbnails={true} />
+    )
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+  })
+
+  it('navigates via thumbnail click', () => {
+    render(
+      <Lightbox items={mockItems} isOpen={true} onClose={() => {}} showThumbnails={true} />
+    )
+    const thumbnails = screen.getAllByRole('option')
+    fireEvent.click(thumbnails[1])
+    expect(screen.getByText('2 / 3')).toBeInTheDocument()
+  })
+
+  it('hides zoom controls when showZoomControls is false', () => {
+    render(
+      <Lightbox items={mockItems} isOpen={true} onClose={() => {}} showZoomControls={false} />
+    )
+    expect(screen.queryByLabelText('Zoom in')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Zoom out')).not.toBeInTheDocument()
+  })
 })

@@ -31,8 +31,8 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 - **Progress:** 100%
 
 ### Phase 6: Video Support & Lightbox Redesign
-- **Status:** Complete (251224)
-- **Description:** Video playback integration in grid and lightbox, glassmorphism UI overhaul (Phase 2, 3 & 4), zoom system, and comprehensive testing.
+- **Status:** Complete (251225)
+- **Description:** Video playback integration in grid and lightbox, glassmorphism UI overhaul, thumbnail strip, zoom system, and comprehensive testing.
 - **Progress:** 100%
 
 ## Key Features & Milestones
@@ -53,8 +53,10 @@ This roadmap outlines the development phases for the `chat-media-view` NPM libra
 
 ## Changelog
 
-**[0.2.0] - 251224**
+**[0.2.0] - 251225**
 ### Added
+- Lightbox UI Redesign Phase 6: Polish & Testing with mobile responsive adjustments, animation polish, and unit test coverage.
+- Lightbox UI Redesign Phase 5: Thumbnail strip with scroll navigation and active states.
 - Lightbox UI Redesign Phase 4: Bottom Control Bar with zoom controls (`useZoom` hook), counter pill, and keyboard shortcuts (`+`, `-`, `0`).
 - `LightboxZoomControls` component for interactive media scaling.
 - New Lightbox props: `showThumbnails`, `showZoomControls`, `minZoom`, `maxZoom`, `zoomStep`.

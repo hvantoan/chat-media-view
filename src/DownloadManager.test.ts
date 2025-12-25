@@ -5,6 +5,9 @@ import {
   revokeImageUrl
 } from './DownloadManager'
 
+import * as matchers from '@testing-library/jest-dom/matchers';
+expect.extend(matchers);
+
 describe('DownloadManager', () => {
   const originalFetch = global.fetch
 

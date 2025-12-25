@@ -12,47 +12,29 @@ const meta = {
     docs: {
       description: {
         component: `
-Optional lightbox component for full-screen media viewing.
+Full-screen media viewer with glassmorphism UI.
 
 ## Features
-- **Video playback** with controls (auto-play when opened)
+- **Glassmorphism UI** with blurred background
+- **Zoom controls** (+/-/reset) for images
+- **Thumbnail strip** for quick navigation
+- **Video playback** with native controls
 - **Download button** with progress indicator
-- Keyboard navigation (Arrow keys, Escape)
-- Prev/Next buttons with counter
-- Click outside to close
-- Body scroll lock when open
+- **Keyboard shortcuts**: Arrows, Escape, +/-, 0
 - Fully accessible with ARIA attributes
-- Tree-shakeable (only included if imported)
         `
       }
     }
   },
   argTypes: {
-    items: {
-      description: 'Array of media items to display (images or videos)',
-      control: { type: 'object' }
-    },
-    images: {
-      description: 'Array of images to display (deprecated, use items)',
-      control: { type: 'object' }
-    },
-    initialIndex: {
-      description: 'Initial image index to show',
-      control: { type: 'number', min: 0 },
-      table: { defaultValue: { summary: '0' } }
-    },
-    isOpen: {
-      description: 'Whether the lightbox is open',
-      control: 'boolean'
-    },
-    onClose: {
-      description: 'Callback when lightbox closes',
-      action: 'closed'
-    },
-    onIndexChange: {
-      description: 'Callback when current index changes',
-      action: 'indexChanged'
-    }
+    items: { description: 'Array of media items', control: { type: 'object' } },
+    initialIndex: { description: 'Starting index', control: { type: 'number', min: 0 } },
+    isOpen: { description: 'Lightbox visibility', control: 'boolean' },
+    showThumbnails: { description: 'Show thumbnail strip', control: 'boolean' },
+    showZoomControls: { description: 'Show zoom controls', control: 'boolean' },
+    showDownload: { description: 'Show download button', control: 'boolean' },
+    onClose: { action: 'closed' },
+    onIndexChange: { action: 'indexChanged' }
   },
   tags: ['autodocs']
 } satisfies Meta<typeof Lightbox>
@@ -60,204 +42,119 @@ Optional lightbox component for full-screen media viewing.
 export default meta
 type Story = StoryObj<typeof meta>
 
-const sampleImages: MediaItem[] = [
-  { type: 'image', src: 'https://picsum.photos/1200/800?random=10', width: 1200, height: 800, alt: 'Landscape photo 1' },
-  { type: 'image', src: 'https://picsum.photos/800/1200?random=11', width: 800, height: 1200, alt: 'Portrait photo 2' },
-  { type: 'image', src: 'https://picsum.photos/1000/1000?random=12', width: 1000, height: 1000, alt: 'Square photo 3' },
-  { type: 'image', src: 'https://picsum.photos/1400/600?random=13', width: 1400, height: 600, alt: 'Wide photo 4' }
+// Simple sample data
+const images: MediaItem[] = [
+  { type: 'image', src: 'https://picsum.photos/1200/800?random=1', width: 1200, height: 800, alt: 'Landscape' },
+  { type: 'image', src: 'https://picsum.photos/800/1200?random=2', width: 800, height: 1200, alt: 'Portrait' },
+  { type: 'image', src: 'https://picsum.photos/1000/1000?random=3', width: 1000, height: 1000, alt: 'Square' },
+  { type: 'image', src: 'https://picsum.photos/1600/900?random=4', width: 1600, height: 900, alt: 'Wide' }
 ]
 
-// Sample video items using public test videos
-const sampleVideos: VideoMediaItem[] = [
+const videos: VideoMediaItem[] = [
   {
     type: 'video',
     src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg',
-    width: 1280,
-    height: 720,
-    duration: 15,
-    alt: 'For Bigger Blazes'
+    width: 1280, height: 720, alt: 'Video 1'
   },
   {
     type: 'video',
     src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg',
-    width: 1280,
-    height: 720,
-    duration: 15,
-    alt: 'For Bigger Escapes'
-  },
-  {
-    type: 'video',
-    src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
-    width: 1280,
-    height: 720,
-    duration: 596,
-    alt: 'Big Buck Bunny'
+    width: 1280, height: 720, alt: 'Video 2'
   }
 ]
 
-// Mixed media items
-const mixedMedia: MediaItem[] = [
-  sampleImages[0],
-  sampleVideos[0],
-  sampleImages[1],
-  sampleVideos[1]
-]
+const mixed: MediaItem[] = [images[0], videos[0], images[1], videos[1]]
 
-// Static lightbox (controlled via args)
-export const Open: Story = {
-  args: {
-    items: sampleImages,
-    isOpen: true,
-    initialIndex: 0
-  }
-}
+// =====================
+// Basic Stories
+// =====================
 
-export const StartAtSecondImage: Story = {
-  name: 'Start at Second Image',
-  args: {
-    items: sampleImages,
-    isOpen: true,
-    initialIndex: 1
-  }
+export const Default: Story = {
+  args: { items: images, isOpen: true }
 }
 
 export const SingleImage: Story = {
-  name: 'Single Image (No Navigation)',
-  args: {
-    items: [sampleImages[0]],
-    isOpen: true
-  },
+  args: { items: [images[0]], isOpen: true },
+  parameters: { docs: { description: { story: 'Single image - no nav buttons or thumbnails' } } }
+}
+
+// =====================
+// New Feature Stories
+// =====================
+
+export const WithZoomControls: Story = {
+  name: 'Zoom Controls',
+  args: { items: images, isOpen: true, showZoomControls: true },
   parameters: {
     docs: {
       description: {
-        story: 'When only one image is provided, navigation buttons are hidden.'
+        story: 'Use +/- buttons or keyboard (+, -, 0) to zoom. Click percentage to reset.'
       }
     }
   }
 }
 
-// Interactive demo with ChatImageGrid
-function LightboxWithGridDemo() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <p style={{ marginBottom: '16px', color: '#666' }}>
-        Click any image to open lightbox. Use arrow keys to navigate, Escape to close.
-      </p>
-      <ChatImageGrid
-        items={sampleImages}
-        maxWidth={400}
-        onMediaClick={(index) => {
-          setSelectedIndex(index)
-          setIsOpen(true)
-        }}
-      />
-      <Lightbox
-        items={sampleImages}
-        initialIndex={selectedIndex}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-      />
-    </div>
-  )
-}
-
-export const WithChatImageGrid: Story = {
-  name: 'Interactive with ChatImageGrid',
-  render: () => <LightboxWithGridDemo />,
+export const WithThumbnails: Story = {
+  name: 'Thumbnail Strip',
+  args: { items: images, isOpen: true, showThumbnails: true },
   parameters: {
     docs: {
       description: {
-        story: 'Complete integration example showing ChatImageGrid opening a Lightbox on image click.'
+        story: 'Clickable thumbnail strip at bottom. Auto-scrolls to active item.'
       }
     }
   }
+}
+
+export const NoThumbnails: Story = {
+  name: 'Without Thumbnails',
+  args: { items: images, isOpen: true, showThumbnails: false },
+  parameters: { docs: { description: { story: 'Thumbnail strip disabled via prop.' } } }
+}
+
+export const NoZoom: Story = {
+  name: 'Without Zoom',
+  args: { items: images, isOpen: true, showZoomControls: false },
+  parameters: { docs: { description: { story: 'Zoom controls disabled via prop.' } } }
 }
 
 // =====================
 // Video Stories
 // =====================
 
-export const SingleVideo: Story = {
-  name: 'Single Video',
-  args: {
-    items: [sampleVideos[0]],
-    isOpen: true
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Single video in lightbox with native controls. Video auto-plays when lightbox opens.'
-      }
-    }
-  }
+export const Video: Story = {
+  args: { items: [videos[0]], isOpen: true },
+  parameters: { docs: { description: { story: 'Single video with native controls.' } } }
 }
 
-export const MultipleVideos: Story = {
-  name: 'Multiple Videos',
-  args: {
-    items: sampleVideos,
-    isOpen: true
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Navigate between videos. Current video pauses when navigating away.'
-      }
-    }
-  }
+export const MixedMedia: Story = {
+  args: { items: mixed, isOpen: true },
+  parameters: { docs: { description: { story: 'Images and videos together. Zoom disabled for videos.' } } }
 }
 
-export const MixedMediaLightbox: Story = {
-  name: 'Mixed Media (Images + Videos)',
-  args: {
-    items: mixedMedia,
-    isOpen: true
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Lightbox with both images and videos. Videos show native controls, images display normally.'
-      }
-    }
-  }
-}
+// =====================
+// Interactive Demo
+// =====================
 
-export const VideoStartAtSecond: Story = {
-  name: 'Start at Second Video',
-  args: {
-    items: sampleVideos,
-    isOpen: true,
-    initialIndex: 1
-  }
-}
-
-// Interactive demo with mixed media grid
-function MixedMediaGridDemo() {
+function InteractiveDemo() {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [index, setIndex] = useState(0)
 
   return (
-    <div style={{ padding: '20px' }}>
-      <p style={{ marginBottom: '16px', color: '#666' }}>
-        Mixed media grid with images and videos. Click to open in lightbox.
+    <div style={{ padding: 20 }}>
+      <p style={{ marginBottom: 16, color: '#666' }}>
+        Click image to open. Use arrows, +/-, thumbnails to navigate.
       </p>
       <ChatImageGrid
-        items={mixedMedia}
+        items={mixed}
         maxWidth={400}
-        onMediaClick={(index) => {
-          setSelectedIndex(index)
-          setIsOpen(true)
-        }}
+        onMediaClick={(i) => { setIndex(i); setIsOpen(true) }}
       />
       <Lightbox
-        items={mixedMedia}
-        initialIndex={selectedIndex}
+        items={mixed}
+        initialIndex={index}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       />
@@ -265,53 +162,12 @@ function MixedMediaGridDemo() {
   )
 }
 
-export const InteractiveMixedMedia: Story = {
-  name: 'Interactive Mixed Media',
-  render: () => <MixedMediaGridDemo />,
+export const Interactive: Story = {
+  render: () => <InteractiveDemo />,
   parameters: {
     docs: {
       description: {
-        story: 'Complete integration showing ChatImageGrid with videos opening a Lightbox.'
-      }
-    }
-  }
-}
-
-// Interactive demo with video-only grid
-function VideoGridDemo() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <p style={{ marginBottom: '16px', color: '#666' }}>
-        Video grid. Click thumbnail to play inline, or open in lightbox.
-      </p>
-      <ChatImageGrid
-        items={sampleVideos.slice(0, 3)}
-        maxWidth={400}
-        onMediaClick={(index) => {
-          setSelectedIndex(index)
-          setIsOpen(true)
-        }}
-      />
-      <Lightbox
-        items={sampleVideos.slice(0, 3)}
-        initialIndex={selectedIndex}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-      />
-    </div>
-  )
-}
-
-export const InteractiveVideoGrid: Story = {
-  name: 'Interactive Video Grid',
-  render: () => <VideoGridDemo />,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Video-only grid with lightbox. Videos can play inline in grid or fullscreen in lightbox.'
+        story: 'Full integration: ChatImageGrid + Lightbox with all features.'
       }
     }
   }

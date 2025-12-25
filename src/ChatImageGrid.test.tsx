@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { fireEvent, render } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 import { ChatImageGrid } from './ChatImageGrid'
 import type { ImageItem, MediaItem } from './types'
 
@@ -62,7 +62,7 @@ describe('ChatImageGrid', () => {
 
   it('cells have accessible role and tabIndex', () => {
     render(<ChatImageGrid images={[mockImages[0]]} />)
-    const cell = document.querySelector('.chat-image-cell')
+    const cell = document.querySelector('.chat-image-cell') as HTMLElement
     expect(cell).toHaveAttribute('role', 'button')
     expect(cell).toHaveAttribute('tabIndex', '0')
   })

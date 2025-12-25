@@ -581,3 +581,196 @@
     height: 40px;
   }
 }
+
+/* ============================================
+   Lightbox Animations
+   ============================================ */
+
+/* Fade in overlay */
+.chat-lightbox {
+  animation: lightbox-fade-in 0.2s ease-out;
+}
+
+@keyframes lightbox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scale in media */
+.chat-lightbox__media {
+  animation: lightbox-scale-in 0.3s ease-out;
+}
+
+@keyframes lightbox-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Blur background fade in */
+.chat-lightbox__blur-bg {
+  animation: lightbox-blur-in 0.4s ease-out;
+}
+
+@keyframes lightbox-blur-in {
+  from { opacity: 0; }
+  to { opacity: 0.3; }
+}
+
+/* Slide up controls */
+.chat-lightbox__bottom {
+  animation: lightbox-slide-up 0.3s ease-out 0.1s both;
+}
+
+@keyframes lightbox-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Reduced Motion Preferences
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .chat-lightbox,
+  .chat-lightbox__media,
+  .chat-lightbox__blur-bg,
+  .chat-lightbox__bottom {
+    animation: none;
+  }
+
+  .chat-lightbox__nav,
+  .chat-lightbox__glass-btn,
+  .chat-lightbox__thumb,
+  .chat-lightbox__pill-btn,
+  .chat-lightbox__media {
+    transition: none;
+  }
+}
+
+/* ============================================
+   Mobile Responsive - Tablets
+   ============================================ */
+@media (max-width: 768px) {
+  :root {
+    --lightbox-gutter: 16px;
+    --lightbox-btn-size: 36px;
+    --lightbox-nav-size: 44px;
+  }
+
+  .chat-lightbox__toolbar {
+    top: 16px;
+    right: 16px;
+    gap: 8px;
+  }
+
+  .chat-lightbox__bottom {
+    bottom: 16px;
+    gap: 12px;
+  }
+
+  .chat-lightbox__media {
+    max-height: calc(100vh - 200px);
+  }
+}
+
+/* ============================================
+   Mobile Responsive - Phones
+   ============================================ */
+@media (max-width: 480px) {
+  :root {
+    --lightbox-nav-size: 40px;
+    --lightbox-thumb-size: 44px;
+    --lightbox-control-height: 32px;
+  }
+
+  .chat-lightbox__gradient--top {
+    height: 64px;
+  }
+
+  .chat-lightbox__gradient--bottom {
+    height: 140px;
+  }
+
+  .chat-lightbox__controls {
+    gap: 8px;
+  }
+
+  .chat-lightbox__pill {
+    font-size: 11px;
+  }
+
+  .chat-lightbox__pill-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .chat-lightbox__zoom-value {
+    min-width: 40px;
+  }
+}
+
+/* ============================================
+   Landscape Phones - Optimize Layout
+   ============================================ */
+@media (max-width: 768px) and (orientation: landscape) {
+  .chat-lightbox__bottom {
+    bottom: 8px;
+  }
+
+  .chat-lightbox__thumbnails {
+    display: none; /* Hide thumbnails in landscape to save space */
+  }
+
+  .chat-lightbox__media {
+    max-height: calc(100vh - 80px);
+  }
+}
+
+/* ============================================
+   Touch Interactions
+   ============================================ */
+
+/* Larger touch targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  .chat-lightbox__nav {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  .chat-lightbox__glass-btn--rect {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .chat-lightbox__thumb {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  .chat-lightbox__pill-btn {
+    min-width: 36px;
+    min-height: 36px;
+  }
+}
+
+/* Disable hover effects on touch devices */
+@media (hover: none) {
+  .chat-lightbox__nav:hover,
+  .chat-lightbox__glass-btn:hover,
+  .chat-lightbox__thumb:hover {
+    background: inherit;
+    border-color: inherit;
+    opacity: inherit;
+  }
+}

@@ -44,6 +44,11 @@ The library focuses on:
     *   **Keyboard Navigation**: SHALL support `Enter`/`Space` to select and `ArrowLeft`/`ArrowRight` to navigate between thumbnails.
     *   **Responsive Design**: SHALL adapt thumbnail sizes based on screen width (Mobile: 40px, Tablet: 48px, Desktop: 56px).
     *   **Edge Fading**: SHALL implement fade indicators on scrollable edges.
+*   **FR1.3.8 Polish & Performance (Phase 6)**: The lightbox SHALL be polished for production use with:
+    *   **Animations**: Smooth entrance and exit animations for the lightbox overlay and media content.
+    *   **Reduced Motion**: SHALL respect `prefers-reduced-motion` media query, disabling non-essential animations.
+    *   **Mobile Responsiveness**: SHALL be fully responsive with specific breakpoints (768px, 480px, 380px) and optimized layouts for small screens.
+    *   **Touch Interactions**: SHALL implement touch-friendly targets (minimum 44-48px) and improved swipe/tap feedback.
 *   **FR1.4 Placeholder Support**: The grid SHALL display a configurable placeholder component while media items are loading or not yet visible.
 *   **FR1.5 Callback Mechanism**: The `ChatMediaView` component SHALL provide an `onMediaClick` callback when a media item is interacted with.
 
