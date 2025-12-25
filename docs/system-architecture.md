@@ -145,3 +145,24 @@ The library exposes two main components: `ChatMediaView` for grid display and `L
 -   **Gesture Support**: Add swipe gestures for navigation and pinch-to-zoom for touch devices in the lightbox.
 -   **Download Progress**: Enhance the download functionality in the lightbox to show progress.
 -   **Accessibility Enhancements**: Further refine ARIA attributes and keyboard interactions for broader accessibility.
+
+## 7. CI/CD Pipeline Architecture
+
+The library implements an automated lifecycle via GitHub Actions.
+
+```
+[Developer] --- Commit ---> [Husky Hooks (Lint/Test)]
+                                 |
+                                 v
+[Push/PR] -----------------> [CI Workflow (ci.yml)]
+                                 | (Lint, Test, Build)
+                                 v
+[Merge to master] ---------> [Release Workflow (release.yml)]
+                                 | (Version, Changelog, Publish)
+                                 v
+                             [NPM Registry]
+```
+
+- **Quality Gate**: Husky prevents bad commits locally. CI verifies all contributions on the server.
+- **Automation**: Release process is fully hands-off once merged to the master branch.
+- **Stability**: Locked Node.js version via `.nvmrc` ensures consistent build environments.

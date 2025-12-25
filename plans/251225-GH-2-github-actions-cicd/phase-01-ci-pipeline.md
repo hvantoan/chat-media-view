@@ -3,7 +3,7 @@
 ## Overview
 
 **Priority:** P1
-**Status:** Pending
+**Status:** Complete
 **Effort:** 30m
 
 Create GitHub Actions workflow for continuous integration on push/PR.
@@ -93,8 +93,8 @@ jobs:
 
 ## Todo
 
-- [ ] Create `.nvmrc` with Node 20
-- [ ] Create `.github/workflows/ci.yml`
+- [x] Create `.nvmrc` with Node 20
+- [x] Create `.github/workflows/ci.yml`
 - [ ] Test by pushing to branch or creating PR
 
 ## Success Criteria

@@ -74,6 +74,11 @@ The library focuses on:
 *   **NFR2.6 Code Quality**:
     *   **NFR2.6.1 Strict TypeScript**: The project SHALL enforce strict TypeScript settings (`strict: true`, `noUncheckedIndexedAccess: true`, etc.) to minimize runtime errors and improve code robustness.
     *   **NFR2.6.2 ESLint**: ESLint 9 SHALL be configured with a flat configuration (`eslint.config.js`) and enforced to maintain code style and catch potential issues. It SHALL include strict library-grade rules such as explicit return types for public APIs and type-only imports.
+*   **NFR2.7 Continuous Integration & Delivery**:
+    *   **NFR2.7.1 Automated Testing**: All PRs SHALL trigger an automated CI pipeline to run linting, tests, and build checks.
+    *   **NFR2.7.2 Automated Release**: Merges to `master` SHALL automate versioning and NPM publishing.
+    *   **NFR2.7.3 Commit Standards**: SHALL enforce Conventional Commits to maintain a machine-readable changelog.
+    *   **NFR2.7.4 Environment Consistency**: SHALL use `.nvmrc` to ensure all developers and CI environments use the same Node.js version.
 
 ## 3. Future Considerations
 

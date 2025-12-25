@@ -106,4 +106,24 @@ Key rules enforced:
 
 ### 10. Version Control
 - **Git Flow**: Follow a standard Git branching strategy (e.g., feature branches, develop, main).
-- **Commit Messages**: Write clear, concise, and descriptive commit messages (e.g., Conventional Commits).
+- **Commit Messages**: Write clear, concise, and descriptive commit messages using [Conventional Commits](https://www.conventionalcommits.org/).
+- **Automation**: Git hooks (via Husky) enforce commit message standards and run quality checks (linting/tests) before every commit.
+- **Workflow**:
+    - Use feature branches for development.
+    - Merge to `develop` for integration.
+    - Merge to `master` to trigger automated releases.
+
+### 11. Continuous Integration & Delivery (CI/CD)
+
+The project uses GitHub Actions for automated quality assurance and publishing.
+
+- **CI Pipeline (`ci.yml`)**: Triggered on all PRs and pushes to main branches. Executes:
+    - Node.js environment setup (v20)
+    - Strict linting (`npm run lint:strict`)
+    - Unit tests with coverage (`npm run test:coverage`)
+    - Build verification (`npm run build`)
+- **CD Pipeline (`release.yml`)**: Triggered on push to `master`. Automates:
+    - Version bumping
+    - Changelog generation
+    - NPM publishing
+- **Dependency Management**: Dependabot is configured to monitor and update dependencies weekly.

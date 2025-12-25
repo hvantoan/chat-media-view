@@ -1,7 +1,7 @@
 ---
 title: "GitHub Actions CI/CD for Library"
 description: "Add CI pipeline with lint/typecheck/test/build, release workflow with npm publish, and Storybook deployment to GitHub Pages"
-status: pending
+status: in-progress
 priority: P1
 effort: 2h
 issue: 2
@@ -28,13 +28,13 @@ Implement complete CI/CD pipeline for `chat-media-view` React component library 
 
 | # | Phase | Status | Effort | Link |
 |---|-------|--------|--------|------|
-| 1 | CI Pipeline | Pending | 30m | [phase-01](./phase-01-ci-pipeline.md) |
-| 2 | Release Workflow | Pending | 30m | [phase-02-release-workflow.md](./phase-02-release-workflow.md) |
-| 3 | Storybook Deploy | Pending | 30m | [phase-03-storybook-deploy.md](./phase-03-storybook-deploy.md) |
-| 4 | Changelog & Commits | Pending | 30m | [phase-04-changelog-commits.md](./phase-04-changelog-commits.md) |
-| 5 | Test Coverage | Pending | 15m | [phase-05-test-coverage.md](./phase-05-test-coverage.md) |
-| 6 | Dependabot | Pending | 10m | [phase-06-dependabot.md](./phase-06-dependabot.md) |
-| 7 | Package Metadata | Pending | 10m | [phase-07-package-metadata.md](./phase-07-package-metadata.md) |
+| 1 | CI Pipeline | DONE (2025-12-25) | 30m | [phase-01](./phase-01-ci-pipeline.md) |
+| 2 | Release Workflow | DONE (2025-12-25) | 30m | [phase-02-release-workflow.md](./phase-02-release-workflow.md) |
+| 3 | Storybook Deploy | DONE (2025-12-25) | 30m | [phase-03-storybook-deploy.md](./phase-03-storybook-deploy.md) |
+| 4 | Changelog & Commits | DONE (2025-12-25) | 30m | [phase-04-changelog-commits.md](./phase-04-changelog-commits.md) |
+| 5 | Test Coverage | DONE (2025-12-25) | 15m | [phase-05-test-coverage.md](./phase-05-test-coverage.md) |
+| 6 | Dependabot | DONE (2025-12-25) | 10m | [phase-06-dependabot.md](./phase-06-dependabot.md) |
+| 7 | Package Metadata | DONE (2025-12-25) | 10m | [phase-07-package-metadata.md](./phase-07-package-metadata.md) |
 | 8 | Repository Config | Pending | 30m | [phase-08-repo-config.md](./phase-08-repo-config.md) |
 
 ## Architecture
@@ -80,13 +80,17 @@ Implement complete CI/CD pipeline for `chat-media-view` React component library 
 
 ## Success Criteria
 
-- [ ] PRs blocked without passing CI
-- [ ] Tag push triggers npm publish with provenance
-- [ ] Storybook auto-deploys to GitHub Pages on release
-- [ ] Node version pinned consistently
-- [ ] Commit messages validated locally via husky + commitlint
-- [ ] CHANGELOG.md follows Keep a Changelog format
-- [ ] Test coverage reported to Codecov
-- [ ] Dependabot creates weekly PRs for outdated deps
-- [ ] LICENSE file present
-- [ ] package.json has author and repository fields
+- [x] PRs blocked without passing CI (ci.yml created)
+- [x] Tag push triggers npm publish with provenance (release.yml)
+- [x] Storybook auto-deploys to GitHub Pages on release (deploy-docs job)
+- [x] Node version pinned consistently (.nvmrc)
+- [x] Commit messages validated locally via husky + commitlint
+- [x] CHANGELOG.md follows Keep a Changelog format
+- [x] Test coverage reported to Codecov (ci.yml updated)
+- [x] Dependabot creates weekly PRs (dependabot.yml)
+- [x] LICENSE file present
+- [x] package.json has author and repository fields
+- [ ] NPM_TOKEN secret added to GitHub (Phase 8)
+- [ ] CODECOV_TOKEN secret added to GitHub (Phase 8)
+- [ ] GitHub Pages enabled (Phase 8)
+- [ ] Configure branch protection (Phase 8)
