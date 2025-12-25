@@ -38,6 +38,12 @@ The library focuses on:
         *   **Enhanced Background**: Dynamic blurred background using the current media thumbnail/source.
         *   **Customization**: Props to toggle UI elements like `showThumbnails`, `showZoomControls`, and `showDownload`.
         *   **Responsive Layout**: Centralized `stage` for media content with independent toolbar, navigation, and bottom control areas.
+*   **FR1.3.7 Thumbnail Strip (Phase 5)**: The lightbox SHALL include a horizontal scrollable thumbnail strip at the bottom.
+    *   **Auto-scroll**: SHALL automatically scroll the active thumbnail into view.
+    *   **Media Indicators**: SHALL display specialized badges (e.g., play icon) for video thumbnails.
+    *   **Keyboard Navigation**: SHALL support `Enter`/`Space` to select and `ArrowLeft`/`ArrowRight` to navigate between thumbnails.
+    *   **Responsive Design**: SHALL adapt thumbnail sizes based on screen width (Mobile: 40px, Tablet: 48px, Desktop: 56px).
+    *   **Edge Fading**: SHALL implement fade indicators on scrollable edges.
 *   **FR1.4 Placeholder Support**: The grid SHALL display a configurable placeholder component while media items are loading or not yet visible.
 *   **FR1.5 Callback Mechanism**: The `ChatMediaView` component SHALL provide an `onMediaClick` callback when a media item is interacted with.
 

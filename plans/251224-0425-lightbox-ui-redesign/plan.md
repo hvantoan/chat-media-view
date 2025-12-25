@@ -135,16 +135,20 @@ Add counter pill and zoom controls.
 - [x] Props interface updated
 - [x] Hook exported from index.ts
 
-### Phase 5: Thumbnail Strip
+### Phase 5: Thumbnail Strip (DONE 2024-12-25)
 **File:** `phase-05-thumbnail-strip.md`
 
 Horizontal scrollable thumbnail gallery.
 
 **Deliverables:**
-- Thumbnail container with overflow scroll
-- Active/inactive thumbnail states
-- Click to navigate functionality
-- Scroll-to-active behavior
+- [x] LightboxThumbnails.tsx component created
+- [x] Thumbnail strip CSS with glassmorphism
+- [x] Active/inactive thumbnail states
+- [x] Video indicator badge
+- [x] Auto-scroll to active thumbnail
+- [x] Keyboard navigation within thumbnails
+- [x] Mobile responsive sizing
+- [x] Component exported from index.ts
 
 ### Phase 6: Polish & Testing
 **File:** `phase-06-polish-testing.md`

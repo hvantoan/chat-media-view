@@ -45,7 +45,10 @@ class MockIntersectionObserver {
 
 (globalThis as unknown as Record<string, unknown>).IntersectionObserver = MockIntersectionObserver
 
-// Mock URL.createObjectURL and URL.revokeObjectURL for jsdom
+// Mock scrollIntoView for jsdom
+if (typeof window.HTMLElement.prototype.scrollIntoView !== 'function') {
+  window.HTMLElement.prototype.scrollIntoView = vi.fn()
+}
 if (typeof URL.createObjectURL === 'undefined') {
   URL.createObjectURL = () => 'blob:mock-url'
 }

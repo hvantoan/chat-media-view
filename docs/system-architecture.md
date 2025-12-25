@@ -65,6 +65,7 @@ The library exposes two main components: `ChatMediaView` for grid display and `L
     *   Provides navigation controls (previous, next) using standardized circular glass buttons.
     *   Offers image and video zoom functionality using `useZoom` hook.
     *   Renders `LightboxZoomControls` in the bottom control area.
+    *   Renders `LightboxThumbnails` at the bottom of the stage for quick navigation.
     *   Includes a top toolbar with rectangular glass buttons for download and close actions.
     *   Features a bottom control area for media counter, zoom controls, and future thumbnail support.
     *   Supports keyboard navigation (Escape to close, arrow keys for navigation, and zoom shortcuts).
@@ -74,6 +75,7 @@ The library exposes two main components: `ChatMediaView` for grid display and `L
     *   Renders `LightboxVideo` for video items.
     *   Uses `useZoom` hook to manage zoom state and transitions.
     *   Renders `LightboxZoomControls` for interactive zooming.
+    *   Renders `LightboxThumbnails` for quick media selection.
 
 ### 3.3 `GridLayoutEngine` (src/GridLayoutEngine.ts)
 

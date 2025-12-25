@@ -11,6 +11,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon
 } from './LightboxIcons'
+import { LightboxThumbnails } from './LightboxThumbnails'
 import './styles/lightbox.css'
 
 /**
@@ -283,8 +284,14 @@ export function Lightbox({
             )}
           </div>
 
-          {/* Thumbnails placeholder - Phase 5 */}
-          {showThumbnails && mediaItems.length > 1 && null}
+          {/* Thumbnail strip */}
+          {showThumbnails && mediaItems.length > 1 && (
+            <LightboxThumbnails
+              items={mediaItems}
+              currentIndex={currentIndex}
+              onSelect={setCurrentIndex}
+            />
+          )}
         </div>
       </div>
     </div>
