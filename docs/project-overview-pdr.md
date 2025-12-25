@@ -25,10 +25,30 @@ The library focuses on:
     *   **FR1.2.3 Max Rows**: The grid SHALL support a `maxRows` property to limit the number of displayed rows.
 *   **FR1.3 Lightbox Viewer**: The library SHALL include a full-screen lightbox component to view media items individually.
     *   **FR1.3.1 Navigation**: The lightbox SHALL provide navigation controls (next/previous) for cycling through media items.
-    *   **FR1.3.2 Zoom**: The lightbox SHALL allow zooming for image media items.
+    *   **FR1.3.2 Zoom**: The lightbox SHALL allow zooming for media items.
+        *   **FR1.3.2.1 Controls**: SHALL provide interactive zoom in/out/reset buttons.
+        *   **FR1.3.2.2 Configuration**: SHALL support `minZoom`, `maxZoom`, and `zoomStep` props.
+        *   **FR1.3.2.3 Shortcuts**: SHALL support keyboard shortcuts: `+`/`=` (Zoom In), `-`/`_` (Zoom Out), `0` (Reset).
     *   **FR1.3.3 Download**: The lightbox SHALL provide an option to download the currently viewed media item.
-    *   **FR1.3.4 Customization**: The lightbox SHALL allow customization of overlay color and control visibility.
-    *   **FR1.3.5 Keyboard Navigation**: The lightbox SHALL support keyboard navigation (Escape, ArrowLeft, ArrowRight).
+    *   **FR1.3.4 Customization**: The lightbox SHALL allow customization of overlay color and control visibility using a centralized design token system (CSS custom properties).
+    *   **FR1.3.5 Keyboard Navigation**: The lightbox SHALL support keyboard navigation (Escape, ArrowLeft, ArrowRight, and Zoom shortcuts).
+    *   **FR1.3.6 Modern UI (Redesign Phase 2)**: The lightbox SHALL implement a sophisticated modern UI with:
+        *   **Layered DOM Structure**: Decoupled background (`blur-bg`), gradient overlays, and interactive `stage`.
+        *   **Glassmorphism**: Standardized glass buttons (circular and rectangular) and pill-shaped badges.
+        *   **Enhanced Background**: Dynamic blurred background using the current media thumbnail/source.
+        *   **Customization**: Props to toggle UI elements like `showThumbnails`, `showZoomControls`, and `showDownload`.
+        *   **Responsive Layout**: Centralized `stage` for media content with independent toolbar, navigation, and bottom control areas.
+*   **FR1.3.7 Thumbnail Strip (Phase 5)**: The lightbox SHALL include a horizontal scrollable thumbnail strip at the bottom.
+    *   **Auto-scroll**: SHALL automatically scroll the active thumbnail into view.
+    *   **Media Indicators**: SHALL display specialized badges (e.g., play icon) for video thumbnails.
+    *   **Keyboard Navigation**: SHALL support `Enter`/`Space` to select and `ArrowLeft`/`ArrowRight` to navigate between thumbnails.
+    *   **Responsive Design**: SHALL adapt thumbnail sizes based on screen width (Mobile: 40px, Tablet: 48px, Desktop: 56px).
+    *   **Edge Fading**: SHALL implement fade indicators on scrollable edges.
+*   **FR1.3.8 Polish & Performance (Phase 6)**: The lightbox SHALL be polished for production use with:
+    *   **Animations**: Smooth entrance and exit animations for the lightbox overlay and media content.
+    *   **Reduced Motion**: SHALL respect `prefers-reduced-motion` media query, disabling non-essential animations.
+    *   **Mobile Responsiveness**: SHALL be fully responsive with specific breakpoints (768px, 480px, 380px) and optimized layouts for small screens.
+    *   **Touch Interactions**: SHALL implement touch-friendly targets (minimum 44-48px) and improved swipe/tap feedback.
 *   **FR1.4 Placeholder Support**: The grid SHALL display a configurable placeholder component while media items are loading or not yet visible.
 *   **FR1.5 Callback Mechanism**: The `ChatMediaView` component SHALL provide an `onMediaClick` callback when a media item is interacted with.
 

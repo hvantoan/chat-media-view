@@ -78,6 +78,7 @@ export default MyChatComponent;
 | `placeholder`     | `React.ReactNode`    | Custom placeholder to display while media is loading.              | `undefined` |
 | `maxRows`         | `number`             | Maximum number of rows to display in the grid.                     | `undefined` |
 | `showControls`    | `boolean`            | Show/hide lightbox navigation controls.                            | `true`    |
+| `showThumbnails`  | `boolean`            | Show/hide thumbnail strip in the lightbox.                         | `true`    |
 | `zoomLevel`       | `number`             | Initial zoom level for images in the lightbox.                     | `1`       |
 | `allowZoom`       | `boolean`            | Allow/disallow zooming in the lightbox.                            | `true`    |
 | `downloadable`    | `boolean`            | Allow/disallow downloading media from the lightbox.                | `true`    |
@@ -112,6 +113,7 @@ The `Lightbox` component is used internally by `ChatMediaView` to display media 
 | `onNext`            | `() => void`           | Callback function for navigating to the next media item.    |         |
 | `onPrev`            | `() => void`           | Callback function for navigating to the previous media item.|         |
 | `showControls`      | `boolean`              | Show/hide navigation controls (arrows, close button).       | `true`  |
+| `showThumbnails`    | `boolean`              | Show/hide thumbnail strip at bottom.                        | `true`  |
 | `zoomLevel`         | `number`               | Initial zoom level for images.                              | `1`     |
 | `allowZoom`         | `boolean`              | Allow/disallow zooming.                                     | `true`  |
 | `downloadable`      | `boolean`              | Allow/disallow downloading media.                           | `true`  |

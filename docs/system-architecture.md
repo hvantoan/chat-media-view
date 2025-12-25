@@ -58,15 +58,24 @@ The library exposes two main components: `ChatMediaView` for grid display and `L
 
 *   **Purpose**: A full-screen overlay component for detailed viewing and interaction with individual media items.
 *   **Responsibilities**:
-    *   Displays the currently selected `MediaItem` (image or video).
-    *   Provides navigation controls (previous, next) for cycling through media.
-    *   Offers image zoom functionality (panning included) and a reset option.
-    *   Includes a download option for the current media.
-    *   Supports keyboard navigation (Escape to close, arrow keys for navigation).
-    *   Handles responsiveness and overlay styling.
+    *   Displays the currently selected `MediaItem` (image or video) using a layered DOM structure:
+        *   `chat-lightbox__blur-bg`: Blurred background using media thumbnail.
+        *   `chat-lightbox__gradient`: Contextual top/bottom overlays for legibility.
+        *   `chat-lightbox__stage`: Main interactive area containing media and controls.
+    *   Provides navigation controls (previous, next) using standardized circular glass buttons.
+    *   Offers image and video zoom functionality using `useZoom` hook.
+    *   Renders `LightboxZoomControls` in the bottom control area.
+    *   Renders `LightboxThumbnails` at the bottom of the stage for quick navigation.
+    *   Includes a top toolbar with rectangular glass buttons for download and close actions.
+    *   Features a bottom control area for media counter, zoom controls, and future thumbnail support.
+    *   Supports keyboard navigation (Escape to close, arrow keys for navigation, and zoom shortcuts).
+    *   Handles responsiveness and high-performance overlay styling.
 *   **Key Interactions**:
-    *   Receives `media`, `currentIndex`, `isOpen`, `onClose`, `onNext`, `onPrev` and other customization props from `ChatMediaView`.
-    *   Manages its own internal state for zoom level and position.
+    *   Receives `media`, `currentIndex`, `isOpen`, `onClose`, `onNext`, `onPrev` and customization props (`showThumbnails`, `showZoomControls`, `minZoom`, `maxZoom`, `zoomStep`).
+    *   Renders `LightboxVideo` for video items.
+    *   Uses `useZoom` hook to manage zoom state and transitions.
+    *   Renders `LightboxZoomControls` for interactive zooming.
+    *   Renders `LightboxThumbnails` for quick media selection.
 
 ### 3.3 `GridLayoutEngine` (src/GridLayoutEngine.ts)
 
@@ -101,7 +110,12 @@ The library exposes two main components: `ChatMediaView` for grid display and `L
 *   **Technologies**: Standard CSS.
 *   **Details**:
     *   `image-grid.css`: Defines grid item styling, responsive behaviors, and placeholder appearance.
-    *   `lightbox.css`: Manages overlay, media element, and control button styling for the full-screen viewer.
+    *   `lightbox.css`: Manages overlay, media element, and control button styling for the full-screen viewer. It utilizes a comprehensive design token system (CSS custom properties) to manage:
+        *   **Colors & Opacity**: Themed overlays, glass backgrounds, and borders.
+        *   **Blur & Effects**: Standardized blur levels for glassmorphism and backdrop-filters.
+        *   **Sizing & Spacing**: Consistent button dimensions, navigation sizes, and gutters.
+        *   **Transitions**: Unified duration and easing functions for all interactive elements.
+        *   **Layering (Z-index)**: Explicitly defined z-index stack for background, media, controls, and toolbar.
 
 ## 4. Data Flow
 

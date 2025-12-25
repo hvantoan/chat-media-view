@@ -1,8 +1,8 @@
 /**
- * Props for a single image in the grid
+ * Base properties shared by all media types
  */
-export interface ImageItem {
-  /** Source URL of the image */
+export interface BaseMediaItem {
+  /** Source URL of the media */
   src: string
   /** Optional thumbnail URL for low-res preview */
   thumbnail?: string
@@ -10,30 +10,63 @@ export interface ImageItem {
   blurhash?: string
   /** ThumbHash string for placeholder (preferred over blurhash) */
   thumbhash?: string
-  /** Original image width in pixels */
+  /** Original media width in pixels */
   width: number
-  /** Original image height in pixels */
+  /** Original media height in pixels */
   height: number
   /** Alt text for accessibility */
   alt?: string
 }
 
 /**
+ * Image media item
+ */
+export interface ImageMediaItem extends BaseMediaItem {
+  type: 'image'
+}
+
+/**
+ * Video media item
+ */
+export interface VideoMediaItem extends BaseMediaItem {
+  type: 'video'
+  /** Video duration in seconds (optional for streaming) */
+  duration?: number
+  /** Whether video starts muted (default: true for autoplay compat) */
+  muted?: boolean
+}
+
+/**
+ * Unified media item type - discriminated union
+ */
+export type MediaItem = ImageMediaItem | VideoMediaItem
+
+/**
+ * Legacy ImageItem type for backwards compatibility
+ * @deprecated Use MediaItem instead
+ */
+export type ImageItem = BaseMediaItem
+
+/**
  * Props for the ChatImageGrid component
  */
 export interface ChatImageGridProps {
-  /** Array of images to display (1-5 images) */
-  images: ImageItem[]
+  /** Array of media items to display (1-5 items) - supports images and videos */
+  items?: MediaItem[]
+  /** @deprecated Use `items` instead. Array of images to display (1-5 images) */
+  images?: ImageItem[]
   /** Maximum width of the grid in pixels */
   maxWidth?: number
   /** Gap between images in pixels */
   gap?: number
   /** Border radius for outer corners */
   borderRadius?: number
-  /** Callback when an image is clicked */
+  /** Callback when a media item is clicked */
+  onMediaClick?: (index: number, item: MediaItem) => void
+  /** @deprecated Use `onMediaClick` instead */
   onImageClick?: (index: number, image: ImageItem) => void
   /** Callback for download progress updates */
-  onDownload?: (image: ImageItem, progress: number) => void
+  onDownload?: (item: MediaItem, progress: number) => void
   /** Enable lazy loading with Intersection Observer */
   lazyLoad?: boolean
   /** Custom class name for the grid container */
