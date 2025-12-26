@@ -50,9 +50,12 @@ export function VideoCell({
   })
 
   const shouldLoadThumbnail = !lazyLoad || isVisible
-  const hasPlaceholder = video.blurhash ?? video.thumbhash
+  const hasPlaceholder = !!video.blurhash
   const showThumbnail = state === 'thumbnail' || state === 'loading'
-  const showVideo = state === 'playing' || state === 'paused' || state === 'loading'
+  // Only render video element during loading (hidden), playing, or paused states
+  const shouldRenderVideo = state === 'loading' || state === 'playing' || state === 'paused'
+  // Only show video visually after it's ready (playing or paused)
+  const showVideo = state === 'playing' || state === 'paused'
 
   const handleThumbnailLoad = useCallback(() => { setThumbnailLoaded(true); }, [])
 
@@ -127,8 +130,7 @@ export function VideoCell({
       {/* Placeholder layer */}
       {hasPlaceholder && !thumbnailLoaded && state !== 'error' && (
         <PlaceholderCanvas
-          hash={(video.thumbhash ?? video.blurhash)!}
-          hashType={video.thumbhash ? 'thumbhash' : 'blurhash'}
+          hash={video.blurhash!}
           width={layout.width}
           height={layout.height}
           className="chat-video-cell__placeholder"
@@ -147,11 +149,11 @@ export function VideoCell({
         />
       )}
 
-      {/* Video element */}
-      {showVideo && (
+      {/* Video element - rendered during loading but hidden until ready */}
+      {shouldRenderVideo && (
         <video
           ref={videoRef}
-          className="chat-video-cell__video"
+          className={`chat-video-cell__video${showVideo ? ' chat-video-cell__video--visible' : ''}`}
           src={video.src}
           controls
           playsInline

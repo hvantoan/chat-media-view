@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { Lightbox } from './Lightbox'
-import { ChatImageGrid } from './ChatImageGrid'
+import { ChatMediaGrid } from './ChatMediaGrid'
 import type { MediaItem, VideoMediaItem } from './types'
 
 const meta = {
@@ -147,7 +147,7 @@ function InteractiveDemo() {
       <p style={{ marginBottom: 16, color: '#666' }}>
         Click image to open. Use arrows, +/-, thumbnails to navigate.
       </p>
-      <ChatImageGrid
+      <ChatMediaGrid
         items={mixed}
         maxWidth={400}
         onMediaClick={(i) => { setIndex(i); setIsOpen(true) }}
@@ -167,7 +167,7 @@ export const Interactive: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Full integration: ChatImageGrid + Lightbox with all features.'
+        story: 'Full integration: ChatMediaGrid + Lightbox with all features.'
       }
     }
   }

@@ -32,7 +32,6 @@ describe('useDownload', () => {
     const { result } = renderHook(() => useDownload())
 
     expect(result.current.progress).toBeNull()
-    expect(result.current.isDownloading).toBe(false)
     expect(result.current.status).toBe('idle')
     expect(result.current.error).toBeNull()
   })
@@ -53,7 +52,6 @@ describe('useDownload', () => {
     })
 
     expect(downloadResult).toBe(mockObjectUrl)
-    expect(result.current.isDownloading).toBe(false)
     expect(result.current.status).toBe('completed')
     expect(result.current.error).toBeNull()
   })
@@ -94,7 +92,6 @@ describe('useDownload', () => {
     })
 
     expect(result.current.error).toBe(error)
-    expect(result.current.isDownloading).toBe(false)
     expect(result.current.status).toBe('error')
   })
 
@@ -120,7 +117,6 @@ describe('useDownload', () => {
 
     expect(result.current.progress).toBeNull()
     expect(result.current.error).toBeNull()
-    expect(result.current.isDownloading).toBe(false)
     expect(result.current.status).toBe('idle')
   })
 

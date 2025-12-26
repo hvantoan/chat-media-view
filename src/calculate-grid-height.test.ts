@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { calculateGridHeight } from './calculate-grid-height'
-import type { ImageItem } from './types'
+import type { MediaItem } from './types'
 
-const mockImage = (w: number, h: number): ImageItem => ({
+const mockImage = (w: number, h: number): MediaItem => ({
+  type: 'image',
   src: 'test.jpg',
   width: w,
   height: h,

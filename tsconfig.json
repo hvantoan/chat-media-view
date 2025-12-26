@@ -26,12 +26,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "types": [
-      "vitest/globals"
+      "vitest/globals",
+      "@testing-library/jest-dom"
     ]
   },
   "include": [
     "src",
-    "src/test/vitest.d.ts"
+    "src/test/vitest.d.ts",
+    "src/global.d.ts"
   ],
   "exclude": [
     "node_modules",

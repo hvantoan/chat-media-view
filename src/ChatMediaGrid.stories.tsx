@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { ChatImageGrid } from './ChatImageGrid'
-import type { ImageItem, VideoMediaItem, MediaItem } from './types'
+import { ChatMediaGrid } from './ChatMediaGrid'
+import type { VideoMediaItem, MediaItem, ImageMediaItem } from './types'
 
 const meta = {
-  component: ChatImageGrid,
-  title: 'Components/ChatImageGrid',
+  component: ChatMediaGrid,
+  title: 'Components/ChatMediaGrid',
   parameters: {
     layout: 'centered',
     docs: {
@@ -14,9 +14,10 @@ Telegram-style media grid for React chat applications.
 
 ## Features
 - Layouts for 1-5 images/videos (exact Telegram clone)
+- **Built-in Lightbox** with zoom, download, thumbnails (toggleable via \`enableLightbox\`)
 - **Video support** with inline playback, duration badge, and auto-pause
 - Virtual list compatible via \`calculateGridHeight()\`
-- BlurHash/ThumbHash placeholder support
+- BlurHash placeholder support
 - Keyboard accessible (Tab, Enter, Arrow keys)
 - RTL layout support
 - < 8KB gzipped
@@ -27,10 +28,6 @@ Telegram-style media grid for React chat applications.
   argTypes: {
     items: {
       description: 'Array of media items to display (1-5 items, supports images and videos)',
-      control: { type: 'object' }
-    },
-    images: {
-      description: 'Array of images to display (1-5 images) - deprecated, use items',
       control: { type: 'object' }
     },
     maxWidth: {
@@ -58,9 +55,25 @@ Telegram-style media grid for React chat applications.
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } }
     },
-    onImageClick: {
-      description: 'Callback when an image is clicked (deprecated, use onMediaClick)',
-      action: 'imageClicked'
+    enableLightbox: {
+      description: 'Enable built-in lightbox for full-screen media viewing',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
+    },
+    lightboxShowDownload: {
+      description: 'Show download button in lightbox',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
+    },
+    lightboxShowThumbnails: {
+      description: 'Show thumbnail strip in lightbox',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
+    },
+    lightboxShowZoomControls: {
+      description: 'Show zoom controls for images in lightbox',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
     },
     onMediaClick: {
       description: 'Callback when a media item is clicked',
@@ -72,17 +85,17 @@ Telegram-style media grid for React chat applications.
     }
   },
   tags: ['autodocs']
-} satisfies Meta<typeof ChatImageGrid>
+} satisfies Meta<typeof ChatMediaGrid>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-const sampleImages: ImageItem[] = [
-  { src: 'https://picsum.photos/800/600?random=1', width: 800, height: 600 },
-  { src: 'https://picsum.photos/600/800?random=2', width: 600, height: 800 },
-  { src: 'https://picsum.photos/700/700?random=3', width: 700, height: 700 },
-  { src: 'https://picsum.photos/900/500?random=4', width: 900, height: 500 },
-  { src: 'https://picsum.photos/500/900?random=5', width: 500, height: 900 }
+const sampleImages: ImageMediaItem[] = [
+  { type: 'image', src: 'https://picsum.photos/800/600?random=1', width: 800, height: 600 },
+  { type: 'image', src: 'https://picsum.photos/600/800?random=2', width: 600, height: 800 },
+  { type: 'image', src: 'https://picsum.photos/700/700?random=3', width: 700, height: 700 },
+  { type: 'image', src: 'https://picsum.photos/900/500?random=4', width: 900, height: 500 },
+  { type: 'image', src: 'https://picsum.photos/500/900?random=5', width: 500, height: 900 }
 ]
 
 // Sample video items using public test videos
@@ -127,45 +140,45 @@ const sampleVideos: VideoMediaItem[] = [
 
 // Mixed media items (images + videos)
 const mixedMedia: MediaItem[] = [
-  { type: 'image', src: 'https://picsum.photos/800/600?random=1', width: 800, height: 600 },
+  sampleImages[0],
   sampleVideos[0],
-  { type: 'image', src: 'https://picsum.photos/600/800?random=2', width: 600, height: 800 },
+  sampleImages[1],
   sampleVideos[1]
 ]
 
 export const OneImage: Story = {
-  args: { images: sampleImages.slice(0, 1) }
+  args: { items: sampleImages.slice(0, 1) }
 }
 
 export const TwoImages: Story = {
-  args: { images: sampleImages.slice(0, 2) }
+  args: { items: sampleImages.slice(0, 2) }
 }
 
 export const ThreeImages: Story = {
-  args: { images: sampleImages.slice(0, 3) }
+  args: { items: sampleImages.slice(0, 3) }
 }
 
 export const FourImages: Story = {
-  args: { images: sampleImages.slice(0, 4) }
+  args: { items: sampleImages.slice(0, 4) }
 }
 
 export const FiveImages: Story = {
-  args: { images: sampleImages.slice(0, 5) }
+  args: { items: sampleImages.slice(0, 5) }
 }
 
 export const WithClickHandler: Story = {
   args: {
-    images: sampleImages.slice(0, 3),
-    onImageClick: (index, image) => {
-      console.log('Clicked image', index, image.src)
-      alert(`Clicked image ${index + 1}`)
+    items: sampleImages.slice(0, 3),
+    onMediaClick: (index, item) => {
+      console.log('Clicked media', index, item.src)
+      alert(`Clicked media ${index + 1}`)
     }
   }
 }
 
 export const CustomDimensions: Story = {
   args: {
-    images: sampleImages.slice(0, 3),
+    items: sampleImages.slice(0, 3),
     maxWidth: 300,
     gap: 4,
     borderRadius: 16
@@ -174,47 +187,47 @@ export const CustomDimensions: Story = {
 
 export const NoLazyLoad: Story = {
   args: {
-    images: sampleImages.slice(0, 3),
+    items: sampleImages.slice(0, 3),
     lazyLoad: false
   }
 }
 
-// Sample thumbhash for demo (a pinkish color)
-const thumbhashSample = 'YTkGJwaRhWUIt4lbgnhZl3ath2BUBGYA'
+// Sample blurhash for demo
+const blurhashSample = 'LEHV6nWB2yk8pyo0adR*.7kCMdnj'
 
-const imagesWithPlaceholder = sampleImages.slice(0, 3).map((img, i) => ({
+const imagesWithPlaceholder: ImageMediaItem[] = sampleImages.slice(0, 3).map((img, i) => ({
   ...img,
-  thumbhash: thumbhashSample,
+  blurhash: blurhashSample,
   alt: `Image ${i + 1} with placeholder`
 }))
 
-export const WithThumbHashPlaceholder: Story = {
-  name: 'With ThumbHash Placeholder',
+export const WithBlurHashPlaceholder: Story = {
+  name: 'With BlurHash Placeholder',
   args: {
-    images: imagesWithPlaceholder
+    items: imagesWithPlaceholder
   }
 }
 
 // Simulating error state with invalid URLs
-const errorImages = [
-  { src: 'https://invalid-url-for-testing.local/image1.jpg', width: 800, height: 600 },
-  { src: 'https://invalid-url-for-testing.local/image2.jpg', width: 600, height: 800 }
+const errorImages: ImageMediaItem[] = [
+  { type: 'image', src: 'https://invalid-url-for-testing.local/image1.jpg', width: 800, height: 600 },
+  { type: 'image', src: 'https://invalid-url-for-testing.local/image2.jpg', width: 600, height: 800 }
 ]
 
 export const ErrorStateWithRetry: Story = {
   name: 'Error State (Retry Button)',
   args: {
-    images: errorImages
+    items: errorImages
   }
 }
 
 export const MixedWithAndWithoutPlaceholder: Story = {
   name: 'Mixed (Some With Placeholder)',
   args: {
-    images: [
-      { ...sampleImages[0], thumbhash: thumbhashSample },
+    items: [
+      { ...sampleImages[0], blurhash: blurhashSample },
       sampleImages[1],
-      { ...sampleImages[2], thumbhash: thumbhashSample }
+      { ...sampleImages[2], blurhash: blurhashSample }
     ]
   }
 }
@@ -223,7 +236,7 @@ export const MixedWithAndWithoutPlaceholder: Story = {
 export const RTLLayout: Story = {
   name: 'RTL Layout (Right-to-Left)',
   args: {
-    images: sampleImages.slice(0, 3),
+    items: sampleImages.slice(0, 3),
     rtl: true
   },
   parameters: {
@@ -239,7 +252,7 @@ export const RTLLayout: Story = {
 export const AccessibilityDemo: Story = {
   name: 'Accessibility (Tab to Navigate)',
   args: {
-    images: sampleImages.slice(0, 4).map((img, i) => ({
+    items: sampleImages.slice(0, 4).map((img, i) => ({
       ...img,
       alt: `Scenic landscape photo ${i + 1}`
     }))
@@ -307,17 +320,17 @@ export const MixedMediaGrid: Story = {
 }
 
 export const VideoWithPlaceholder: Story = {
-  name: 'Video with Thumbnail Placeholder',
+  name: 'Video with BlurHash Placeholder',
   args: {
     items: [{
       ...sampleVideos[0],
-      thumbhash: thumbhashSample
+      blurhash: blurhashSample
     }]
   },
   parameters: {
     docs: {
       description: {
-        story: 'Video with ThumbHash placeholder while thumbnail loads.'
+        story: 'Video with BlurHash placeholder while thumbnail loads.'
       }
     }
   }
@@ -385,6 +398,76 @@ export const VideoNoDuration: Story = {
     docs: {
       description: {
         story: 'Videos without duration info hide the duration badge.'
+      }
+    }
+  }
+}
+
+// =====================
+// Lightbox Stories
+// =====================
+
+export const WithLightbox: Story = {
+  name: 'With Lightbox (Default)',
+  args: {
+    items: sampleImages.slice(0, 3),
+    enableLightbox: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Click any image to open the built-in lightbox. Navigate with arrows, zoom with +/- keys.'
+      }
+    }
+  }
+}
+
+export const LightboxDisabled: Story = {
+  name: 'Lightbox Disabled',
+  args: {
+    items: sampleImages.slice(0, 3),
+    enableLightbox: false,
+    onMediaClick: (index, item) => {
+      alert(`Custom handler: clicked ${item.type} at index ${index}`)
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Lightbox disabled. Use onMediaClick to implement custom behavior.'
+      }
+    }
+  }
+}
+
+export const LightboxMinimal: Story = {
+  name: 'Lightbox Minimal UI',
+  args: {
+    items: sampleImages.slice(0, 4),
+    enableLightbox: true,
+    lightboxShowDownload: false,
+    lightboxShowThumbnails: false,
+    lightboxShowZoomControls: false
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Lightbox with minimal UI - no download button, thumbnails, or zoom controls.'
+      }
+    }
+  }
+}
+
+export const LightboxWithVideos: Story = {
+  name: 'Lightbox with Videos',
+  args: {
+    items: mixedMedia,
+    enableLightbox: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Lightbox supports both images and videos. Videos play inline with native controls.'
       }
     }
   }

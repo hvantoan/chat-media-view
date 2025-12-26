@@ -8,8 +8,6 @@ export interface BaseMediaItem {
   thumbnail?: string
   /** BlurHash string for placeholder */
   blurhash?: string
-  /** ThumbHash string for placeholder (preferred over blurhash) */
-  thumbhash?: string
   /** Original media width in pixels */
   width: number
   /** Original media height in pixels */
@@ -42,19 +40,11 @@ export interface VideoMediaItem extends BaseMediaItem {
 export type MediaItem = ImageMediaItem | VideoMediaItem
 
 /**
- * Legacy ImageItem type for backwards compatibility
- * @deprecated Use MediaItem instead
+ * Props for the ChatMediaGrid component
  */
-export type ImageItem = BaseMediaItem
-
-/**
- * Props for the ChatImageGrid component
- */
-export interface ChatImageGridProps {
+export interface ChatMediaGridProps {
   /** Array of media items to display (1-5 items) - supports images and videos */
   items?: MediaItem[]
-  /** @deprecated Use `items` instead. Array of images to display (1-5 images) */
-  images?: ImageItem[]
   /** Maximum width of the grid in pixels */
   maxWidth?: number
   /** Gap between images in pixels */
@@ -63,8 +53,6 @@ export interface ChatImageGridProps {
   borderRadius?: number
   /** Callback when a media item is clicked */
   onMediaClick?: (index: number, item: MediaItem) => void
-  /** @deprecated Use `onMediaClick` instead */
-  onImageClick?: (index: number, image: ImageItem) => void
   /** Callback for download progress updates */
   onDownload?: (item: MediaItem, progress: number) => void
   /** Enable lazy loading with Intersection Observer */
@@ -73,6 +61,14 @@ export interface ChatImageGridProps {
   className?: string
   /** Enable RTL layout */
   rtl?: boolean
+  /** Enable lightbox for full-screen media viewing (default: true) */
+  enableLightbox?: boolean
+  /** Show download button in lightbox (default: true) */
+  lightboxShowDownload?: boolean
+  /** Show thumbnail strip in lightbox (default: true) */
+  lightboxShowThumbnails?: boolean
+  /** Show zoom controls for images in lightbox (default: true) */
+  lightboxShowZoomControls?: boolean
 }
 
 /**
