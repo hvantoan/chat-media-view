@@ -1,7 +1,7 @@
 {
   "name": "chat-media-view",
   "version": "0.2.0",
-  "description": "Telegram-style image grid for React chat applications",
+  "description": "Telegram-style responsive media grid for React chat applications. Features BlurHash placeholders, built-in lightbox with zoom/pan/navigation, lazy loading, accessibility (ARIA, keyboard, RTL), and video support.",
   "type": "module",
   "exports": {
     ".": {
