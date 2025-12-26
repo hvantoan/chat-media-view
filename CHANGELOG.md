@@ -7,13 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- GitHub Actions CI pipeline with lint, typecheck, test, build
-- Release workflow with npm publish and provenance
-- Storybook deployment to GitHub Pages
-- Conventional commits enforcement via commitlint
-- Dependabot for automated dependency updates
-- Test coverage reporting to Codecov
+## [0.2.0] - 2025-12-26
+
+### Changed
+- **BREAKING**: Migrate from ThumbHash to BlurHash for placeholder generation
+- **BREAKING**: Rename component from `ChatMediaView` to `ChatMediaGrid`
+- Integrated Lightbox component directly into ChatMediaGrid
+- Updated keywords: removed `thumbhash`, added `blurhash` and `lightbox`
+
+### Fixed
+- Improved placeholder rendering with BlurHash encoding
 
 ## [0.1.0] - 2025-12-25
 
