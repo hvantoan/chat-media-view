@@ -118,6 +118,13 @@
   object-fit: cover;
   background: #000;
   z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chat-video-cell__video--visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Loading spinner */
