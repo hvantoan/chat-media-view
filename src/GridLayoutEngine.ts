@@ -1,5 +1,5 @@
 import type {
-  ImageItem,
+  BaseMediaItem,
   CellLayout,
   GridLayoutResult,
   LayoutConfig,
@@ -26,7 +26,7 @@ function getAspectRatio(width: number, height: number): number {
  * @returns Grid layout with cell positions and dimensions
  */
 export function calculateLayout(
-  images: ImageItem[],
+  images: BaseMediaItem[],
   config: Partial<LayoutConfig> = {}
 ): GridLayoutResult {
   const cfg = { ...DEFAULT_CONFIG, ...config }
@@ -90,7 +90,7 @@ function getCornerRadius(index: number, total: number, radius: number): BorderRa
 /**
  * Layout for single image - full width, aspect ratio preserved
  */
-function layoutSingle(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
+function layoutSingle(images: BaseMediaItem[], cfg: LayoutConfig): GridLayoutResult {
   const img = images[0]
   if (!img) {
     return { cells: [], totalWidth: 0, totalHeight: 0 }
@@ -119,7 +119,7 @@ function layoutSingle(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult 
 /**
  * Layout for 2 images - side by side, 50/50 split
  */
-function layoutTwo(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
+function layoutTwo(images: BaseMediaItem[], cfg: LayoutConfig): GridLayoutResult {
   const img0 = images[0]
   const img1 = images[1]
   if (!img0 || !img1) {
@@ -170,7 +170,7 @@ function layoutTwo(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
 /**
  * Layout for 3 images - 66% left + 33% right (2 stacked)
  */
-function layoutThree(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
+function layoutThree(images: BaseMediaItem[], cfg: LayoutConfig): GridLayoutResult {
   const img0 = images[0]
   if (!img0) {
     return { cells: [], totalWidth: 0, totalHeight: 0 }
@@ -232,7 +232,7 @@ function layoutThree(images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
 /**
  * Layout for 4 images - 2x2 grid
  */
-function layoutFour(_images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
+function layoutFour(_images: BaseMediaItem[], cfg: LayoutConfig): GridLayoutResult {
   const cellSize = (cfg.maxWidth - cfg.gap) / 2
   const cells: CellLayout[] = []
 
@@ -259,7 +259,7 @@ function layoutFour(_images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
 /**
  * Layout for 5 images - 2 top + 3 bottom
  */
-function layoutFive(_images: ImageItem[], cfg: LayoutConfig): GridLayoutResult {
+function layoutFive(_images: BaseMediaItem[], cfg: LayoutConfig): GridLayoutResult {
   const topCellWidth = (cfg.maxWidth - cfg.gap) / 2
   const bottomCellWidth = (cfg.maxWidth - cfg.gap * 2) / 3
   const rowHeight = cfg.maxWidth * 0.3

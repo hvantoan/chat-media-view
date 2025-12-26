@@ -1,5 +1,5 @@
 import { calculateLayout } from './GridLayoutEngine'
-import type { ImageItem } from './types'
+import type { BaseMediaItem } from './types'
 
 /**
  * Calculate the total height of a grid layout for virtual list integration.
@@ -24,7 +24,7 @@ import type { ImageItem } from './types'
  * ```
  */
 export function calculateGridHeight(
-  images: ImageItem[],
+  images: BaseMediaItem[],
   maxWidth = 400,
   gap = 2
 ): number {

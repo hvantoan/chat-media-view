@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
-import type { MediaItem, ImageItem } from './types'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import type { MediaItem } from './types'
 import { handleKeyboardNav } from './accessibility'
 import { LightboxVideo } from './LightboxVideo'
 import { useDownload } from './hooks/useDownload'
@@ -15,19 +15,9 @@ import {
 import { LightboxThumbnails } from './LightboxThumbnails'
 import './styles/lightbox.css'
 
-/**
- * Normalize legacy ImageItem to MediaItem
- */
-function normalizeMediaItem(item: ImageItem | MediaItem): MediaItem {
-  if ('type' in item) return item
-  return { ...item, type: 'image' as const }
-}
-
 export interface LightboxProps {
   /** Array of media items to display */
   items?: MediaItem[]
-  /** @deprecated Use `items` instead */
-  images?: ImageItem[]
   /** Initial media index */
   initialIndex?: number
   /** Whether lightbox is open */
@@ -58,7 +48,6 @@ export interface LightboxProps {
  */
 export function Lightbox({
   items,
-  images,
   initialIndex = 0,
   isOpen,
   onClose,
@@ -82,11 +71,7 @@ export function Lightbox({
     step: zoomStep
   })
 
-  // Normalize items (backwards compat)
-  const mediaItems = useMemo(() => {
-    const source = items ?? images ?? []
-    return source.map(normalizeMediaItem)
-  }, [items, images])
+  const mediaItems = items ?? []
 
   useEffect(() => {
     setCurrentIndex(initialIndex)

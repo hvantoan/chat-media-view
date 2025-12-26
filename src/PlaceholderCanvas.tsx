@@ -1,11 +1,9 @@
 import { useEffect, useRef, memo } from 'react'
-import { thumbHashToRGBA, base64ToBytes } from './thumbhash'
+import { decode } from 'blurhash'
 
 interface PlaceholderCanvasProps {
-  /** ThumbHash or BlurHash string */
+  /** BlurHash string */
   hash: string
-  /** Hash type - currently only 'thumbhash' is supported natively */
-  hashType: 'thumbhash' | 'blurhash'
   /** Target width in pixels */
   width: number
   /** Target height in pixels */
@@ -15,12 +13,10 @@ interface PlaceholderCanvasProps {
 }
 
 /**
- * Canvas-based placeholder renderer for ThumbHash
- * BlurHash requires optional blurhash package - falls back to solid color
+ * Canvas-based placeholder renderer for BlurHash
  */
 export const PlaceholderCanvas = memo(function PlaceholderCanvas({
   hash,
-  hashType,
   width,
   height,
   className
@@ -35,26 +31,21 @@ export const PlaceholderCanvas = memo(function PlaceholderCanvas({
     if (!ctx) return
 
     try {
-      if (hashType === 'thumbhash') {
-        const bytes = base64ToBytes(hash)
-        const { w, h, rgba } = thumbHashToRGBA(bytes)
-        canvas.width = w
-        canvas.height = h
-        const imageData = new ImageData(new Uint8ClampedArray(rgba), w, h)
-        ctx.putImageData(imageData, 0, 0)
-      } else {
-        // BlurHash not included to keep bundle small
-        // Fill with average gray as fallback
-        ctx.fillStyle = '#e0e0e0'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-      }
+      // Decode BlurHash to pixels (32x32 is optimal for placeholder)
+      const pixels = decode(hash, 32, 32)
+      canvas.width = 32
+      canvas.height = 32
+      // Create ImageData with the decoded pixels
+      const imageData = ctx.createImageData(32, 32)
+      imageData.data.set(pixels)
+      ctx.putImageData(imageData, 0, 0)
     } catch (e) {
-      console.warn('Failed to decode hash:', e)
+      console.warn('Failed to decode blurhash:', e)
       // Fallback to gray
       ctx.fillStyle = '#e0e0e0'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
     }
-  }, [hash, hashType])
+  }, [hash])
 
   return (
     <canvas

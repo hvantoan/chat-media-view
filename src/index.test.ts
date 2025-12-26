@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { ChatImageGrid, calculateGridHeight } from './index'
-import type { ImageItem } from './types'
+import type { MediaItem } from './types'
 
 describe('chat-media-view exports', () => {
   it('exports ChatImageGrid component', () => {
@@ -14,10 +14,10 @@ describe('chat-media-view exports', () => {
   })
 
   it('calculateGridHeight returns a number', () => {
-    const images: ImageItem[] = [
-      { src: 'test.jpg', width: 100, height: 100 },
+    const items: MediaItem[] = [
+      { type: 'image', src: 'test.jpg', width: 100, height: 100 },
     ]
-    const result = calculateGridHeight(images, 400)
+    const result = calculateGridHeight(items, 400)
     expect(typeof result).toBe('number')
   })
 })

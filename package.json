@@ -1,6 +1,6 @@
 {
   "name": "chat-media-view",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Telegram-style image grid for React chat applications",
   "type": "module",
   "exports": {
@@ -44,7 +44,6 @@
     "gallery",
     "virtual-list",
     "blurhash",
-    "thumbhash",
     "lightbox",
     "accessibility",
     "rtl"
@@ -97,5 +96,8 @@
     "vite": "^7.3.0",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.0.16"
+  },
+  "dependencies": {
+    "blurhash": "^2.0.5"
   }
 }

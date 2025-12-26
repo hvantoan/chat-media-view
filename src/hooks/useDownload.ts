@@ -26,8 +26,6 @@ export interface UseDownloadResult {
   error: Error | null
   /** Reset state */
   reset: () => void
-  /** @deprecated Use status === 'downloading' instead */
-  isDownloading: boolean
 }
 
 /**
@@ -135,8 +133,6 @@ export function useDownload(): UseDownloadResult {
     progress,
     status,
     error,
-    reset,
-    // Backwards compat
-    isDownloading: status === 'downloading'
+    reset
   }
 }

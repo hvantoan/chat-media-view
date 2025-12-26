@@ -50,7 +50,7 @@ export function VideoCell({
   })
 
   const shouldLoadThumbnail = !lazyLoad || isVisible
-  const hasPlaceholder = video.blurhash ?? video.thumbhash
+  const hasPlaceholder = !!video.blurhash
   const showThumbnail = state === 'thumbnail' || state === 'loading'
   const showVideo = state === 'playing' || state === 'paused' || state === 'loading'
 
@@ -127,8 +127,7 @@ export function VideoCell({
       {/* Placeholder layer */}
       {hasPlaceholder && !thumbnailLoaded && state !== 'error' && (
         <PlaceholderCanvas
-          hash={(video.thumbhash ?? video.blurhash)!}
-          hashType={video.thumbhash ? 'thumbhash' : 'blurhash'}
+          hash={video.blurhash!}
           width={layout.width}
           height={layout.height}
           className="chat-video-cell__placeholder"

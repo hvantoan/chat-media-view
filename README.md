@@ -155,6 +155,40 @@ The build output will be in the `dist` directory.
 
 We welcome contributions! Please see our `CONTRIBUTING.md` for more details.
 
+## Migration from v0.1.x
+
+### Breaking Changes in v0.2.0
+
+| Before (v0.1.x) | After (v0.2.0) |
+|-----------------|----------------|
+| `images` prop | `items` prop |
+| `onImageClick` callback | `onMediaClick` callback |
+| `ImageItem` type | `MediaItem` type with `type: 'image'` |
+| `thumbhash` field | `blurhash` field |
+| `isDownloading` in `useDownload` | `status === 'downloading'` |
+| ThumbHash utilities exported | Removed |
+
+### Migration Steps
+
+1. **Update props**: Replace `images` with `items` and `onImageClick` with `onMediaClick`
+2. **Update types**: Change `ImageItem` to `MediaItem` and add `type: 'image'` to each item
+3. **Update placeholder hashes**: Replace `thumbhash` with `blurhash` field
+4. **Update download status checks**: Replace `isDownloading` with `status === 'downloading'`
+
+```typescript
+// Before (v0.1.x)
+const images: ImageItem[] = [
+  { src: 'photo.jpg', width: 800, height: 600, thumbhash: 'YTkG...' }
+]
+<ChatImageGrid images={images} onImageClick={(i, img) => console.log(i)} />
+
+// After (v0.2.0)
+const items: MediaItem[] = [
+  { type: 'image', src: 'photo.jpg', width: 800, height: 600, blurhash: 'LEHV...' }
+]
+<ChatImageGrid items={items} onMediaClick={(i, item) => console.log(i)} />
+```
+
 ## License
 
 This project is licensed under the MIT License.
