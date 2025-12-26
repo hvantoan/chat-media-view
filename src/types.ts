@@ -61,6 +61,14 @@ export interface ChatMediaGridProps {
   className?: string
   /** Enable RTL layout */
   rtl?: boolean
+  /** Enable lightbox for full-screen media viewing (default: true) */
+  enableLightbox?: boolean
+  /** Show download button in lightbox (default: true) */
+  lightboxShowDownload?: boolean
+  /** Show thumbnail strip in lightbox (default: true) */
+  lightboxShowThumbnails?: boolean
+  /** Show zoom controls for images in lightbox (default: true) */
+  lightboxShowZoomControls?: boolean
 }
 
 /**

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import type { MediaItem } from './types'
 import { handleKeyboardNav } from './accessibility'
 import { LightboxVideo } from './LightboxVideo'
@@ -71,7 +71,7 @@ export function Lightbox({
     step: zoomStep
   })
 
-  const mediaItems = items ?? []
+  const mediaItems = useMemo(() => items ?? [], [items])
 
   useEffect(() => {
     setCurrentIndex(initialIndex)

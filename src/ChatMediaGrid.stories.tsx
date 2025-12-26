@@ -14,6 +14,7 @@ Telegram-style media grid for React chat applications.
 
 ## Features
 - Layouts for 1-5 images/videos (exact Telegram clone)
+- **Built-in Lightbox** with zoom, download, thumbnails (toggleable via \`enableLightbox\`)
 - **Video support** with inline playback, duration badge, and auto-pause
 - Virtual list compatible via \`calculateGridHeight()\`
 - BlurHash placeholder support
@@ -53,6 +54,26 @@ Telegram-style media grid for React chat applications.
       description: 'Enable RTL (right-to-left) layout',
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } }
+    },
+    enableLightbox: {
+      description: 'Enable built-in lightbox for full-screen media viewing',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
+    },
+    lightboxShowDownload: {
+      description: 'Show download button in lightbox',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
+    },
+    lightboxShowThumbnails: {
+      description: 'Show thumbnail strip in lightbox',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
+    },
+    lightboxShowZoomControls: {
+      description: 'Show zoom controls for images in lightbox',
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } }
     },
     onMediaClick: {
       description: 'Callback when a media item is clicked',
@@ -377,6 +398,76 @@ export const VideoNoDuration: Story = {
     docs: {
       description: {
         story: 'Videos without duration info hide the duration badge.'
+      }
+    }
+  }
+}
+
+// =====================
+// Lightbox Stories
+// =====================
+
+export const WithLightbox: Story = {
+  name: 'With Lightbox (Default)',
+  args: {
+    items: sampleImages.slice(0, 3),
+    enableLightbox: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Click any image to open the built-in lightbox. Navigate with arrows, zoom with +/- keys.'
+      }
+    }
+  }
+}
+
+export const LightboxDisabled: Story = {
+  name: 'Lightbox Disabled',
+  args: {
+    items: sampleImages.slice(0, 3),
+    enableLightbox: false,
+    onMediaClick: (index, item) => {
+      alert(`Custom handler: clicked ${item.type} at index ${index}`)
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Lightbox disabled. Use onMediaClick to implement custom behavior.'
+      }
+    }
+  }
+}
+
+export const LightboxMinimal: Story = {
+  name: 'Lightbox Minimal UI',
+  args: {
+    items: sampleImages.slice(0, 4),
+    enableLightbox: true,
+    lightboxShowDownload: false,
+    lightboxShowThumbnails: false,
+    lightboxShowZoomControls: false
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Lightbox with minimal UI - no download button, thumbnails, or zoom controls.'
+      }
+    }
+  }
+}
+
+export const LightboxWithVideos: Story = {
+  name: 'Lightbox with Videos',
+  args: {
+    items: mixedMedia,
+    enableLightbox: true
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Lightbox supports both images and videos. Videos play inline with native controls.'
       }
     }
   }
