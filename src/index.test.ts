@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { ChatImageGrid, calculateGridHeight } from './index'
+import { ChatMediaGrid, calculateGridHeight } from './index'
 import type { MediaItem } from './types'
 
 describe('chat-media-view exports', () => {
-  it('exports ChatImageGrid component', () => {
-    expect(ChatImageGrid).toBeDefined()
-    expect(typeof ChatImageGrid).toBe('function')
+  it('exports ChatMediaGrid component', () => {
+    expect(ChatMediaGrid).toBeDefined()
+    expect(typeof ChatMediaGrid).toBe('function')
   })
 
   it('exports calculateGridHeight utility', () => {

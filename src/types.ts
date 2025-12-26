@@ -40,9 +40,9 @@ export interface VideoMediaItem extends BaseMediaItem {
 export type MediaItem = ImageMediaItem | VideoMediaItem
 
 /**
- * Props for the ChatImageGrid component
+ * Props for the ChatMediaGrid component
  */
-export interface ChatImageGridProps {
+export interface ChatMediaGridProps {
   /** Array of media items to display (1-5 items) - supports images and videos */
   items?: MediaItem[]
   /** Maximum width of the grid in pixels */

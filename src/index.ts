@@ -1,5 +1,5 @@
 // Components
-export { ChatImageGrid } from './ChatImageGrid'
+export { ChatMediaGrid } from './ChatMediaGrid'
 export { ImageCell } from './ImageCell'
 export { VideoCell } from './VideoCell'
 export { MediaCell } from './MediaCell'
@@ -44,7 +44,7 @@ export { getAriaLabel, handleKeyboardNav } from './accessibility'
 
 // Types
 export type {
-  ChatImageGridProps,
+  ChatMediaGridProps,
   MediaItem,
   ImageMediaItem,
   VideoMediaItem,

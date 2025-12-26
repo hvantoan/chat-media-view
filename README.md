@@ -180,13 +180,13 @@ We welcome contributions! Please see our `CONTRIBUTING.md` for more details.
 const images: ImageItem[] = [
   { src: 'photo.jpg', width: 800, height: 600, thumbhash: 'YTkG...' }
 ]
-<ChatImageGrid images={images} onImageClick={(i, img) => console.log(i)} />
+<ChatMediaGrid images={images} onImageClick={(i, img) => console.log(i)} />
 
 // After (v0.2.0)
 const items: MediaItem[] = [
   { type: 'image', src: 'photo.jpg', width: 800, height: 600, blurhash: 'LEHV...' }
 ]
-<ChatImageGrid items={items} onMediaClick={(i, item) => console.log(i)} />
+<ChatMediaGrid items={items} onMediaClick={(i, item) => console.log(i)} />
 ```
 
 ## License
