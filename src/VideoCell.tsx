@@ -159,6 +159,7 @@ export function VideoCell({
           controls
           playsInline
           muted={video.muted ?? true}
+          loop={video.loop ?? false}
           onCanPlay={handleVideoCanPlay}
           onError={handleVideoError}
           onPause={handleVideoPause}
