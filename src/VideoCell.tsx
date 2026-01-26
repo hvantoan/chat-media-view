@@ -155,6 +155,7 @@ export function VideoCell({
           ref={videoRef}
           className={`chat-video-cell__video${showVideo ? ' chat-video-cell__video--visible' : ''}`}
           src={video.src}
+          poster={video.thumbnail ?? video.src}
           controls
           playsInline
           muted={video.muted ?? true}
