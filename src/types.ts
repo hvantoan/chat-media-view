@@ -32,6 +32,8 @@ export interface VideoMediaItem extends BaseMediaItem {
   duration?: number
   /** Whether video starts muted (default: true for autoplay compat) */
   muted?: boolean
+  /** URL of the poster image to display before video loads */
+  poster?: string
 }
 
 /**
