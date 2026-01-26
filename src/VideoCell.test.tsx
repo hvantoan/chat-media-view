@@ -314,4 +314,30 @@ describe('VideoCell', () => {
     const videoEl = document.querySelector('video') as HTMLVideoElement
     expect(videoEl.classList.contains('chat-video-cell__video--visible')).toBe(false)
   })
+
+  it('uses video.poster on video element when provided', () => {
+    const videoWithPoster = { ...mockVideo, poster: 'https://example.com/custom-poster.jpg' }
+    render(<VideoCell video={videoWithPoster} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.poster).toBe('https://example.com/custom-poster.jpg')
+  })
+
+  it('uses thumbnail as poster when poster not provided', () => {
+    render(<VideoCell video={mockVideo} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.poster).toBe('https://example.com/thumb.jpg')
+  })
+
+  it('falls back to src as poster when thumbnail not provided', () => {
+    const videoNoThumb = { ...mockVideo, thumbnail: undefined }
+    render(<VideoCell video={videoNoThumb} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.poster).toBe('https://example.com/video.mp4')
+  })
 })
