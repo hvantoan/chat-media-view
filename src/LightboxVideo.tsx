@@ -37,6 +37,8 @@ export function LightboxVideo({ video, isActive }: LightboxVideoProps): ReactNod
       controls
       autoPlay
       muted={video.muted ?? true}
+      poster={video.poster}
+      loop={video.loop ?? false}
       playsInline
       onClick={(e) => { e.stopPropagation(); }}
     >
