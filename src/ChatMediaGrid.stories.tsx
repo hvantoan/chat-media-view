@@ -403,6 +403,75 @@ export const VideoNoDuration: Story = {
   }
 }
 
+export const VideoWithPoster: Story = {
+  name: 'Video with Custom Poster',
+  args: {
+    items: [{
+      ...sampleVideos[0],
+      poster: 'https://picsum.photos/1280/720?random=10'
+    }]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Video with custom poster image displayed before video loads. Useful for branding or preview frames.'
+      }
+    }
+  }
+}
+
+export const VideoWithLoop: Story = {
+  name: 'Looping Video',
+  args: {
+    items: [{
+      ...sampleVideos[0],
+      loop: true
+    }]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Video that loops continuously. Ideal for GIF-like behavior or background animations.'
+      }
+    }
+  }
+}
+
+export const VideoWithLoopAndPoster: Story = {
+  name: 'Looping Video with Poster',
+  args: {
+    items: [{
+      ...sampleVideos[0],
+      poster: 'https://picsum.photos/1280/720?random=11',
+      loop: true
+    }]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Looping video with custom poster image. Poster shows before first playback, then loops continuously.'
+      }
+    }
+  }
+}
+
+export const MultipleLoopingVideos: Story = {
+  name: 'Multiple Looping Videos',
+  args: {
+    items: sampleVideos.slice(0, 2).map(v => ({
+      ...v,
+      loop: true
+    }))
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Grid with multiple looping videos. Each video loops independently.'
+      }
+    }
+  }
+}
+
 // =====================
 // Lightbox Stories
 // =====================
