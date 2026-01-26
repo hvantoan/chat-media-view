@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react'
 import { useRef, useState, useCallback } from 'react'
 import { useIntersectionObserver } from './hooks/useIntersectionObserver'
 import { PlaceholderCanvas } from './PlaceholderCanvas'
-import type { ImageItem, CellLayout } from './types'
+import type { ImageMediaItem, CellLayout } from './types'
 
 interface ImageCellProps {
-  image: ImageItem
+  image: ImageMediaItem
   layout: CellLayout
   lazyLoad: boolean
   onClick?: () => void
@@ -15,7 +16,7 @@ export function ImageCell({
   layout,
   lazyLoad,
   onClick
-}: ImageCellProps) {
+}: ImageCellProps): ReactNode {
   const ref = useRef<HTMLDivElement>(null)
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(false)
@@ -27,10 +28,10 @@ export function ImageCell({
   })
 
   const shouldLoad = !lazyLoad || isVisible
-  const hasPlaceholder = image.blurhash || image.thumbhash
+  const hasPlaceholder = !!image.blurhash
 
-  const handleLoad = useCallback(() => setLoaded(true), [])
-  const handleError = useCallback(() => setError(true), [])
+  const handleLoad = useCallback((): void => { setLoaded(true); }, [])
+  const handleError = useCallback((): void => { setError(true); }, [])
   const handleRetry = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
     setError(false)
@@ -56,14 +57,13 @@ export function ImageCell({
       onClick={onClick}
       role="button"
       tabIndex={0}
-      aria-label={image.alt || 'Image'}
+      aria-label={image.alt ?? 'Image'}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick?.()}
     >
       {/* Placeholder layer - shown until image loads */}
       {hasPlaceholder && !loaded && !error && (
         <PlaceholderCanvas
-          hash={(image.thumbhash || image.blurhash)!}
-          hashType={image.thumbhash ? 'thumbhash' : 'blurhash'}
+          hash={image.blurhash!}
           width={layout.width}
           height={layout.height}
           className="chat-image-cell__placeholder"
@@ -73,7 +73,7 @@ export function ImageCell({
       {/* Image layer */}
       {shouldLoad && !error && (
         <img
-          src={image.thumbnail || image.src}
+          src={image.thumbnail ?? image.src}
           alt={image.alt ?? ''}
           className={`chat-image-cell__img ${loaded ? 'loaded' : ''}`}
           onLoad={handleLoad}

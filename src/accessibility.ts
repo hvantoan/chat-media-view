@@ -1,10 +1,10 @@
-import type { ImageItem } from './types'
+import type { BaseMediaItem } from './types'
 
 /**
  * Generate ARIA label for an image in the grid
  */
-export function getAriaLabel(image: ImageItem, index: number, total: number): string {
-  const base = image.alt || `Image ${index + 1}`
+export function getAriaLabel(image: BaseMediaItem, index: number, total: number): string {
+  const base = image.alt ?? `Image ${index + 1}`
   return `${base}, ${index + 1} of ${total}`
 }
 

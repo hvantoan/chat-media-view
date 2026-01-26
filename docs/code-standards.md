@@ -28,7 +28,7 @@ The `chat-media-view` library follows a modular structure designed for clarity, 
 ├── tsconfig.json         # TypeScript configuration
 ├── tsconfig.build.json   # TypeScript build configuration
 ├── vite.config.ts        # Vite build configuration
-├── .eslintrc.cjs         # ESLint configuration
+├── eslint.config.js     # ESLint 9 configuration
 ├── postcss.config.js     # PostCSS configuration
 ├── tailwind.config.js    # Tailwind CSS configuration
 └── README.md             # Project README
@@ -59,6 +59,9 @@ The `chat-media-view` library follows a modular structure designed for clarity, 
 - **CSS Files**: Utilize dedicated CSS files (e.g., `image-grid.css`, `lightbox.css`) for component-specific styling.
 - **Utility-First**: Consider using utility-first CSS frameworks like Tailwind CSS for rapid UI development, configured via `tailwind.config.js`.
 - **Variables**: Use CSS variables for themes, colors, and common spacing.
+- **Design Tokens**: Follow a strict naming convention for CSS custom properties: `--[component]-[category]-[property]` (e.g., `--lightbox-color-overlay`, `--lightbox-blur-bg`).
+- **Glassmorphism**: When implementing glassmorphism, always provide a fallback for browsers that do not support `backdrop-filter` using `@supports not (backdrop-filter: blur(1px))`.
+- **Transitions**: Standardize transitions using CSS variables to ensure consistency across interactive elements (e.g., `--lightbox-transition-normal`).
 
 ### 4. Naming Conventions
 - **Files**: `PascalCase` for React components (`ComponentName.tsx`), `camelCase` for hooks and utilities (`useHookName.ts`, `utilityFunction.ts`). Storybook files are `ComponentName.stories.tsx`.
@@ -85,6 +88,42 @@ The `chat-media-view` library follows a modular structure designed for clarity, 
 - **Memoization**: Use `React.memo`, `useMemo`, and `useCallback` to optimize performance for expensive computations or re-renders.
 - **Lazy Loading**: Implement lazy loading for components or media (e.g., `useIntersectionObserver` for media items).
 
-### 9. Version Control
+### 9. Linting
+
+This project uses ESLint 9 with TypeScript-ESLint for code quality:
+
+```bash
+npm run lint        # Check for issues
+npm run lint:fix    # Auto-fix issues
+npm run lint:strict # Zero warnings allowed
+```
+
+Key rules enforced:
+- Explicit return types on exported functions
+- Type-only imports for types
+- No unsafe any operations
+- React hooks rules
+
+### 10. Version Control
 - **Git Flow**: Follow a standard Git branching strategy (e.g., feature branches, develop, main).
-- **Commit Messages**: Write clear, concise, and descriptive commit messages (e.g., Conventional Commits).
+- **Commit Messages**: Write clear, concise, and descriptive commit messages using [Conventional Commits](https://www.conventionalcommits.org/).
+- **Automation**: Git hooks (via Husky) enforce commit message standards and run quality checks (linting/tests) before every commit.
+- **Workflow**:
+    - Use feature branches for development.
+    - Merge to `develop` for integration.
+    - Merge to `master` to trigger automated releases.
+
+### 11. Continuous Integration & Delivery (CI/CD)
+
+The project uses GitHub Actions for automated quality assurance and publishing.
+
+- **CI Pipeline (`ci.yml`)**: Triggered on all PRs and pushes to main branches. Executes:
+    - Node.js environment setup (v20)
+    - Strict linting (`npm run lint:strict`)
+    - Unit tests with coverage (`npm run test:coverage`)
+    - Build verification (`npm run build`)
+- **CD Pipeline (`release.yml`)**: Triggered on push to `master`. Automates:
+    - Version bumping
+    - Changelog generation
+    - NPM publishing
+- **Dependency Management**: Dependabot is configured to monitor and update dependencies weekly.

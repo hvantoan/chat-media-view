@@ -1,4 +1,21 @@
+import { vi } from 'vitest'
 import '@testing-library/jest-dom'
+
+// Mock HTMLMediaElement play/pause for jsdom
+Object.defineProperty(globalThis.HTMLMediaElement.prototype, 'play', {
+  configurable: true,
+  value: vi.fn().mockImplementation(() => Promise.resolve()),
+})
+
+Object.defineProperty(globalThis.HTMLMediaElement.prototype, 'pause', {
+  configurable: true,
+  value: vi.fn(),
+})
+
+Object.defineProperty(globalThis.HTMLMediaElement.prototype, 'load', {
+  configurable: true,
+  value: vi.fn(),
+})
 
 // Mock IntersectionObserver for jsdom environment
 class MockIntersectionObserver {
@@ -28,7 +45,10 @@ class MockIntersectionObserver {
 
 (globalThis as unknown as Record<string, unknown>).IntersectionObserver = MockIntersectionObserver
 
-// Mock URL.createObjectURL and URL.revokeObjectURL for jsdom
+// Mock scrollIntoView for jsdom
+if (typeof window.HTMLElement.prototype.scrollIntoView !== 'function') {
+  window.HTMLElement.prototype.scrollIntoView = vi.fn()
+}
 if (typeof URL.createObjectURL === 'undefined') {
   URL.createObjectURL = () => 'blob:mock-url'
 }

@@ -32,7 +32,7 @@ describe('useDownload', () => {
     const { result } = renderHook(() => useDownload())
 
     expect(result.current.progress).toBeNull()
-    expect(result.current.isDownloading).toBe(false)
+    expect(result.current.status).toBe('idle')
     expect(result.current.error).toBeNull()
   })
 
@@ -40,7 +40,8 @@ describe('useDownload', () => {
     const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
     const mockObjectUrl = 'blob:http://localhost/test'
 
-    mockDownloadWithProgress.mockResolvedValue(mockBlob)
+    // Now returns DownloadResult
+    mockDownloadWithProgress.mockResolvedValue({ blob: mockBlob, retried: false, attempts: 1 })
     mockCreateImageUrl.mockReturnValue(mockObjectUrl)
 
     const { result } = renderHook(() => useDownload())
@@ -51,7 +52,7 @@ describe('useDownload', () => {
     })
 
     expect(downloadResult).toBe(mockObjectUrl)
-    expect(result.current.isDownloading).toBe(false)
+    expect(result.current.status).toBe('completed')
     expect(result.current.error).toBeNull()
   })
 
@@ -59,10 +60,10 @@ describe('useDownload', () => {
     const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
     const mockObjectUrl = 'blob:http://localhost/test'
 
-    mockDownloadWithProgress.mockImplementation(async (_url, onProgress) => {
-      onProgress?.({ loaded: 50, total: 100, percentage: 50 })
-      onProgress?.({ loaded: 100, total: 100, percentage: 100 })
-      return mockBlob
+    mockDownloadWithProgress.mockImplementation(async (_url, options) => {
+      options?.onProgress?.({ loaded: 50, total: 100, percentage: 50 })
+      options?.onProgress?.({ loaded: 100, total: 100, percentage: 100 })
+      return { blob: mockBlob, retried: false, attempts: 1 }
     })
     mockCreateImageUrl.mockReturnValue(mockObjectUrl)
 
@@ -91,7 +92,7 @@ describe('useDownload', () => {
     })
 
     expect(result.current.error).toBe(error)
-    expect(result.current.isDownloading).toBe(false)
+    expect(result.current.status).toBe('error')
   })
 
   it('reset clears state', async () => {
@@ -116,14 +117,14 @@ describe('useDownload', () => {
 
     expect(result.current.progress).toBeNull()
     expect(result.current.error).toBeNull()
-    expect(result.current.isDownloading).toBe(false)
+    expect(result.current.status).toBe('idle')
   })
 
   it('cleans up object URL on unmount', async () => {
     const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
     const mockObjectUrl = 'blob:http://localhost/test'
 
-    mockDownloadWithProgress.mockResolvedValue(mockBlob)
+    mockDownloadWithProgress.mockResolvedValue({ blob: mockBlob, retried: false, attempts: 1 })
     mockCreateImageUrl.mockReturnValue(mockObjectUrl)
 
     const { result, unmount } = renderHook(() => useDownload())
@@ -135,5 +136,29 @@ describe('useDownload', () => {
     unmount()
 
     expect(mockRevokeImageUrl).toHaveBeenCalledWith(mockObjectUrl)
+  })
+
+  it('cancel aborts download and updates status', async () => {
+    const mockBlob = new Blob(['test'], { type: 'image/jpeg' })
+
+    // Simulate a slow download that can be cancelled
+    mockDownloadWithProgress.mockImplementation(async () => {
+      await new Promise(r => setTimeout(r, 100))
+      return { blob: mockBlob, retried: false, attempts: 1 }
+    })
+
+    const { result } = renderHook(() => useDownload())
+
+    // Start download without awaiting
+    act(() => {
+      result.current.download('https://example.com/image.jpg')
+    })
+
+    // Cancel immediately
+    act(() => {
+      result.current.cancel()
+    })
+
+    expect(result.current.status).toBe('cancelled')
   })
 })

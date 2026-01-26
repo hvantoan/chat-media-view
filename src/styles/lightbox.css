@@ -1,14 +1,420 @@
-/* Lightbox - Full-screen image viewer */
+/* ============================================
+   Lightbox Design Tokens
+   ============================================ */
+:root {
+  /* Colors */
+  --lightbox-overlay: rgba(0, 0, 0, 0.95);
+  --lightbox-glass: rgba(255, 255, 255, 0.15);
+  --lightbox-glass-hover: rgba(255, 255, 255, 0.25);
+  --lightbox-glass-dark: rgba(0, 0, 0, 0.4);
+  --lightbox-border: rgba(255, 255, 255, 0.1);
+  --lightbox-border-hover: rgba(255, 255, 255, 0.2);
+  --lightbox-text: rgba(255, 255, 255, 0.9);
+  --lightbox-text-muted: rgba(255, 255, 255, 0.7);
+
+  /* Blur */
+  --lightbox-blur-bg: 48px;
+  --lightbox-blur-button: 12px;
+
+  /* Sizing */
+  --lightbox-btn-size: 40px;
+  --lightbox-nav-size: 48px;
+  --lightbox-thumb-size: 56px;
+  --lightbox-control-height: 36px;
+
+  /* Spacing */
+  --lightbox-gutter: 24px;
+  --lightbox-thumb-gap: 12px;
+
+  /* Radius */
+  --lightbox-radius-sm: 8px;
+  --lightbox-radius-full: 9999px;
+
+  /* Transitions */
+  --lightbox-transition-fast: 150ms ease;
+  --lightbox-transition-normal: 200ms ease;
+  --lightbox-transition-slow: 300ms ease-in-out;
+
+  /* Gradients */
+  --lightbox-gradient-top: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+  --lightbox-gradient-bottom: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+
+  /* Z-index layers */
+  --lightbox-z-bg: 0;
+  --lightbox-z-gradient: 1;
+  --lightbox-z-media: 10;
+  --lightbox-z-controls: 20;
+  --lightbox-z-toolbar: 30;
+}
+
+/* ============================================
+   Glassmorphism Base Styles
+   ============================================ */
+.chat-lightbox__glass-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lightbox-glass);
+  backdrop-filter: blur(var(--lightbox-blur-button));
+  -webkit-backdrop-filter: blur(var(--lightbox-blur-button));
+  border: 1px solid var(--lightbox-border);
+  color: white;
+  cursor: pointer;
+  transition:
+    background var(--lightbox-transition-normal),
+    border-color var(--lightbox-transition-normal),
+    transform var(--lightbox-transition-fast);
+}
+
+.chat-lightbox__glass-btn:hover {
+  background: var(--lightbox-glass-hover);
+  border-color: var(--lightbox-border-hover);
+}
+
+.chat-lightbox__glass-btn:active {
+  transform: scale(0.95);
+}
+
+.chat-lightbox__glass-btn:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Rectangular variant (toolbar buttons) */
+.chat-lightbox__glass-btn--rect {
+  width: var(--lightbox-btn-size);
+  height: var(--lightbox-btn-size);
+  border-radius: var(--lightbox-radius-sm);
+}
+
+/* Circular variant (nav buttons) */
+.chat-lightbox__glass-btn--circle {
+  width: var(--lightbox-nav-size);
+  height: var(--lightbox-nav-size);
+  border-radius: var(--lightbox-radius-full);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.chat-lightbox__glass-btn--circle:hover {
+  background: var(--lightbox-glass);
+  border-color: var(--lightbox-border-hover);
+}
+
+/* ============================================
+   Pill/Badge Styles (counter, zoom)
+   ============================================ */
+.chat-lightbox__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lightbox-glass-dark);
+  backdrop-filter: blur(var(--lightbox-blur-button));
+  -webkit-backdrop-filter: blur(var(--lightbox-blur-button));
+  border: 1px solid var(--lightbox-border);
+  border-radius: var(--lightbox-radius-full);
+  height: var(--lightbox-control-height);
+  padding: 0 14px;
+  color: var(--lightbox-text);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  user-select: none;
+}
+
+/* Zoom control pill (contains buttons) */
+.chat-lightbox__pill--interactive {
+  padding: 2px;
+  gap: 0;
+}
+
+.chat-lightbox__pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--lightbox-radius-full);
+  background: transparent;
+  border: none;
+  color: var(--lightbox-text);
+  cursor: pointer;
+  transition: background var(--lightbox-transition-fast);
+}
+
+.chat-lightbox__pill-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.chat-lightbox__pill-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.chat-lightbox__zoom-value {
+  min-width: 48px;
+  text-align: center;
+  padding: 0 8px;
+  cursor: pointer;
+}
+
+.chat-lightbox__zoom-value:hover {
+  color: white;
+}
+
+/* Zoom button disabled state */
+.chat-lightbox__pill-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.chat-lightbox__pill-btn:focus-visible {
+  outline: 2px solid white;
+  outline-offset: -2px;
+}
+
+/* ============================================
+   Gradient Overlays
+   ============================================ */
+.chat-lightbox__gradient {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: var(--lightbox-z-gradient);
+}
+
+.chat-lightbox__gradient--top {
+  top: 0;
+  height: 96px;
+  background: var(--lightbox-gradient-top);
+}
+
+.chat-lightbox__gradient--bottom {
+  bottom: 0;
+  height: 192px;
+  background: var(--lightbox-gradient-bottom);
+}
+
+/* ============================================
+   Fallback for browsers without backdrop-filter
+   ============================================ */
+@supports not (backdrop-filter: blur(1px)) {
+  .chat-lightbox__glass-btn {
+    background: rgba(60, 60, 60, 0.9);
+  }
+
+  .chat-lightbox__pill {
+    background: rgba(30, 30, 30, 0.95);
+  }
+}
+
+/* ============================================
+   Lightbox Base Container
+   ============================================ */
 .chat-lightbox {
   position: fixed;
   inset: 0;
   z-index: 9999;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.9);
+  background: var(--lightbox-overlay);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: white;
+  overflow: hidden;
 }
 
+/* ============================================
+   Blurred Background Layer
+   ============================================ */
+.chat-lightbox__blur-bg {
+  position: absolute;
+  inset: 0;
+  z-index: var(--lightbox-z-bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(var(--lightbox-blur-bg));
+  opacity: 0.3;
+  pointer-events: none;
+  transform: scale(1.1);
+}
+
+/* ============================================
+   Stage Container
+   ============================================ */
+.chat-lightbox__stage {
+  position: relative;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--lightbox-z-media);
+  padding: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .chat-lightbox__stage {
+    padding: 0 16px;
+  }
+}
+
+/* ============================================
+   Media Wrapper & Media Element
+   ============================================ */
+.chat-lightbox__media-wrapper {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .chat-lightbox__media-wrapper {
+    padding-bottom: 0;
+  }
+}
+
+.chat-lightbox__media {
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: transform var(--lightbox-transition-slow);
+  touch-action: manipulation;
+}
+
+.chat-lightbox__media--zoomed {
+  cursor: zoom-out;
+}
+
+/* Video element styling */
+.chat-lightbox__video {
+  max-width: 90vw;
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+  background: #000;
+}
+
+/* ============================================
+   Toolbar Container (Top Right)
+   ============================================ */
+.chat-lightbox__toolbar {
+  position: fixed;
+  top: 48px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: var(--lightbox-z-toolbar);
+}
+
+@media (max-width: 639px) {
+  .chat-lightbox__toolbar {
+    top: 16px;
+    right: 16px;
+  }
+}
+
+/* ============================================
+   Navigation Buttons
+   ============================================ */
+.chat-lightbox__nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: var(--lightbox-z-controls);
+}
+
+.chat-lightbox__nav--prev {
+  left: 24px;
+}
+
+.chat-lightbox__nav--next {
+  right: 24px;
+}
+
+/* Icon hover animation */
+.chat-lightbox__nav svg {
+  transition: transform var(--lightbox-transition-fast);
+}
+
+.chat-lightbox__nav--prev:hover svg {
+  transform: translateX(-2px);
+}
+
+.chat-lightbox__nav--next:hover svg {
+  transform: translateX(2px);
+}
+
+/* Active state with proper transform */
+.chat-lightbox__nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+@media (max-width: 639px) {
+  .chat-lightbox__nav {
+    top: auto;
+    bottom: 100px;
+    transform: none;
+  }
+
+  .chat-lightbox__nav:active {
+    transform: scale(0.95);
+  }
+
+  .chat-lightbox__nav--prev {
+    left: 16px;
+  }
+
+  .chat-lightbox__nav--next {
+    right: 16px;
+  }
+}
+
+/* ============================================
+   Bottom Controls Container
+   ============================================ */
+.chat-lightbox__bottom {
+  position: fixed;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: var(--lightbox-z-controls);
+  pointer-events: none;
+}
+
+.chat-lightbox__bottom > * {
+  pointer-events: auto;
+}
+
+.chat-lightbox__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 639px) {
+  .chat-lightbox__bottom {
+    bottom: 16px;
+  }
+}
+
+/* ============================================
+   Legacy Styles (for backwards compat)
+   ============================================ */
 .chat-lightbox__content {
   position: relative;
   max-width: 90vw;
@@ -21,81 +427,354 @@
   object-fit: contain;
 }
 
-.chat-lightbox__close,
-.chat-lightbox__prev,
-.chat-lightbox__next {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  font-size: 24px;
-  padding: 12px 16px;
+/* ============================================
+   Thumbnail Strip
+   ============================================ */
+.chat-lightbox__thumbnails {
+  position: relative;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.chat-lightbox__thumbnails-scroll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-lightbox__thumbnails-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-lightbox__thumbnails-list {
+  display: flex;
+  align-items: center;
+  gap: var(--lightbox-thumb-gap);
+  padding: 0 8px;
+  min-width: max-content;
+}
+
+/* Individual thumbnail */
+.chat-lightbox__thumb {
+  position: relative;
+  width: var(--lightbox-thumb-size);
+  height: var(--lightbox-thumb-size);
+  flex-shrink: 0;
+  border-radius: var(--lightbox-radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--lightbox-border);
+  opacity: 0.6;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s ease;
+  transition:
+    opacity var(--lightbox-transition-normal),
+    border-color var(--lightbox-transition-normal),
+    transform var(--lightbox-transition-fast);
+  background: rgba(0, 0, 0, 0.3);
 }
 
-.chat-lightbox__close:hover,
-.chat-lightbox__prev:hover,
-.chat-lightbox__next:hover {
-  background: rgba(255, 255, 255, 0.2);
+.chat-lightbox__thumb:hover {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
-.chat-lightbox__close:focus-visible,
-.chat-lightbox__prev:focus-visible,
-.chat-lightbox__next:focus-visible {
+.chat-lightbox__thumb:active {
+  transform: scale(0.95);
+}
+
+.chat-lightbox__thumb:focus-visible {
   outline: 2px solid white;
   outline-offset: 2px;
+  opacity: 1;
 }
 
-.chat-lightbox__close {
-  top: -48px;
-  right: 0;
+/* Active thumbnail */
+.chat-lightbox__thumb--active {
+  opacity: 1;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
-.chat-lightbox__prev {
-  left: -60px;
-  top: 50%;
-  transform: translateY(-50%);
+.chat-lightbox__thumb--active:hover {
+  border-color: white;
 }
 
-.chat-lightbox__next {
-  right: -60px;
-  top: 50%;
-  transform: translateY(-50%);
+/* Thumbnail image */
+.chat-lightbox__thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.chat-lightbox__counter {
+/* Video indicator on thumbnail */
+.chat-lightbox__thumb-video-badge {
   position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 14px;
+  bottom: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 3px;
 }
 
-/* Mobile responsive */
+.chat-lightbox__thumb-video-badge svg {
+  width: 10px;
+  height: 10px;
+  fill: white;
+}
+
+/* ============================================
+   Thumbnail Fade Edges (Scroll Indicator)
+   ============================================ */
+.chat-lightbox__thumbnails::before,
+.chat-lightbox__thumbnails::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 8px;
+  width: 32px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chat-lightbox__thumbnails::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+.chat-lightbox__thumbnails::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+/* ============================================
+   Thumbnail Mobile Responsive
+   ============================================ */
+@media (max-width: 640px) {
+  .chat-lightbox__thumbnails {
+    padding: 0 8px;
+  }
+
+  .chat-lightbox__thumb {
+    width: 48px;
+    height: 48px;
+  }
+
+  .chat-lightbox__thumbnails-list {
+    gap: 8px;
+  }
+
+  /* Hide edge fade on mobile */
+  .chat-lightbox__thumbnails::before,
+  .chat-lightbox__thumbnails::after {
+    display: none;
+  }
+}
+
+/* Very small screens: smaller thumbs */
+@media (max-width: 380px) {
+  .chat-lightbox__thumb {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ============================================
+   Lightbox Animations
+   ============================================ */
+
+/* Fade in overlay */
+.chat-lightbox {
+  animation: lightbox-fade-in 0.2s ease-out;
+}
+
+@keyframes lightbox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scale in media */
+.chat-lightbox__media {
+  animation: lightbox-scale-in 0.3s ease-out;
+}
+
+@keyframes lightbox-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Blur background fade in */
+.chat-lightbox__blur-bg {
+  animation: lightbox-blur-in 0.4s ease-out;
+}
+
+@keyframes lightbox-blur-in {
+  from { opacity: 0; }
+  to { opacity: 0.3; }
+}
+
+/* Slide up controls */
+.chat-lightbox__bottom {
+  animation: lightbox-slide-up 0.3s ease-out 0.1s both;
+}
+
+@keyframes lightbox-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Reduced Motion Preferences
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .chat-lightbox,
+  .chat-lightbox__media,
+  .chat-lightbox__blur-bg,
+  .chat-lightbox__bottom {
+    animation: none;
+  }
+
+  .chat-lightbox__nav,
+  .chat-lightbox__glass-btn,
+  .chat-lightbox__thumb,
+  .chat-lightbox__pill-btn,
+  .chat-lightbox__media {
+    transition: none;
+  }
+}
+
+/* ============================================
+   Mobile Responsive - Tablets
+   ============================================ */
 @media (max-width: 768px) {
-  .chat-lightbox__prev {
-    left: 8px;
-    top: auto;
+  :root {
+    --lightbox-gutter: 16px;
+    --lightbox-btn-size: 36px;
+    --lightbox-nav-size: 44px;
+  }
+
+  .chat-lightbox__toolbar {
+    top: 16px;
+    right: 16px;
+    gap: 8px;
+  }
+
+  .chat-lightbox__bottom {
+    bottom: 16px;
+    gap: 12px;
+  }
+
+  .chat-lightbox__media {
+    max-height: calc(100vh - 200px);
+  }
+}
+
+/* ============================================
+   Mobile Responsive - Phones
+   ============================================ */
+@media (max-width: 480px) {
+  :root {
+    --lightbox-nav-size: 40px;
+    --lightbox-thumb-size: 44px;
+    --lightbox-control-height: 32px;
+  }
+
+  .chat-lightbox__gradient--top {
+    height: 64px;
+  }
+
+  .chat-lightbox__gradient--bottom {
+    height: 140px;
+  }
+
+  .chat-lightbox__controls {
+    gap: 8px;
+  }
+
+  .chat-lightbox__pill {
+    font-size: 11px;
+  }
+
+  .chat-lightbox__pill-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .chat-lightbox__zoom-value {
+    min-width: 40px;
+  }
+}
+
+/* ============================================
+   Landscape Phones - Optimize Layout
+   ============================================ */
+@media (max-width: 768px) and (orientation: landscape) {
+  .chat-lightbox__bottom {
     bottom: 8px;
-    transform: none;
   }
 
-  .chat-lightbox__next {
-    right: 8px;
-    top: auto;
-    bottom: 8px;
-    transform: none;
+  .chat-lightbox__thumbnails {
+    display: none; /* Hide thumbnails in landscape to save space */
   }
 
-  .chat-lightbox__close {
-    top: 8px;
-    right: 8px;
+  .chat-lightbox__media {
+    max-height: calc(100vh - 80px);
+  }
+}
+
+/* ============================================
+   Touch Interactions
+   ============================================ */
+
+/* Larger touch targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  .chat-lightbox__nav {
+    min-width: 48px;
+    min-height: 48px;
   }
 
-  .chat-lightbox__counter {
-    bottom: 60px;
+  .chat-lightbox__glass-btn--rect {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .chat-lightbox__thumb {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  .chat-lightbox__pill-btn {
+    min-width: 36px;
+    min-height: 36px;
+  }
+}
+
+/* Disable hover effects on touch devices */
+@media (hover: none) {
+  .chat-lightbox__nav:hover,
+  .chat-lightbox__glass-btn:hover,
+  .chat-lightbox__thumb:hover {
+    background: inherit;
+    border-color: inherit;
+    opacity: inherit;
   }
 }

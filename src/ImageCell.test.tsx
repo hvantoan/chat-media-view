@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ImageCell } from './ImageCell'
-import type { ImageItem, CellLayout } from './types'
+import type { ImageMediaItem, CellLayout } from './types'
 
 // Mock canvas for PlaceholderCanvas
 beforeEach(() => {
@@ -12,16 +12,17 @@ beforeEach(() => {
   })
 })
 
-const mockImage: ImageItem = {
+const mockImage: ImageMediaItem = {
+  type: 'image',
   src: 'test.jpg',
   width: 800,
   height: 600,
   alt: 'Test image'
 }
 
-const mockImageWithHash: ImageItem = {
+const mockImageWithHash: ImageMediaItem = {
   ...mockImage,
-  thumbhash: 'YTkGJwaRhWUIt4lbgnhZl3ath2BUBGYA'
+  blurhash: 'LEHV6nWB2yk8pyo0adR*.7kCMdnj'
 }
 
 const mockLayout: CellLayout = {
@@ -120,13 +121,13 @@ describe('ImageCell', () => {
   })
 
   it('handles missing alt text gracefully', () => {
-    const imageNoAlt = { src: 'test.jpg', width: 100, height: 100 }
+    const imageNoAlt: ImageMediaItem = { type: 'image', src: 'test.jpg', width: 100, height: 100 }
     render(<ImageCell image={imageNoAlt} layout={mockLayout} lazyLoad={false} />)
     const img = document.querySelector('img')
     expect(img).toHaveAttribute('alt', '')
   })
 
-  it('renders placeholder when thumbhash provided', () => {
+  it('renders placeholder when blurhash provided', () => {
     render(<ImageCell image={mockImageWithHash} layout={mockLayout} lazyLoad={false} />)
     const canvas = document.querySelector('canvas')
     expect(canvas).toBeInTheDocument()

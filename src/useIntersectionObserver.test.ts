@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useIntersectionObserver } from './hooks/useIntersectionObserver'
-import { useRef } from 'react'
 
 describe('useIntersectionObserver', () => {
   let observeMock: ReturnType<typeof vi.fn>
@@ -13,7 +12,8 @@ describe('useIntersectionObserver', () => {
     disconnectMock = vi.fn()
 
     // Store callback for manual triggering
-    global.IntersectionObserver = vi.fn((callback) => {
+    // Using regular function (not arrow) for vitest 4.x compatibility with `new` keyword
+    global.IntersectionObserver = vi.fn(function (callback) {
       mockCallback = callback
       return {
         observe: observeMock,
