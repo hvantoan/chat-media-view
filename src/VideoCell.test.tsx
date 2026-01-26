@@ -271,6 +271,21 @@ describe('VideoCell', () => {
     expect(videoEl.muted).toBe(false)
   })
 
+  it('sets video loop to false by default', () => {
+    render(<VideoCell video={mockVideo} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.loop).toBe(false)
+  })
+
+  it('respects loop prop when set to true', () => {
+    const videoLooping = { ...mockVideo, loop: true }
+    render(<VideoCell video={videoLooping} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.loop).toBe(true)
+  })
+
   it('shows video with visible class in playing state', async () => {
     render(<VideoCell video={mockVideo} layout={mockLayout} lazyLoad={false} />)
     fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
