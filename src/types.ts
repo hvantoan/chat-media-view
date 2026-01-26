@@ -32,6 +32,8 @@ export interface VideoMediaItem extends BaseMediaItem {
   duration?: number
   /** Whether video starts muted (default: true for autoplay compat) */
   muted?: boolean
+  /** Whether video should loop (default: true) */
+  loop?: boolean
 }
 
 /**

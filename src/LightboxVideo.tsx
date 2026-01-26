@@ -2,6 +2,9 @@ import type { ReactNode } from 'react'
 import { useRef, useEffect } from 'react'
 import type { VideoMediaItem } from './types'
 
+const DEFAULT_VIDEO_MUTED = true
+const DEFAULT_VIDEO_LOOP = true
+
 interface LightboxVideoProps {
   video: VideoMediaItem
   isActive: boolean
@@ -36,7 +39,8 @@ export function LightboxVideo({ video, isActive }: LightboxVideoProps): ReactNod
       src={video.src}
       controls
       autoPlay
-      muted={video.muted ?? true}
+      muted={video.muted ?? DEFAULT_VIDEO_MUTED}
+      loop={video.loop ?? DEFAULT_VIDEO_LOOP}
       playsInline
       onClick={(e) => { e.stopPropagation(); }}
     >

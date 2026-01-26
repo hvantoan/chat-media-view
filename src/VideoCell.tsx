@@ -7,6 +7,9 @@ import { PlayIcon } from './PlayIcon'
 import type { VideoMediaItem, CellLayout } from './types'
 import './styles/video-cell.css'
 
+const DEFAULT_VIDEO_MUTED = true
+const DEFAULT_VIDEO_LOOP = true
+
 type VideoState = 'thumbnail' | 'loading' | 'playing' | 'paused' | 'error'
 
 interface VideoCellProps {
@@ -157,7 +160,9 @@ export function VideoCell({
           src={video.src}
           controls
           playsInline
-          muted={video.muted ?? true}
+          muted={video.muted ?? DEFAULT_VIDEO_MUTED}
+          loop={video.loop ?? DEFAULT_VIDEO_LOOP}
+          preload="metadata"
           onCanPlay={handleVideoCanPlay}
           onError={handleVideoError}
           onPause={handleVideoPause}

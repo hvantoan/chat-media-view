@@ -299,4 +299,26 @@ describe('VideoCell', () => {
     const videoEl = document.querySelector('video') as HTMLVideoElement
     expect(videoEl.classList.contains('chat-video-cell__video--visible')).toBe(false)
   })
+
+  it('sets loop attribute to true by default', () => {
+    render(<VideoCell video={mockVideo} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.loop).toBe(true)
+  })
+
+  it('respects loop=false from video prop', () => {
+    const videoNoLoop = { ...mockVideo, loop: false }
+    render(<VideoCell video={videoNoLoop} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.loop).toBe(false)
+  })
+
+  it('sets preload to metadata', () => {
+    render(<VideoCell video={mockVideo} layout={mockLayout} lazyLoad={false} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Play video' }))
+    const videoEl = document.querySelector('video') as HTMLVideoElement
+    expect(videoEl.preload).toBe('metadata')
+  })
 })
