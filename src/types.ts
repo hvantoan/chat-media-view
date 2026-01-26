@@ -34,6 +34,8 @@ export interface VideoMediaItem extends BaseMediaItem {
   muted?: boolean
   /** URL of the poster image to display before video loads */
   poster?: string
+  /** Whether the video should loop (default: false) */
+  loop?: boolean
 }
 
 /**
